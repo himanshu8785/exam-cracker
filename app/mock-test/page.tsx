@@ -46,7 +46,7 @@ export default function MockTest() {
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
-  const [answers,setAnswers] = useState([]);
+  const [answers,setAnswers] = useState<string[]>([]);
 
   const [score,setScore] = useState(0);
 
