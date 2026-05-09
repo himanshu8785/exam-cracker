@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Link from "next/link";
 
@@ -9,41 +9,39 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 
 import { auth } from "../firebase";
 
 export default function Home() {
 
-  const [email,setEmail] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [user, setUser] = useState(null);
 
-  const [password,setPassword] = useState("");
-
-  const [isLogin,setIsLogin] = useState(true);
-
-  const [user,setUser] = useState<User | null>(null);
-
-  useEffect(()=>{
+  useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(
       auth,
-      (currentUser)=>{
+      (currentUser) => {
 
         setUser(currentUser);
 
       }
     );
 
-    return ()=>unsubscribe();
+    return () => unsubscribe();
 
-  },[]);
+  }, []);
 
-  async function handleAuth(){
+  async function handleAuth() {
 
-    try{
+    try {
 
-      if(isLogin){
+      if (isLogin) {
 
         await signInWithEmailAndPassword(
           auth,
@@ -53,7 +51,7 @@ export default function Home() {
 
         alert("Login Successful 🚀");
 
-      }else{
+      } else {
 
         await createUserWithEmailAndPassword(
           auth,
@@ -65,7 +63,7 @@ export default function Home() {
 
       }
 
-    }catch(error:any){
+    } catch (error) {
 
       alert(error.message);
 
@@ -73,7 +71,25 @@ export default function Home() {
 
   }
 
-  async function handleLogout(){
+  async function handleGoogleLogin() {
+
+    try {
+
+      const provider = new GoogleAuthProvider();
+
+      await signInWithPopup(auth, provider);
+
+      alert("Google Login Successful 🚀");
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
+
+  }
+
+  async function handleLogout() {
 
     await signOut(auth);
 
@@ -81,9 +97,9 @@ export default function Home() {
 
   }
 
-  if(user){
+  if (user) {
 
-    return(
+    return (
 
       <main className="min-h-screen bg-[#0b1120] text-white p-6">
 
@@ -167,7 +183,7 @@ export default function Home() {
               </h3>
 
               <p className="text-gray-400">
-                View your test history.
+                View your saved scores.
               </p>
 
             </div>
@@ -198,7 +214,10 @@ export default function Home() {
 
         <p className="text-center text-gray-400 mb-8">
 
-          {isLogin ? "Login To Continue" : "Create Your Account"}
+          {isLogin
+            ? "Login To Continue"
+            : "Create Your Account"
+          }
 
         </p>
 
@@ -206,28 +225,37 @@ export default function Home() {
           type="email"
           placeholder="Enter Email"
           className="w-full p-4 rounded-2xl bg-[#1e293b] mb-4 outline-none"
-          onChange={(e)=>setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
           placeholder="Enter Password"
           className="w-full p-4 rounded-2xl bg-[#1e293b] mb-6 outline-none"
-          onChange={(e)=>setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           onClick={handleAuth}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold text-lg hover:scale-105 transition"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold text-lg"
         >
 
           {isLogin ? "Login" : "Sign Up"}
 
         </button>
 
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full py-4 rounded-2xl bg-white text-black font-semibold text-lg mt-4"
+        >
+
+          Continue with Google
+
+        </button>
+
         <p
           className="text-center mt-6 text-gray-400 cursor-pointer"
-          onClick={()=>setIsLogin(!isLogin)}
+          onClick={() => setIsLogin(!isLogin)}
         >
 
           {isLogin
