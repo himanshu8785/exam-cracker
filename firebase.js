@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB9bEDqU36tLb472xP6aWDqIRpd0gtTYKI",
-  authDomain: "examcracker-07.firebaseapp.com",
-  projectId: "examcracker-07",
-  storageBucket: "examcracker-07.firebasestorage.app",
-  messagingSenderId: "627093985071",
-  appId: "1:627093985071:web:337f98caf8b27c3dafb3da"
+  apiKey: "AIzaSyBo7IdV5JtKOdnh28AA0zmiESdPAFk88wo",
+  authDomain: "exam-cracker-16.firebaseapp.com",
+  projectId: "exam-cracker-16",
+  storageBucket: "exam-cracker-16.firebasestorage.app",
+  messagingSenderId: "278430144732",
+  appId: "1:278430144732:web:332a08959b458c955fbc19"
 };
 
 const app = initializeApp(firebaseConfig);
