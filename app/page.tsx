@@ -8,7 +8,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  User
 } from "firebase/auth";
 
 import { auth } from "../firebase";
@@ -16,19 +17,23 @@ import { auth } from "../firebase";
 export default function Home() {
 
   const [email,setEmail] = useState("");
+
   const [password,setPassword] = useState("");
 
   const [isLogin,setIsLogin] = useState(true);
 
-  const [user,setUser] = useState(null);
+  const [user,setUser] = useState<User | null>(null);
 
   useEffect(()=>{
 
-    const unsubscribe = onAuthStateChanged(auth,(currentUser)=>{
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (currentUser)=>{
 
-      setUser(currentUser);
+        setUser(currentUser);
 
-    });
+      }
+    );
 
     return ()=>unsubscribe();
 
@@ -60,7 +65,7 @@ export default function Home() {
 
       }
 
-    }catch(error){
+    }catch(error:any){
 
       alert(error.message);
 
@@ -81,8 +86,6 @@ export default function Home() {
     return(
 
       <main className="min-h-screen bg-[#0b1120] text-white p-6">
-
-        {/* NAVBAR */}
 
         <nav className="flex justify-between items-center mb-10">
 
@@ -105,8 +108,6 @@ export default function Home() {
 
         </nav>
 
-        {/* HERO */}
-
         <div className="bg-[#111827] p-8 rounded-3xl border border-gray-800">
 
           <h2 className="text-4xl font-bold mb-4">
@@ -122,8 +123,6 @@ export default function Home() {
           </p>
 
         </div>
-
-        {/* CARDS */}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
