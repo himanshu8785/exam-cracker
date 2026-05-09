@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBo7IdV5JtKOdnh28AA0zmiESdPAFk88wo",
+  apiKey: "AIzaSyBo7IdV5JtKOdnh28AA0zmiESdPAFk88w0",
   authDomain: "exam-cracker-16.firebaseapp.com",
   projectId: "exam-cracker-16",
   storageBucket: "exam-cracker-16.firebasestorage.app",
