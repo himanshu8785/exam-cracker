@@ -158,17 +158,21 @@ export default function Home() {
 
           </Link>
 
-          <div className="bg-[#111827] p-8 rounded-3xl border border-gray-800">
+          <Link href="/scores">
 
-            <h3 className="text-2xl font-semibold mb-3">
-              🔥 PYQs
-            </h3>
+            <div className="bg-[#111827] p-8 rounded-3xl border border-gray-800 hover:border-purple-500 transition cursor-pointer">
 
-            <p className="text-gray-400">
-              Coming Soon 🚀
-            </p>
+              <h3 className="text-2xl font-semibold mb-3">
+                📊 Your Scores
+              </h3>
 
-          </div>
+              <p className="text-gray-400">
+                View your test history.
+              </p>
+
+            </div>
+
+          </Link>
 
         </div>
 
