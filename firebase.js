@@ -10,8 +10,7 @@ const firebaseConfig = {
   projectId: "examcracker-07",
   storageBucket: "examcracker-07.firebasestorage.app",
   messagingSenderId: "627093985071",
-  appId: "1:627093985071:web:337f98caf8b27c3dafb3da",
-  measurementId: "G-LXN7PEXLCR"
+  appId: "1:627093985071:web:337f98caf8b27c3dafb3da"
 };
 
 const app = initializeApp(firebaseConfig);
