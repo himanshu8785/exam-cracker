@@ -2,6 +2,16 @@
 
 import { useState,useEffect } from "react";
 
+import {
+  collection,
+  addDoc
+} from "firebase/firestore";
+
+import {
+  auth,
+  db
+} from "../../firebase";
+
 export default function MockTest() {
 
   const questions = [
@@ -28,17 +38,6 @@ export default function MockTest() {
       question:"Who discovered Gravity?",
       options:["Newton","Tesla","Einstein","Bohr"],
       answer:"Newton"
-    },
-
-    {
-      question:"Speed of light is?",
-      options:[
-        "3×10^8 m/s",
-        "5×10^6 m/s",
-        "7×10^5 m/s",
-        "1×10^9 m/s"
-      ],
-      answer:"3×10^8 m/s"
     }
 
   ];
@@ -46,13 +45,17 @@ export default function MockTest() {
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
-  const [answers,setAnswers] = useState<string[]>([]);
+  const [answers,setAnswers] =
+  useState<string[]>([]);
 
-  const [score,setScore] = useState(0);
+  const [score,setScore] =
+  useState(0);
 
-  const [submitted,setSubmitted] = useState(false);
+  const [submitted,setSubmitted] =
+  useState(false);
 
-  const [timeLeft,setTimeLeft] = useState(300);
+  const [timeLeft,setTimeLeft] =
+  useState(240);
 
   useEffect(()=>{
 
@@ -84,7 +87,7 @@ export default function MockTest() {
 
   }
 
-  function handleSubmit(){
+  async function handleSubmit(){
 
     let finalScore = 0;
 
@@ -94,7 +97,9 @@ export default function MockTest() {
 
         finalScore += 4;
 
-      }else if(answers[index]){
+      }
+
+      else if(answers[index]){
 
         finalScore -= 1;
 
@@ -105,6 +110,30 @@ export default function MockTest() {
     setScore(finalScore);
 
     setSubmitted(true);
+
+    try{
+
+      const user = auth.currentUser;
+
+      if(user){
+
+        await addDoc(collection(db,"scores"),{
+
+          email:user.email,
+
+          score:finalScore,
+
+          createdAt:new Date()
+
+        });
+
+      }
+
+    }catch(error){
+
+      console.log(error);
+
+    }
 
   }
 
@@ -133,7 +162,7 @@ export default function MockTest() {
 
           <p className="text-gray-400 text-lg">
 
-            Keep Practicing Daily 🚀
+            Score Saved Successfully 🚀
 
           </p>
 
@@ -155,8 +184,6 @@ export default function MockTest() {
 
     <main className="min-h-screen bg-[#0b1120] text-white p-6">
 
-      {/* NAVBAR */}
-
       <nav className="flex justify-between items-center mb-10">
 
         <h1 className="text-3xl font-bold">
@@ -174,8 +201,6 @@ export default function MockTest() {
         </div>
 
       </nav>
-
-      {/* QUESTION BOX */}
 
       <div className="max-w-3xl mx-auto bg-[#111827] p-10 rounded-3xl border border-gray-800">
 
@@ -218,8 +243,6 @@ export default function MockTest() {
           ))}
 
         </div>
-
-        {/* BUTTONS */}
 
         <div className="flex justify-between mt-10 gap-4">
 
