@@ -74,7 +74,7 @@ export default function MockTest() {
 
   },[timeLeft]);
 
-  function selectOption(option){
+  function selectOption(option:string){
 
     const updatedAnswers = [...answers];
 
