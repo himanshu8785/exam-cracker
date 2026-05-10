@@ -1,140 +1,195 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useEffect,useState } from "react";
 
-import questions from "../data/questions";
+import {
+  db,
+  auth
+} from "../../firebase";
+
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  serverTimestamp
+} from "firebase/firestore";
 
 import ProtectedRoute from "../ProtectedRoute";
 
-import { saveScore } from "../lib/saveScore";
+const testSeriesList = [
+
+  "JEE-MOCK-1",
+  "JEE-MOCK-2",
+  "JEE-MOCK-3",
+
+  "NEET-MOCK-1",
+  "NEET-MOCK-2",
+
+  "PHY-TEST-1",
+  "CHEM-TEST-1"
+
+];
 
 export default function MockTestPage() {
+
+  const [selectedSeries,setSelectedSeries] =
+  useState("");
+
+  const [questions,setQuestions] =
+  useState([]);
+
+  const [loading,setLoading] =
+  useState(false);
+
+  const [started,setStarted] =
+  useState(false);
 
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
-  const [answers,setAnswers] =
-  useState([]);
-
-  const [submitted,setSubmitted] =
-  useState(false);
-
-  const [saving,setSaving] =
-  useState(false);
+  const [selected,setSelected] =
+  useState("");
 
   const [score,setScore] =
   useState(0);
 
-  const [timeLeft,setTimeLeft] =
-  useState(1800);
+  const [submitted,setSubmitted] =
+  useState(false);
 
-  useEffect(()=>{
+  async function startTest(){
 
-    if(timeLeft <= 0){
+    if(!selectedSeries){
 
-      submitTest();
-
-      return;
-
-    }
-
-    const timer = setInterval(()=>{
-
-      setTimeLeft(prev=>prev - 1);
-
-    },1000);
-
-    return ()=>clearInterval(timer);
-
-  },[timeLeft]);
-
-  function chooseOption(option){
-
-    const updated = [...answers];
-
-    updated[currentQuestion] = option;
-
-    setAnswers(updated);
-
-  }
-
-  async function submitTest(){
-
-    if(saving){
+      alert("Select test series 🚀");
 
       return;
 
     }
 
-    setSaving(true);
+    setLoading(true);
 
-    let finalScore = 0;
+    try{
 
-    questions.forEach((q,index)=>{
+      const q = query(
 
-      if(answers[index] === q.answer){
+        collection(db,"questions"),
 
-        finalScore += 4;
+        where(
+          "testSeries",
+          "==",
+          selectedSeries
+        )
 
-      }
+      );
 
-      else if(answers[index]){
+      const querySnapshot =
+      await getDocs(q);
 
-        finalScore -= 1;
+      const data = [];
 
-      }
+      querySnapshot.forEach((doc)=>{
 
-    });
+        data.push({
 
-    setScore(finalScore);
+          id:doc.id,
 
-    await saveScore(finalScore);
+          ...doc.data()
 
-    setSubmitted(true);
+        });
+
+      });
+
+      setQuestions(data);
+
+      setStarted(true);
+
+    }
+
+    catch(error){
+
+      console.log(error);
+
+    }
+
+    setLoading(false);
 
   }
 
-  const minutes =
-  Math.floor(timeLeft / 60);
+  async function nextQuestion(){
 
-  const seconds =
-  timeLeft % 60;
+    if(selected === ""){
 
-  if(submitted){
+      alert("Select an option 🚀");
 
-    return(
+      return;
 
-      <ProtectedRoute>
+    }
 
-        <main className="min-h-screen bg-[#0b1120] text-white flex justify-center items-center px-6">
+    let finalScore = score;
 
-          <div className="bg-[#111827] p-10 rounded-3xl border border-gray-800 max-w-2xl w-full text-center">
+    if(
+      selected ===
+      questions[currentQuestion].answer
+    ){
 
-            <h1 className="text-5xl font-bold mb-6">
+      finalScore += 4;
 
-              🎉 Test Submitted
+      setScore(finalScore);
 
-            </h1>
+    }
 
-            <p className="text-3xl text-purple-500 font-bold mb-4">
+    if(
+      currentQuestion <
+      questions.length - 1
+    ){
 
-              Your Score: {score}
+      setCurrentQuestion(prev=>
+        prev + 1
+      );
 
-            </p>
+      setSelected("");
 
-            <p className="text-gray-400 text-lg">
+    }
 
-              Score saved successfully 🚀
+    else{
 
-            </p>
+      try{
 
-          </div>
+        await addDoc(
 
-        </main>
+          collection(db,"scores"),
 
-      </ProtectedRoute>
+          {
 
-    );
+            email:
+            auth.currentUser?.email,
+
+            score:
+            finalScore,
+
+            testSeries:
+            selectedSeries,
+
+            createdAt:
+            serverTimestamp()
+
+          }
+
+        );
+
+      }
+
+      catch(error){
+
+        console.log(error);
+
+      }
+
+      setSubmitted(true);
+
+    }
 
   }
 
@@ -144,56 +199,182 @@ export default function MockTestPage() {
 
       <main className="min-h-screen bg-[#0b1120] text-white p-6">
 
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
 
-          <div className="flex flex-col lg:flex-row gap-6">
+          <h1 className="text-5xl font-black text-center mb-4">
 
-            <div className="flex-1">
+            📝 <span className="text-purple-500">
+              Mock Test Series
+            </span>
 
-              <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8">
+          </h1>
 
-                <div className="flex justify-between items-center mb-6">
+          <p className="text-center text-gray-400 text-lg mb-12">
 
-                  <div>
+            Professional JEE / NEET Test System 🚀
 
-                    <p className="text-purple-500 font-semibold mb-2">
+          </p>
 
-                      {questions[currentQuestion].subject}
+          {!started ? (
 
-                    </p>
+            <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
 
-                    <p className="text-gray-400">
+              <h2 className="text-4xl font-bold mb-10 text-center">
 
-                      {questions[currentQuestion].chapter}
+                Select Test Series 😎
 
-                    </p>
+              </h2>
 
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                  <div className="bg-[#1e293b] px-5 py-3 rounded-2xl text-xl font-bold">
+                {testSeriesList.map((test,index)=>(
 
-                    ⏱️ {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                  <button
+                    key={index}
+                    onClick={()=>
+                      setSelectedSeries(test)
+                    }
+                    className={`p-6 rounded-3xl border text-left transition
 
-                  </div>
+                    ${selectedSeries === test
+
+                      ? "bg-purple-600 border-purple-500"
+
+                      : "bg-[#1e293b] border-gray-700 hover:border-purple-500"
+
+                    }`}
+                  >
+
+                    <h3 className="text-2xl font-bold">
+
+                      {test}
+
+                    </h3>
+
+                  </button>
+
+                ))}
+
+              </div>
+
+              <button
+                onClick={startTest}
+                className="w-full mt-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+              >
+
+                {loading
+                  ? "Loading..."
+                  : "Start Test"
+                }
+
+              </button>
+
+            </div>
+
+          ) : submitted ? (
+
+            <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-12 text-center">
+
+              <h2 className="text-6xl font-black text-purple-500 mb-6">
+
+                {score}
+
+              </h2>
+
+              <p className="text-2xl text-gray-300 mb-4">
+
+                Test Submitted Successfully 🚀
+
+              </p>
+
+              <p className="text-lg text-gray-500 mb-10">
+
+                {selectedSeries}
+
+              </p>
+
+              <button
+                onClick={()=>
+                  window.location.reload()
+                }
+                className="px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+              >
+
+                Back To Tests
+
+              </button>
+
+            </div>
+
+          ) : questions.length === 0 ? (
+
+            <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-12 text-center">
+
+              <h2 className="text-4xl font-bold">
+
+                No Questions Found 🚀
+
+              </h2>
+
+              <p className="text-gray-400 mt-6 text-lg">
+
+                Upload questions for:
+                {selectedSeries}
+
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
+
+              <div className="flex justify-between items-center mb-8">
+
+                <h2 className="text-2xl font-bold">
+
+                  Question {currentQuestion + 1}
+                  / {questions.length}
+
+                </h2>
+
+                <div className="bg-[#1e293b] px-6 py-3 rounded-2xl">
+
+                  Score: {score}
 
                 </div>
 
-                <h1 className="text-3xl font-bold mb-10 leading-relaxed">
+              </div>
 
-                  {questions[currentQuestion].question}
+              <p className="text-gray-400 mb-4">
 
-                </h1>
+                {selectedSeries}
 
-                <div className="space-y-5">
+              </p>
 
-                  {questions[currentQuestion].options.map((option,index)=>(
+              <h3 className="text-4xl font-bold leading-relaxed mb-10">
+
+                {
+                  questions[currentQuestion]
+                  .question
+                }
+
+              </h3>
+
+              <div className="space-y-5">
+
+                {
+                  questions[currentQuestion]
+                  .options.map((option,index)=>(
 
                     <button
                       key={index}
-                      onClick={()=>chooseOption(option)}
+                      onClick={()=>
+                        setSelected(option)
+                      }
                       className={`w-full p-5 rounded-2xl text-left border transition
 
-                      ${answers[currentQuestion] === option
+                      ${selected === option
 
                         ? "bg-purple-600 border-purple-500"
 
@@ -206,119 +387,30 @@ export default function MockTestPage() {
 
                     </button>
 
-                  ))}
-
-                </div>
-
-                <div className="flex justify-between mt-10">
-
-                  <button
-                    onClick={()=>
-                      setCurrentQuestion(prev=>
-                        Math.max(prev - 1,0)
-                      )
-                    }
-                    className="px-8 py-4 rounded-2xl bg-gray-700"
-                  >
-
-                    Previous
-
-                  </button>
-
-                  {currentQuestion < questions.length - 1 ? (
-
-                    <button
-                      onClick={()=>
-                        setCurrentQuestion(prev=>
-                          prev + 1
-                        )
-                      }
-                      className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600"
-                    >
-
-                      Next
-
-                    </button>
-
-                  ) : (
-
-                    <button
-                      onClick={submitTest}
-                      disabled={saving}
-                      className="px-8 py-4 rounded-2xl bg-green-600 disabled:opacity-50"
-                    >
-
-                      {saving
-                        ? "Submitting..."
-                        : "Submit Test"
-                      }
-
-                    </button>
-
-                  )}
-
-                </div>
+                  ))
+                }
 
               </div>
 
-            </div>
+              <button
+                onClick={nextQuestion}
+                className="w-full mt-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+              >
 
-            <div className="lg:w-80">
+                {
+                  currentQuestion ===
+                  questions.length - 1
 
-              <div className="bg-[#111827] border border-gray-800 rounded-3xl p-6 sticky top-6">
+                    ? "Submit Test"
 
-                <h2 className="text-2xl font-bold mb-6">
+                    : "Next Question"
+                }
 
-                  Question Palette
-
-                </h2>
-
-                <div className="grid grid-cols-4 gap-4">
-
-                  {questions.map((_,index)=>(
-
-                    <button
-                      key={index}
-                      onClick={()=>
-                        setCurrentQuestion(index)
-                      }
-                      className={`h-14 rounded-2xl font-bold transition
-
-                      ${answers[index]
-
-                        ? "bg-purple-600"
-
-                        : "bg-[#1e293b]"
-
-                      }`}
-                    >
-
-                      {index + 1}
-
-                    </button>
-
-                  ))}
-
-                </div>
-
-                <button
-                  onClick={submitTest}
-                  disabled={saving}
-                  className="w-full mt-8 py-4 rounded-2xl bg-red-500 font-semibold disabled:opacity-50"
-                >
-
-                  {saving
-                    ? "Submitting..."
-                    : "Submit Full Test"
-                  }
-
-                </button>
-
-              </div>
+              </button>
 
             </div>
 
-          </div>
+          )}
 
         </div>
 

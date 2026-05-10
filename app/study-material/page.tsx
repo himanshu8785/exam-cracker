@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import ProtectedRoute from "../ProtectedRoute";
 
 export default function StudyMaterialPage() {
@@ -7,51 +9,38 @@ export default function StudyMaterialPage() {
   const materials = [
 
     {
-      subject:"Physics",
-      chapter:"Units & Dimensions",
-      file:"Download PDF"
+      title:"Physics Class 11 Notes",
+      description:
+      "Complete handwritten notes for Class 11 Physics 🚀",
+      file:"/pdfs/physics11.pdf"
     },
 
     {
-      subject:"Physics",
-      chapter:"Laws of Motion",
-      file:"Download PDF"
+      title:"Physics Class 12 Notes",
+      description:
+      "Important concepts and formulas for boards + JEE 😎",
+      file:"/pdfs/physics12.pdf"
     },
 
     {
-      subject:"Chemistry",
-      chapter:"Atomic Structure",
-      file:"Download PDF"
+      title:"Chemistry Short Notes",
+      description:
+      "Organic + Inorganic revision notes 🔥",
+      file:"/pdfs/chemistry.pdf"
     },
 
     {
-      subject:"Chemistry",
-      chapter:"Chemical Bonding",
-      file:"Download PDF"
+      title:"Math Formula Sheet",
+      description:
+      "All important formulas in one place 😭🔥",
+      file:"/pdfs/maths.pdf"
     },
 
     {
-      subject:"Mathematics",
-      chapter:"Limits & Continuity",
-      file:"Download PDF"
-    },
-
-    {
-      subject:"Mathematics",
-      chapter:"Integration",
-      file:"Download PDF"
-    },
-
-    {
-      subject:"Biology",
-      chapter:"Cell Structure",
-      file:"Download PDF"
-    },
-
-    {
-      subject:"Biology",
-      chapter:"Genetics",
-      file:"Download PDF"
+      title:"Biology NCERT Notes",
+      description:
+      "Best notes for NEET preparation 😎",
+      file:"/pdfs/biology.pdf"
     }
 
   ];
@@ -64,7 +53,7 @@ export default function StudyMaterialPage() {
 
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-5xl font-bold text-center mb-4">
+          <h1 className="text-6xl font-black text-center mb-4">
 
             📚 <span className="text-purple-500">
               Study Material
@@ -72,56 +61,56 @@ export default function StudyMaterialPage() {
 
           </h1>
 
-          <p className="text-center text-gray-400 text-lg mb-12">
+          <p className="text-center text-gray-400 text-xl mb-16">
 
-            Access chapter-wise notes and PDFs 🚀
+            Premium notes, NCERT PDFs and formula sheets 🚀
 
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {materials.map((item,index)=>(
 
               <div
                 key={index}
-                className="bg-[#111827] border border-gray-800 rounded-3xl p-8 hover:border-purple-500 transition"
+                className="bg-[#111827] border border-gray-800 rounded-[40px] p-10 flex flex-col justify-between"
               >
 
-                <div className="flex justify-between items-center mb-6">
+                <div>
 
-                  <div className="px-4 py-2 rounded-full bg-purple-600/20 text-purple-400 border border-purple-500">
-
-                    {item.subject}
-
-                  </div>
-
-                  <div className="text-3xl">
+                  <div className="text-7xl mb-8">
 
                     📄
 
                   </div>
 
+                  <h2 className="text-4xl font-black mb-6">
+
+                    {item.title}
+
+                  </h2>
+
+                  <p className="text-gray-400 text-lg leading-relaxed">
+
+                    {item.description}
+
+                  </p>
+
                 </div>
 
-                <h2 className="text-3xl font-bold mb-4 leading-snug">
+                <div className="mt-10">
 
-                  {item.chapter}
+                  <Link
+                    href={item.file}
+                    target="_blank"
+                    className="block w-full text-center py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+                  >
 
-                </h2>
+                    Download PDF 🚀
 
-                <p className="text-gray-400 mb-8">
+                  </Link>
 
-                  Premium handwritten notes and formulas 🚀
-
-                </p>
-
-                <button
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold text-lg"
-                >
-
-                  {item.file}
-
-                </button>
+                </div>
 
               </div>
 

@@ -4,16 +4,21 @@ import { useState } from "react";
 
 export default function AIDoubtSolverPage() {
 
-  const [question,setQuestion] = useState("");
+  const [question,setQuestion] =
+  useState("");
 
-  const [answer,setAnswer] = useState("");
+  const [answer,setAnswer] =
+  useState("");
 
-  const [loading,setLoading] = useState(false);
+  const [loading,setLoading] =
+  useState(false);
 
   async function solveDoubt(){
 
-    if(question.trim() === ""){
+    if(!question){
+
       return;
+
     }
 
     setLoading(true);
@@ -22,7 +27,8 @@ export default function AIDoubtSolverPage() {
 
     try{
 
-      const response = await fetch("/api/ai",{
+      const response =
+      await fetch("/api/solve-doubt",{
 
         method:"POST",
 
@@ -36,16 +42,16 @@ export default function AIDoubtSolverPage() {
 
       });
 
-      const data = await response.json();
+      const data =
+      await response.json();
 
-      setAnswer(
-        data.choices?.[0]?.message?.content ||
-        "No response from AI"
-      );
+      setAnswer(data.answer);
 
     }
 
     catch(error){
+
+      console.log(error);
 
       setAnswer(
         "Something went wrong 🚀"
@@ -63,7 +69,7 @@ export default function AIDoubtSolverPage() {
 
       <div className="max-w-5xl mx-auto">
 
-        <h1 className="text-5xl font-bold text-center mb-4">
+        <h1 className="text-5xl font-black text-center mb-4">
 
           🤖 <span className="text-purple-500">
             AI Doubt Solver
@@ -71,26 +77,26 @@ export default function AIDoubtSolverPage() {
 
         </h1>
 
-        <p className="text-center text-gray-400 text-lg mb-10">
+        <p className="text-center text-gray-400 text-lg mb-12">
 
-          Ask JEE / NEET doubts using AI 🚀
+          Ask any JEE / NEET doubt instantly 🚀
 
         </p>
 
-        <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8">
+        <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
 
           <textarea
+            placeholder="Ask your doubt..."
             value={question}
             onChange={(e)=>
               setQuestion(e.target.value)
             }
-            placeholder="Ask your doubt..."
-            className="w-full h-40 bg-[#1e293b] rounded-2xl p-5 outline-none resize-none text-lg"
+            className="w-full h-40 bg-[#1e293b] rounded-3xl p-6 outline-none resize-none text-lg"
           />
 
           <button
             onClick={solveDoubt}
-            className="w-full mt-6 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+            className="w-full mt-8 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
           >
 
             {loading
@@ -104,19 +110,18 @@ export default function AIDoubtSolverPage() {
 
         {answer && (
 
-          <div className="mt-10 bg-[#111827] border border-gray-800 rounded-3xl p-8">
+          <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10 mt-10">
 
-            <h2 className="text-3xl font-bold mb-6">
+            <h2 className="text-4xl font-bold mb-8">
 
-              AI Answer 🚀
-
+              ✅ Solution
             </h2>
 
-            <p className="text-lg leading-relaxed text-gray-300 whitespace-pre-line">
+            <div className="bg-[#1e293b] rounded-3xl p-6 whitespace-pre-wrap leading-relaxed text-lg text-gray-300">
 
               {answer}
 
-            </p>
+            </div>
 
           </div>
 
