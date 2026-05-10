@@ -1,26 +1,24 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import { ReactNode,useEffect,useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import {
-  onAuthStateChanged
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
-import {
-  auth
-} from "../firebase";
+import { auth } from "../firebase";
+
+interface Props {
+
+  children: ReactNode;
+
+}
 
 export default function ProtectedRoute({
 
   children,
 
-}:{
-
-  children:React.ReactNode
-
-}) {
+}: Props) {
 
   const router = useRouter();
 
@@ -54,7 +52,7 @@ export default function ProtectedRoute({
 
     return(
 
-      <main className="min-h-screen bg-[#0b1120] flex justify-center items-center text-white">
+      <main className="min-h-screen bg-[#0b1120] text-white flex justify-center items-center">
 
         <h1 className="text-4xl font-bold">
 
@@ -68,6 +66,6 @@ export default function ProtectedRoute({
 
   }
 
-  return children;
+  return <>{children}</>;
 
 }
