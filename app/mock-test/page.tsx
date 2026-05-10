@@ -2,66 +2,37 @@
 
 import { useState,useEffect } from "react";
 
-import {
-  collection,
-  addDoc
-} from "firebase/firestore";
+import questions from "../data/questions";
 
-import {
-  auth,
-  db
-} from "../../firebase";
+import ProtectedRoute from "../ProtectedRoute";
 
-export default function MockTest() {
+import { saveScore } from "../lib/saveScore";
 
-  const questions = [
-
-    {
-      question:"SI unit of Force is?",
-      options:["Joule","Newton","Pascal","Watt"],
-      answer:"Newton"
-    },
-
-    {
-      question:"H2O is formula of?",
-      options:["Hydrogen","Water","Salt","Oxygen"],
-      answer:"Water"
-    },
-
-    {
-      question:"Human heart has how many chambers?",
-      options:["2","3","4","5"],
-      answer:"4"
-    },
-
-    {
-      question:"Who discovered Gravity?",
-      options:["Newton","Tesla","Einstein","Bohr"],
-      answer:"Newton"
-    }
-
-  ];
+export default function MockTestPage() {
 
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
   const [answers,setAnswers] =
-  useState<string[]>([]);
-
-  const [score,setScore] =
-  useState(0);
+  useState([]);
 
   const [submitted,setSubmitted] =
   useState(false);
 
+  const [saving,setSaving] =
+  useState(false);
+
+  const [score,setScore] =
+  useState(0);
+
   const [timeLeft,setTimeLeft] =
-  useState(240);
+  useState(1800);
 
   useEffect(()=>{
 
     if(timeLeft <= 0){
 
-      handleSubmit();
+      submitTest();
 
       return;
 
@@ -77,17 +48,25 @@ export default function MockTest() {
 
   },[timeLeft]);
 
-  function selectOption(option:string){
+  function chooseOption(option){
 
-    const updatedAnswers = [...answers];
+    const updated = [...answers];
 
-    updatedAnswers[currentQuestion] = option;
+    updated[currentQuestion] = option;
 
-    setAnswers(updatedAnswers);
+    setAnswers(updated);
 
   }
 
-  async function handleSubmit(){
+  async function submitTest(){
+
+    if(saving){
+
+      return;
+
+    }
+
+    setSaving(true);
 
     let finalScore = 0;
 
@@ -109,68 +88,9 @@ export default function MockTest() {
 
     setScore(finalScore);
 
+    await saveScore(finalScore);
+
     setSubmitted(true);
-
-    try{
-
-      const user = auth.currentUser;
-
-      if(user){
-
-        await addDoc(collection(db,"scores"),{
-
-          email:user.email,
-
-          score:finalScore,
-
-          createdAt:new Date()
-
-        });
-
-      }
-
-    }catch(error){
-
-      console.log(error);
-
-    }
-
-  }
-
-  if(submitted){
-
-    return(
-
-      <main className="min-h-screen bg-[#0b1120] text-white flex justify-center items-center px-6">
-
-        <div className="bg-[#111827] p-10 rounded-3xl border border-gray-800 text-center max-w-xl w-full">
-
-          <h1 className="text-5xl font-bold mb-6">
-
-            🎉 Test Completed
-
-          </h1>
-
-          <p className="text-2xl text-gray-300 mb-4">
-
-            Your Score:
-            <span className="text-purple-500 font-bold">
-              {" "} {score}
-            </span>
-
-          </p>
-
-          <p className="text-gray-400 text-lg">
-
-            Score Saved Successfully 🚀
-
-          </p>
-
-        </div>
-
-      </main>
-
-    );
 
   }
 
@@ -180,114 +100,231 @@ export default function MockTest() {
   const seconds =
   timeLeft % 60;
 
+  if(submitted){
+
+    return(
+
+      <ProtectedRoute>
+
+        <main className="min-h-screen bg-[#0b1120] text-white flex justify-center items-center px-6">
+
+          <div className="bg-[#111827] p-10 rounded-3xl border border-gray-800 max-w-2xl w-full text-center">
+
+            <h1 className="text-5xl font-bold mb-6">
+
+              🎉 Test Submitted
+
+            </h1>
+
+            <p className="text-3xl text-purple-500 font-bold mb-4">
+
+              Your Score: {score}
+
+            </p>
+
+            <p className="text-gray-400 text-lg">
+
+              Score saved successfully 🚀
+
+            </p>
+
+          </div>
+
+        </main>
+
+      </ProtectedRoute>
+
+    );
+
+  }
+
   return (
 
-    <main className="min-h-screen bg-[#0b1120] text-white p-6">
+    <ProtectedRoute>
 
-      <nav className="flex justify-between items-center mb-10">
+      <main className="min-h-screen bg-[#0b1120] text-white p-6">
 
-        <h1 className="text-3xl font-bold">
+        <div className="max-w-7xl mx-auto">
 
-          Exam <span className="text-purple-500">
-            Cracker
-          </span>
+          <div className="flex flex-col lg:flex-row gap-6">
 
-        </h1>
+            <div className="flex-1">
 
-        <div className="bg-[#111827] px-5 py-3 rounded-2xl border border-gray-800 text-xl font-semibold">
+              <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8">
 
-          ⏱️ {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                <div className="flex justify-between items-center mb-6">
+
+                  <div>
+
+                    <p className="text-purple-500 font-semibold mb-2">
+
+                      {questions[currentQuestion].subject}
+
+                    </p>
+
+                    <p className="text-gray-400">
+
+                      {questions[currentQuestion].chapter}
+
+                    </p>
+
+                  </div>
+
+                  <div className="bg-[#1e293b] px-5 py-3 rounded-2xl text-xl font-bold">
+
+                    ⏱️ {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+
+                  </div>
+
+                </div>
+
+                <h1 className="text-3xl font-bold mb-10 leading-relaxed">
+
+                  {questions[currentQuestion].question}
+
+                </h1>
+
+                <div className="space-y-5">
+
+                  {questions[currentQuestion].options.map((option,index)=>(
+
+                    <button
+                      key={index}
+                      onClick={()=>chooseOption(option)}
+                      className={`w-full p-5 rounded-2xl text-left border transition
+
+                      ${answers[currentQuestion] === option
+
+                        ? "bg-purple-600 border-purple-500"
+
+                        : "bg-[#1e293b] border-gray-700 hover:border-purple-500"
+
+                      }`}
+                    >
+
+                      {option}
+
+                    </button>
+
+                  ))}
+
+                </div>
+
+                <div className="flex justify-between mt-10">
+
+                  <button
+                    onClick={()=>
+                      setCurrentQuestion(prev=>
+                        Math.max(prev - 1,0)
+                      )
+                    }
+                    className="px-8 py-4 rounded-2xl bg-gray-700"
+                  >
+
+                    Previous
+
+                  </button>
+
+                  {currentQuestion < questions.length - 1 ? (
+
+                    <button
+                      onClick={()=>
+                        setCurrentQuestion(prev=>
+                          prev + 1
+                        )
+                      }
+                      className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600"
+                    >
+
+                      Next
+
+                    </button>
+
+                  ) : (
+
+                    <button
+                      onClick={submitTest}
+                      disabled={saving}
+                      className="px-8 py-4 rounded-2xl bg-green-600 disabled:opacity-50"
+                    >
+
+                      {saving
+                        ? "Submitting..."
+                        : "Submit Test"
+                      }
+
+                    </button>
+
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="lg:w-80">
+
+              <div className="bg-[#111827] border border-gray-800 rounded-3xl p-6 sticky top-6">
+
+                <h2 className="text-2xl font-bold mb-6">
+
+                  Question Palette
+
+                </h2>
+
+                <div className="grid grid-cols-4 gap-4">
+
+                  {questions.map((_,index)=>(
+
+                    <button
+                      key={index}
+                      onClick={()=>
+                        setCurrentQuestion(index)
+                      }
+                      className={`h-14 rounded-2xl font-bold transition
+
+                      ${answers[index]
+
+                        ? "bg-purple-600"
+
+                        : "bg-[#1e293b]"
+
+                      }`}
+                    >
+
+                      {index + 1}
+
+                    </button>
+
+                  ))}
+
+                </div>
+
+                <button
+                  onClick={submitTest}
+                  disabled={saving}
+                  className="w-full mt-8 py-4 rounded-2xl bg-red-500 font-semibold disabled:opacity-50"
+                >
+
+                  {saving
+                    ? "Submitting..."
+                    : "Submit Full Test"
+                  }
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
-      </nav>
+      </main>
 
-      <div className="max-w-3xl mx-auto bg-[#111827] p-10 rounded-3xl border border-gray-800">
-
-        <p className="text-gray-400 mb-4">
-
-          Question {currentQuestion + 1}
-          / {questions.length}
-
-        </p>
-
-        <h2 className="text-3xl font-bold mb-10 leading-relaxed">
-
-          {questions[currentQuestion].question}
-
-        </h2>
-
-        <div className="space-y-5">
-
-          {questions[currentQuestion].options.map((option,index)=>(
-
-            <button
-              key={index}
-              onClick={()=>selectOption(option)}
-              className={`w-full text-left p-5 rounded-2xl transition border
-
-              ${answers[currentQuestion] === option
-
-                ? "bg-purple-600 border-purple-500"
-
-                : "bg-[#1e293b] border-gray-700 hover:border-purple-500"
-
-              }`}
-
-            >
-
-              {option}
-
-            </button>
-
-          ))}
-
-        </div>
-
-        <div className="flex justify-between mt-10 gap-4">
-
-          <button
-            onClick={()=>
-              setCurrentQuestion(prev=>Math.max(prev - 1,0))
-            }
-            className="bg-gray-700 px-8 py-4 rounded-2xl font-semibold"
-          >
-
-            Previous
-
-          </button>
-
-          {currentQuestion < questions.length - 1 ? (
-
-            <button
-              onClick={()=>
-                setCurrentQuestion(prev=>prev + 1)
-              }
-              className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 rounded-2xl font-semibold"
-            >
-
-              Next
-
-            </button>
-
-          ) : (
-
-            <button
-              onClick={handleSubmit}
-              className="bg-green-600 px-8 py-4 rounded-2xl font-semibold"
-            >
-
-              Submit Test
-
-            </button>
-
-          )}
-
-        </div>
-
-      </div>
-
-    </main>
+    </ProtectedRoute>
 
   );
 

@@ -2,114 +2,234 @@
 
 import { useState } from "react";
 
-export default function RankPredictor() {
+export default function RankPredictorPage() {
 
-  const [percentile,setPercentile] = useState("");
+  const [score,setScore] = useState("");
 
-  const [rank,setRank] = useState("");
+  const [category,setCategory] =
+  useState("General");
+
+  const [result,setResult] = useState(null);
 
   function predictRank(){
 
-    const p = parseFloat(percentile);
+    const marks = Number(score);
 
-    if(isNaN(p)){
+    if(!marks && marks !== 0){
 
-      setRank("Please enter valid percentile");
+      alert("Enter valid marks");
 
       return;
 
     }
 
-    if(p >= 99.9){
+    let percentile = 0;
 
-      setRank("🔥 Expected Rank: Under 1,000");
+    let rank = 0;
 
-    }
+    // Percentile Prediction
 
-    else if(p >= 99.5){
+    if(marks >= 290){
 
-      setRank("🚀 Expected Rank: Under 8,000");
-
-    }
-
-    else if(p >= 99){
-
-      setRank("🎯 Expected Rank: Under 15,000");
+      percentile = 99.95;
+      rank = 500;
 
     }
 
-    else if(p >= 97){
+    else if(marks >= 250){
 
-      setRank("📘 Expected Rank: Around 30,000");
-
-    }
-
-    else if(p >= 95){
-
-      setRank("💪 Expected Rank: Around 50,000");
+      percentile = 99.5;
+      rank = 4000;
 
     }
 
-    else if(p >= 90){
+    else if(marks >= 200){
 
-      setRank("📈 Expected Rank: Around 1,00,000");
+      percentile = 98;
+      rank = 18000;
+
+    }
+
+    else if(marks >= 150){
+
+      percentile = 95;
+      rank = 40000;
+
+    }
+
+    else if(marks >= 100){
+
+      percentile = 85;
+      rank = 90000;
+
+    }
+
+    else if(marks >= 50){
+
+      percentile = 70;
+      rank = 150000;
 
     }
 
     else{
 
-      setRank("Keep Practicing Daily 🔥");
+      percentile = 50;
+      rank = 250000;
 
     }
+
+    // Category Adjustment
+
+    if(category === "OBC"){
+
+      rank = Math.floor(rank * 0.9);
+
+    }
+
+    else if(category === "SC"){
+
+      rank = Math.floor(rank * 0.7);
+
+    }
+
+    else if(category === "ST"){
+
+      rank = Math.floor(rank * 0.5);
+
+    }
+
+    setResult({
+
+      percentile,
+      rank
+
+    });
 
   }
 
   return (
 
-    <main className="min-h-screen bg-[#0b1120] text-white flex justify-center items-center px-6">
+    <main className="min-h-screen bg-[#0b1120] text-white p-6">
 
-      <div className="w-full max-w-2xl bg-[#111827] p-10 rounded-3xl border border-gray-800">
+      <div className="max-w-4xl mx-auto">
 
         <h1 className="text-5xl font-bold text-center mb-4">
 
-          Rank <span className="text-purple-500">
-            Predictor
+          📈 <span className="text-purple-500">
+            Rank Predictor
           </span>
 
         </h1>
 
-        <p className="text-center text-gray-400 text-lg mb-10">
+        <p className="text-center text-gray-400 text-lg mb-12">
 
-          Predict your expected JEE rank instantly 🚀
+          Predict your JEE Main rank instantly 🚀
 
         </p>
 
-        <input
-          type="number"
-          placeholder="Enter Your Percentile"
-          value={percentile}
-          onChange={(e)=>setPercentile(e.target.value)}
-          className="w-full p-5 rounded-2xl bg-[#1e293b] outline-none text-lg mb-6"
-        />
+        <div className="bg-[#111827] border border-gray-800 rounded-3xl p-10">
 
-        <button
-          onClick={predictRank}
-          className="w-full py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold hover:scale-105 transition"
-        >
+          <div className="space-y-6">
 
-          Predict Rank
+            <div>
 
-        </button>
+              <label className="block mb-3 text-lg text-gray-400">
 
-        {rank && (
+                Enter Expected Score
 
-          <div className="mt-10 bg-[#1e293b] p-6 rounded-2xl border border-gray-700">
+              </label>
 
-            <h2 className="text-3xl font-bold text-center">
+              <input
+                type="number"
+                placeholder="Enter marks out of 300"
+                value={score}
+                onChange={(e)=>setScore(e.target.value)}
+                className="w-full p-5 rounded-2xl bg-[#1e293b] outline-none text-lg"
+              />
 
-              {rank}
+            </div>
+
+            <div>
+
+              <label className="block mb-3 text-lg text-gray-400">
+
+                Select Category
+
+              </label>
+
+              <select
+                value={category}
+                onChange={(e)=>setCategory(e.target.value)}
+                className="w-full p-5 rounded-2xl bg-[#1e293b] outline-none text-lg"
+              >
+
+                <option>General</option>
+                <option>OBC</option>
+                <option>SC</option>
+                <option>ST</option>
+
+              </select>
+
+            </div>
+
+            <button
+              onClick={predictRank}
+              className="w-full py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+            >
+
+              Predict Rank
+
+            </button>
+
+          </div>
+
+        </div>
+
+        {result && (
+
+          <div className="mt-10 bg-[#111827] border border-purple-500 rounded-3xl p-10">
+
+            <h2 className="text-4xl font-bold mb-8 text-center">
+
+              🎯 Prediction Result
 
             </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div className="bg-[#1e293b] p-8 rounded-3xl text-center">
+
+                <h3 className="text-2xl text-gray-400 mb-4">
+
+                  Expected Percentile
+
+                </h3>
+
+                <p className="text-5xl font-bold text-purple-500">
+
+                  {result.percentile}
+
+                </p>
+
+              </div>
+
+              <div className="bg-[#1e293b] p-8 rounded-3xl text-center">
+
+                <h3 className="text-2xl text-gray-400 mb-4">
+
+                  Expected Rank
+
+                </h3>
+
+                <p className="text-5xl font-bold text-purple-500">
+
+                  AIR {result.rank}
+
+                </p>
+
+              </div>
+
+            </div>
 
           </div>
 
