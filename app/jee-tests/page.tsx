@@ -4,108 +4,45 @@ import Link from "next/link";
 
 export default function JEETestsPage() {
 
-  const completeTests = [
+  const tests = [
 
-    "JEE Main Full Test 1",
+    {
+      title:"JEE Full Syllabus Test",
+      icon:"🚀",
+      link:"/mock-test?exam=JEE"
+    },
 
-    "JEE Main Full Test 2",
+    {
+      title:"Physics Test",
+      icon:"⚡",
+      link:"/mock-test?subject=Physics"
+    },
 
-    "JEE Advanced Full Test",
+    {
+      title:"Chemistry Test",
+      icon:"🧪",
+      link:"/mock-test?subject=Chemistry"
+    },
 
-    "Complete PYQ Challenge"
+    {
+      title:"Maths Test",
+      icon:"📘",
+      link:"/mock-test?subject=Maths"
+    },
+
+    {
+      title:"Gravitation Chapter Test",
+      icon:"🌍",
+      link:"/mock-test?chapter=Gravitation"
+    },
+
+    {
+      title:"Current Electricity Test",
+      icon:"🔋",
+      link:"/mock-test?chapter=Current Electricity"
+    }
 
   ];
-
-  const halfTests = [
-
-    "Half Syllabus Test 1",
-
-    "Half Syllabus Test 2",
-
-    "Class 11 Revision Test",
-
-    "Class 12 Revision Test"
-
-  ];
-
-  const subjectTests = [
-
-    "Physics Advanced Test",
-
-    "Chemistry PYQ Test",
-
-    "Maths Calculus Test",
-
-    "Physics Current Electricity"
-
-  ];
-
-  function TestCard({title}:any){
-
-    return(
-
-      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition">
-
-        <div className="flex justify-between items-center mb-6">
-
-          <div className="text-5xl">
-
-            📝
-
-          </div>
-
-          <div className="bg-purple-600 px-4 py-2 rounded-xl text-sm font-semibold">
-
-            25 Questions
-
-          </div>
-
-        </div>
-
-        <h2 className="text-3xl font-black mb-6">
-
-          {title}
-
-        </h2>
-
-        <div className="space-y-3 text-gray-300 mb-8">
-
-          <p>
-
-            ⏱ Duration:
-            {" "}
-            60 mins
-
-          </p>
-
-          <p>
-
-            📚 JEE Main + Advanced
-
-          </p>
-
-          <p>
-
-            🔥 Real PYQ Level Questions
-
-          </p>
-
-        </div>
-
-        <Link
-          href="/mock-test"
-          className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
-        >
-
-          Start Test 🚀
-
-        </Link>
-
-      </div>
-
-    );
-
-  }
 
   return (
 
@@ -123,23 +60,23 @@ export default function JEETestsPage() {
 
               <div className="inline-block px-5 py-2 rounded-full bg-white/20 mb-6">
 
-                ⚡ JEE Test Series
+                ⚡ JEE Smart Test Series
 
               </div>
 
               <h1 className="text-6xl font-black leading-tight mb-6">
 
-                Unlimited
+                Real JEE
                 <br />
 
-                JEE Mock Tests 😎🔥
+                Mock Tests 😎🔥
 
               </h1>
 
               <p className="text-xl text-gray-100 max-w-2xl leading-relaxed">
 
-                Real JEE Main & Advanced
-                PYQs with complete and half syllabus tests 🚀
+                Smart filtered tests with
+                real PYQs and chapter-wise practice 🚀
 
               </p>
 
@@ -157,104 +94,63 @@ export default function JEETestsPage() {
 
       </section>
 
-      {/* COMPLETE TESTS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            🚀
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Complete Syllabus Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {completeTests.map((item,index)=>(
-
-            <TestCard
-              key={index}
-              title={item}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* HALF TESTS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            📚
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Half Syllabus Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {halfTests.map((item,index)=>(
-
-            <TestCard
-              key={index}
-              title={item}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* SUBJECT TESTS */}
+      {/* TESTS */}
 
       <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
 
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            🔥
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Subject Wise Tests
-
-          </h2>
-
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {subjectTests.map((item,index)=>(
+          {tests.map((test,index)=>(
 
-            <TestCard
+            <div
               key={index}
-              title={item}
-            />
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-10 hover:border-purple-500 transition"
+            >
+
+              <div className="text-7xl mb-8">
+
+                {test.icon}
+
+              </div>
+
+              <h2 className="text-4xl font-black mb-6">
+
+                {test.title}
+
+              </h2>
+
+              <div className="space-y-3 text-gray-300 mb-10">
+
+                <p>
+
+                  ✅ Smart Auto Filtering
+
+                </p>
+
+                <p>
+
+                  ✅ Real JEE Questions
+
+                </p>
+
+                <p>
+
+                  ✅ 25 Questions
+
+                </p>
+
+              </div>
+
+              <Link
+                href={test.link}
+                className="block text-center py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
+              >
+
+                Start Test 🚀
+
+              </Link>
+
+            </div>
 
           ))}
 
