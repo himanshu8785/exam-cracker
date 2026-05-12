@@ -4,25 +4,29 @@ import { useState } from "react";
 
 import Papa from "papaparse";
 
-import { db } from "../../../firebase";
+import {
+  db
+} from "../../../firebase";
 
 import {
   collection,
-  addDoc,
-  serverTimestamp
+  addDoc
 } from "firebase/firestore";
 
-export default function CSVUploadPage() {
+export default function CSVUploadPage(){
 
   const [loading,setLoading] =
   useState(false);
+
+  const [message,setMessage] =
+  useState("");
 
   async function handleFileUpload(
     event:any
   ){
 
     const file =
-    event?.target?.files?.[0];
+    event.target.files[0];
 
     if(!file){
 
@@ -38,20 +42,11 @@ export default function CSVUploadPage() {
 
       skipEmptyLines:true,
 
-      complete: async function(
-        results:any
-      ){
+      complete: async(results:any)=>{
 
         try{
 
-          const rows =
-          results.data || [];
-
-          for(
-            const item of rows
-          ){
-
-            const row:any = item;
+          for(const item of results.data){
 
             await addDoc(
 
@@ -63,40 +58,34 @@ export default function CSVUploadPage() {
               {
 
                 question:
-                row.question || "",
+                item.question,
 
                 options:[
 
-                  row.option1 || "",
+                  item.option1,
 
-                  row.option2 || "",
+                  item.option2,
 
-                  row.option3 || "",
+                  item.option3,
 
-                  row.option4 || ""
+                  item.option4
 
                 ],
 
                 answer:
-                row.answer || "",
-
-                subject:
-                row.subject || "",
-
-                chapter:
-                row.chapter || "",
-
-                difficulty:
-                row.difficulty || "",
+                item.answer,
 
                 exam:
-                row.exam || "",
+                item.exam,
 
-                testSeries:
-                row.testSeries || "",
+                subject:
+                item.subject,
 
-                createdAt:
-                serverTimestamp()
+                chapter:
+                item.chapter,
+
+                difficulty:
+                item.difficulty
 
               }
 
@@ -104,8 +93,8 @@ export default function CSVUploadPage() {
 
           }
 
-          alert(
-            "CSV Uploaded Successfully 🚀"
+          setMessage(
+            "Questions Uploaded Successfully 🚀"
           );
 
         }
@@ -114,8 +103,8 @@ export default function CSVUploadPage() {
 
           console.log(error);
 
-          alert(
-            "Upload Failed ❌"
+          setMessage(
+            "Upload Failed 😭"
           );
 
         }
@@ -128,60 +117,72 @@ export default function CSVUploadPage() {
 
   }
 
-  return (
+  return(
 
-    <main className="min-h-screen bg-[#0b1120] text-white p-6">
+    <main className="min-h-screen bg-[#050816] text-white p-6">
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-3xl mx-auto">
 
-        <h1 className="text-5xl font-black text-center mb-4">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-12">
 
-          📄 CSV Upload
+          <div className="text-center mb-10">
 
-        </h1>
+            <div className="text-8xl mb-6">
 
-        <p className="text-center text-gray-400 text-lg mb-12">
+              📄
 
-          Upload bulk JEE / NEET questions 🚀
+            </div>
 
-        </p>
+            <h1 className="text-5xl font-black mb-4">
 
-        <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10 text-center">
+              CSV Upload
 
-          <div className="text-8xl mb-8">
+            </h1>
 
-            📂
+            <p className="text-gray-400 text-xl">
+
+              Upload JEE / NEET Questions 😎🔥
+
+            </p>
 
           </div>
 
-          <h2 className="text-4xl font-bold mb-6">
+          <div className="bg-[#111827] rounded-3xl p-10 border border-white/10">
 
-            Upload CSV File
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="w-full text-lg"
+            />
 
-          </h2>
+            {
 
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-            className="mb-8"
-          />
+              loading && (
 
-          <div>
+                <div className="mt-8 text-center text-2xl font-bold text-purple-400">
 
-            <button
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
-            >
+                  Uploading Questions 🚀
 
-              {loading
+                </div>
 
-                ? "Uploading..."
+              )
 
-                : "Ready To Upload"
+            }
 
-              }
+            {
 
-            </button>
+              message && (
+
+                <div className="mt-8 text-center text-2xl font-bold text-green-400">
+
+                  {message}
+
+                </div>
+
+              )
+
+            }
 
           </div>
 
