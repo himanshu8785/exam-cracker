@@ -2,61 +2,162 @@
 
 import Link from "next/link";
 
-export default function NEETTestsPage() {
+export default function NEETTestSeriesPage(){
 
-  const completeTests = [
+  const fullTests = Array.from(
+    {length:20},
+    (_,i)=>{
 
-    "NEET Full Syllabus Test 1",
+      let plan = "FREE";
 
-    "NEET Full Syllabus Test 2",
+      if(i >= 3){
 
-    "NCERT Ultimate Test",
+        plan = "BASIC";
 
-    "NEET PYQ Challenge"
+      }
 
-  ];
+      if(i >= 8){
 
-  const halfTests = [
+        plan = "PRO";
 
-    "Half Syllabus Test 1",
+      }
 
-    "Class 11 Biology Test",
+      if(i >= 15){
 
-    "Class 12 Biology Test",
+        plan = "ELITE";
 
-    "Half Syllabus Rapid Revision"
+      }
 
-  ];
+      return{
 
-  const subjectTests = [
+        title:`NEET Full Test ${i+1}`,
 
-    "Biology NCERT Test",
+        plan,
 
-    "Physics NEET Test",
+        link:`/mock-test?exam=NEET&test=${i+1}`
 
-    "Chemistry Organic Test",
+      };
 
-    "Human Physiology Test"
+    }
+  );
 
-  ];
+  const biologyTests = Array.from(
+    {length:10},
+    (_,i)=>({
 
-  function TestCard({title}:any){
+      title:`Biology Test ${i+1}`,
+
+      link:`/mock-test?subject=Biology&test=${i+1}`
+
+    })
+  );
+
+  const chemistryTests = Array.from(
+    {length:10},
+    (_,i)=>({
+
+      title:`Chemistry Test ${i+1}`,
+
+      link:`/mock-test?subject=Chemistry&test=${i+1}`
+
+    })
+  );
+
+  const physicsTests = Array.from(
+    {length:10},
+    (_,i)=>({
+
+      title:`Physics Test ${i+1}`,
+
+      link:`/mock-test?subject=Physics&test=${i+1}`
+
+    })
+  );
+
+  function getBadge(plan:string){
+
+    if(plan === "FREE"){
+
+      return(
+
+        <div className="bg-green-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
+
+          FREE
+
+        </div>
+
+      );
+
+    }
+
+    if(plan === "BASIC"){
+
+      return(
+
+        <div className="bg-purple-500 px-4 py-2 rounded-xl text-sm font-bold">
+
+          BASIC ₹19
+
+        </div>
+
+      );
+
+    }
+
+    if(plan === "PRO"){
+
+      return(
+
+        <div className="bg-blue-500 px-4 py-2 rounded-xl text-sm font-bold">
+
+          PRO ₹49
+
+        </div>
+
+      );
+
+    }
 
     return(
 
-      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-green-500 transition">
+      <div className="bg-yellow-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
+
+        ELITE ₹299
+
+      </div>
+
+    );
+
+  }
+
+  function TestCard({title,link,plan}:any){
+
+    const locked =
+    plan && plan !== "FREE";
+
+    return(
+
+      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-green-500 transition relative overflow-hidden">
+
+        {
+
+          plan && (
+
+            <div className="absolute top-4 right-4">
+
+              {getBadge(plan)}
+
+            </div>
+
+          )
+
+        }
 
         <div className="flex justify-between items-center mb-6">
 
           <div className="text-5xl">
 
             🧬
-
-          </div>
-
-          <div className="bg-green-600 px-4 py-2 rounded-xl text-sm font-semibold">
-
-            25 Questions
 
           </div>
 
@@ -72,34 +173,51 @@ export default function NEETTestsPage() {
 
           <p>
 
-            ⏱ Duration:
-            {" "}
-            60 mins
+            ⏱ 60 Minutes
 
           </p>
 
           <p>
 
-            📚 NEET Level Questions
+            🔥 Real NEET PYQs
 
           </p>
 
           <p>
 
-            🔥 Real PYQ Level Questions
+            🚀 Smart Test Engine
 
           </p>
 
         </div>
 
-        <Link
-          href="/mock-test"
-          className="block text-center py-4 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-500 text-lg font-bold"
-        >
+        {
 
-          Start Test 🚀
+          locked
 
-        </Link>
+          ?
+
+          <Link
+            href="/pricing"
+            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-500 text-lg font-bold"
+          >
+
+            Unlock {plan} 💎
+
+          </Link>
+
+          :
+
+          <Link
+            href={link}
+            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-500 text-lg font-bold"
+          >
+
+            Start Free Test 🚀
+
+          </Link>
+
+        }
 
       </div>
 
@@ -107,15 +225,15 @@ export default function NEETTestsPage() {
 
   }
 
-  return (
+  return(
 
     <main className="min-h-screen bg-[#050816] text-white">
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-10">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-12">
 
-        <div className="bg-gradient-to-r from-green-700 to-emerald-600 rounded-[45px] p-12">
+        <div className="bg-gradient-to-r from-green-600 to-emerald-500 rounded-[45px] p-12">
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-10">
 
@@ -123,13 +241,13 @@ export default function NEETTestsPage() {
 
               <div className="inline-block px-5 py-2 rounded-full bg-white/20 mb-6">
 
-                🧬 NEET Test Series
+                🧬 Real NEET Test Series
 
               </div>
 
-              <h1 className="text-6xl font-black leading-tight mb-6">
+              <h1 className="text-7xl font-black leading-tight mb-6">
 
-                Unlimited
+                100+
                 <br />
 
                 NEET Mock Tests 😎🔥
@@ -138,8 +256,10 @@ export default function NEETTestsPage() {
 
               <p className="text-xl text-gray-100 max-w-2xl leading-relaxed">
 
-                Real NEET PYQs,
-                NCERT based questions and full syllabus tests 🚀
+                Full syllabus,
+                Biology tests,
+                Physics tests,
+                Chemistry tests and PYQs 🚀
 
               </p>
 
@@ -157,7 +277,81 @@ export default function NEETTestsPage() {
 
       </section>
 
-      {/* COMPLETE TESTS */}
+      {/* PLAN INFO */}
+
+      <section className="max-w-7xl mx-auto px-6 py-10">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div className="bg-purple-600 rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              BASIC ₹19
+
+            </h2>
+
+            <div className="space-y-4 text-lg">
+
+              <p>✅ 3 Full Tests</p>
+
+              <p>✅ 2 Subject Tests</p>
+
+              <p>✅ Daily Quiz</p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-blue-600 rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              PRO ₹49
+
+            </h2>
+
+            <div className="space-y-4 text-lg">
+
+              <p>✅ 20 Full Tests</p>
+
+              <p>✅ Subject Tests</p>
+
+              <p>✅ Analytics</p>
+
+              <p>✅ Leaderboard</p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-yellow-500 text-black rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              ELITE ₹299
+
+            </h2>
+
+            <div className="space-y-4 text-lg font-semibold">
+
+              <p>✅ ALL Tests</p>
+
+              <p>✅ ALL Notes</p>
+
+              <p>✅ Future AI Tools</p>
+
+              <p>✅ Premium Features</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* FULL TESTS */}
 
       <section className="max-w-7xl mx-auto px-6 py-16">
 
@@ -171,7 +365,7 @@ export default function NEETTestsPage() {
 
           <h2 className="text-5xl font-black">
 
-            Complete Syllabus Tests
+            Full Syllabus Tests
 
           </h2>
 
@@ -179,11 +373,13 @@ export default function NEETTestsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {completeTests.map((item,index)=>(
+          {fullTests.map((test,index)=>(
 
             <TestCard
               key={index}
-              title={item}
+              title={test.title}
+              link={test.link}
+              plan={test.plan}
             />
 
           ))}
@@ -192,7 +388,7 @@ export default function NEETTestsPage() {
 
       </section>
 
-      {/* HALF TESTS */}
+      {/* BIOLOGY */}
 
       <section className="max-w-7xl mx-auto px-6 py-16">
 
@@ -200,13 +396,13 @@ export default function NEETTestsPage() {
 
           <div className="text-5xl">
 
-            📚
+            🌿
 
           </div>
 
           <h2 className="text-5xl font-black">
 
-            Half Syllabus Tests
+            Biology Tests
 
           </h2>
 
@@ -214,11 +410,12 @@ export default function NEETTestsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {halfTests.map((item,index)=>(
+          {biologyTests.map((test,index)=>(
 
             <TestCard
               key={index}
-              title={item}
+              title={test.title}
+              link={test.link}
             />
 
           ))}
@@ -227,21 +424,21 @@ export default function NEETTestsPage() {
 
       </section>
 
-      {/* SUBJECT TESTS */}
+      {/* CHEMISTRY */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
+      <section className="max-w-7xl mx-auto px-6 py-16">
 
         <div className="flex items-center gap-4 mb-12">
 
           <div className="text-5xl">
 
-            🔥
+            🧪
 
           </div>
 
           <h2 className="text-5xl font-black">
 
-            Subject Wise Tests
+            Chemistry Tests
 
           </h2>
 
@@ -249,11 +446,48 @@ export default function NEETTestsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {subjectTests.map((item,index)=>(
+          {chemistryTests.map((test,index)=>(
 
             <TestCard
               key={index}
-              title={item}
+              title={test.title}
+              link={test.link}
+            />
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* PHYSICS */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            ⚡
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Physics Tests
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {physicsTests.map((test,index)=>(
+
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
             />
 
           ))}
