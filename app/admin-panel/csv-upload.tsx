@@ -4,9 +4,7 @@ import { useState } from "react";
 
 import Papa from "papaparse";
 
-import {
-  db
-} from "../../../firebase";
+import { db } from "../../firebase";
 
 import {
   collection,
@@ -24,7 +22,7 @@ export default function CSVUploadPage() {
   ){
 
     const file =
-    event.target.files[0];
+    event?.target?.files?.[0];
 
     if(!file){
 
@@ -40,52 +38,62 @@ export default function CSVUploadPage() {
 
       skipEmptyLines:true,
 
-      complete: async function(results:any){
+      complete: async function(
+        results:any
+      ){
 
         try{
 
+          const rows =
+          results.data || [];
+
           for(
-            let item:any of results.data
+            const item of rows
           ){
+
+            const row:any = item;
 
             await addDoc(
 
-              collection(db,"questions"),
+              collection(
+                db,
+                "questions"
+              ),
 
               {
 
                 question:
-                item.question || "",
+                row.question || "",
 
                 options:[
 
-                  item.option1 || "",
+                  row.option1 || "",
 
-                  item.option2 || "",
+                  row.option2 || "",
 
-                  item.option3 || "",
+                  row.option3 || "",
 
-                  item.option4 || ""
+                  row.option4 || ""
 
                 ],
 
                 answer:
-                item.answer || "",
+                row.answer || "",
 
                 subject:
-                item.subject || "",
+                row.subject || "",
 
                 chapter:
-                item.chapter || "",
+                row.chapter || "",
 
                 difficulty:
-                item.difficulty || "",
+                row.difficulty || "",
 
                 exam:
-                item.exam || "",
+                row.exam || "",
 
                 testSeries:
-                item.testSeries || "",
+                row.testSeries || "",
 
                 createdAt:
                 serverTimestamp()
@@ -97,7 +105,7 @@ export default function CSVUploadPage() {
           }
 
           alert(
-            "CSV Questions Uploaded 🚀"
+            "CSV Uploaded Successfully 🚀"
           );
 
         }
@@ -128,17 +136,13 @@ export default function CSVUploadPage() {
 
         <h1 className="text-5xl font-black text-center mb-4">
 
-          📄 <span className="text-purple-500">
-
-            CSV Upload
-
-          </span>
+          📄 CSV Upload
 
         </h1>
 
         <p className="text-center text-gray-400 text-lg mb-12">
 
-          Upload JEE / NEET questions instantly 🚀
+          Upload bulk JEE / NEET questions 🚀
 
         </p>
 
@@ -155,16 +159,6 @@ export default function CSVUploadPage() {
             Upload CSV File
 
           </h2>
-
-          <p className="text-gray-400 text-lg mb-10 leading-relaxed">
-
-            CSV should contain:
-            question, option1, option2,
-            option3, option4, answer,
-            subject, chapter, difficulty,
-            exam, testSeries
-
-          </p>
 
           <input
             type="file"
