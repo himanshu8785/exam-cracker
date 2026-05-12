@@ -14,7 +14,7 @@ import {
   getDocs
 } from "firebase/firestore";
 
-export default function MockTestPage() {
+export default function MockTestPage(){
 
   const [questions,setQuestions] =
   useState<any[]>([]);
@@ -71,7 +71,7 @@ export default function MockTestPage() {
 
       });
 
-      /* AUTO SMART FILTER */
+      /* URL PARAMS */
 
       const urlParams =
       new URLSearchParams(
@@ -88,6 +88,9 @@ export default function MockTestPage() {
 
       const chapter =
       urlParams.get("chapter");
+
+      const test =
+      urlParams.get("test");
 
       let filtered = data;
 
@@ -131,6 +134,28 @@ export default function MockTestPage() {
           (q:any)=>
 
             q.chapter === chapter
+
+        );
+
+      }
+
+      /* TEST-ID ENGINE */
+
+      if(test){
+
+        const testNumber =
+        parseInt(test);
+
+        filtered =
+        filtered.filter(
+
+          (
+            _:any,
+            index:number
+          )=>
+
+            index % 10 ===
+            testNumber % 10
 
         );
 
@@ -300,6 +325,7 @@ export default function MockTestPage() {
           <h1 className="text-6xl font-black text-purple-400 mb-6">
 
             Test Submitted
+
           </h1>
 
           <p className="text-3xl mb-4">
@@ -311,6 +337,7 @@ export default function MockTestPage() {
           <div className="text-7xl font-black mb-8">
 
             {score}
+
           </div>
 
           <button
@@ -332,7 +359,7 @@ export default function MockTestPage() {
 
   }
 
-  return (
+  return(
 
     <main className="min-h-screen bg-[#050816] text-white p-6">
 
@@ -342,7 +369,7 @@ export default function MockTestPage() {
 
           <h1 className="text-5xl font-black">
 
-            🚀 Smart Mock Test
+            🚀 Real Test Series
 
           </h1>
 
