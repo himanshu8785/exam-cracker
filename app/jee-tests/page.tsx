@@ -10,6 +10,8 @@ export default function JEETestSeriesPage(){
 
       title:`JEE Full Test ${i+1}`,
 
+      premium:i >= 3,
+
       link:`/mock-test?exam=JEE&test=${i+1}`
 
     })
@@ -20,6 +22,8 @@ export default function JEETestSeriesPage(){
     (_,i)=>({
 
       title:`Half Syllabus Test ${i+1}`,
+
+      premium:i >= 2,
 
       link:`/mock-test?exam=JEE&half=${i+1}`
 
@@ -32,38 +36,32 @@ export default function JEETestSeriesPage(){
 
       title:`Physics Test ${i+1}`,
 
+      premium:i >= 2,
+
       link:`/mock-test?subject=Physics&test=${i+1}`
 
     })
   );
 
-  const chemistryTests = Array.from(
-    {length:10},
-    (_,i)=>({
-
-      title:`Chemistry Test ${i+1}`,
-
-      link:`/mock-test?subject=Chemistry&test=${i+1}`
-
-    })
-  );
-
-  const mathsTests = Array.from(
-    {length:10},
-    (_,i)=>({
-
-      title:`Maths Test ${i+1}`,
-
-      link:`/mock-test?subject=Maths&test=${i+1}`
-
-    })
-  );
-
-  function TestCard({title,link}:any){
+  function TestCard({title,link,premium}:any){
 
     return(
 
-      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition">
+      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition relative overflow-hidden">
+
+        {
+
+          premium && (
+
+            <div className="absolute top-4 right-4 bg-yellow-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
+
+              🔒 PREMIUM
+
+            </div>
+
+          )
+
+        }
 
         <div className="flex justify-between items-center mb-6">
 
@@ -109,14 +107,33 @@ export default function JEETestSeriesPage(){
 
         </div>
 
-        <Link
-          href={link}
-          className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
-        >
+        {
 
-          Start Test 🚀
+          premium
 
-        </Link>
+          ?
+
+          <Link
+            href="/pricing"
+            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-500 text-lg font-bold"
+          >
+
+            Unlock Premium 💎
+
+          </Link>
+
+          :
+
+          <Link
+            href={link}
+            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
+          >
+
+            Start Test 🚀
+
+          </Link>
+
+        }
 
       </div>
 
@@ -176,7 +193,7 @@ export default function JEETestSeriesPage(){
 
       </section>
 
-      {/* FULL TESTS */}
+      {/* FREE TESTS */}
 
       <section className="max-w-7xl mx-auto px-6 py-16">
 
@@ -204,6 +221,7 @@ export default function JEETestSeriesPage(){
               key={index}
               title={test.title}
               link={test.link}
+              premium={test.premium}
             />
 
           ))}
@@ -240,6 +258,7 @@ export default function JEETestSeriesPage(){
               key={index}
               title={test.title}
               link={test.link}
+              premium={test.premium}
             />
 
           ))}
@@ -250,7 +269,7 @@ export default function JEETestSeriesPage(){
 
       {/* PHYSICS */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
 
         <div className="flex items-center gap-4 mb-12">
 
@@ -276,78 +295,7 @@ export default function JEETestSeriesPage(){
               key={index}
               title={test.title}
               link={test.link}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* CHEMISTRY */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            🧪
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Chemistry Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {chemistryTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* MATHS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            📘
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Maths Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {mathsTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
+              premium={test.premium}
             />
 
           ))}
