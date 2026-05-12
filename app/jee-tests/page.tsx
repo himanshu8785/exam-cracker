@@ -2,55 +2,135 @@
 
 import Link from "next/link";
 
-export default function JEETestsPage() {
+export default function JEETestSeriesPage(){
 
-  const tests = [
+  const fullTests = Array.from(
+    {length:20},
+    (_,i)=>({
 
-    {
-      title:"JEE Full Syllabus Test",
-      icon:"🚀",
-      link:"/mock-test?exam=JEE"
-    },
+      title:`JEE Full Test ${i+1}`,
 
-    {
-      title:"Physics Test",
-      icon:"⚡",
-      link:"/mock-test?subject=Physics"
-    },
+      link:`/mock-test?exam=JEE&test=${i+1}`
 
-    {
-      title:"Chemistry Test",
-      icon:"🧪",
-      link:"/mock-test?subject=Chemistry"
-    },
+    })
+  );
 
-    {
-      title:"Maths Test",
-      icon:"📘",
-      link:"/mock-test?subject=Maths"
-    },
+  const halfTests = Array.from(
+    {length:10},
+    (_,i)=>({
 
-    {
-      title:"Gravitation Chapter Test",
-      icon:"🌍",
-      link:"/mock-test?chapter=Gravitation"
-    },
+      title:`Half Syllabus Test ${i+1}`,
 
-    {
-      title:"Current Electricity Test",
-      icon:"🔋",
-      link:"/mock-test?chapter=Current Electricity"
-    }
+      link:`/mock-test?exam=JEE&half=${i+1}`
 
-  ];
+    })
+  );
 
-  return (
+  const physicsTests = Array.from(
+    {length:10},
+    (_,i)=>({
+
+      title:`Physics Test ${i+1}`,
+
+      link:`/mock-test?subject=Physics&test=${i+1}`
+
+    })
+  );
+
+  const chemistryTests = Array.from(
+    {length:10},
+    (_,i)=>({
+
+      title:`Chemistry Test ${i+1}`,
+
+      link:`/mock-test?subject=Chemistry&test=${i+1}`
+
+    })
+  );
+
+  const mathsTests = Array.from(
+    {length:10},
+    (_,i)=>({
+
+      title:`Maths Test ${i+1}`,
+
+      link:`/mock-test?subject=Maths&test=${i+1}`
+
+    })
+  );
+
+  function TestCard({title,link}:any){
+
+    return(
+
+      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition">
+
+        <div className="flex justify-between items-center mb-6">
+
+          <div className="text-5xl">
+
+            📝
+
+          </div>
+
+          <div className="bg-purple-600 px-4 py-2 rounded-xl text-sm font-semibold">
+
+            25 Questions
+
+          </div>
+
+        </div>
+
+        <h2 className="text-3xl font-black mb-6">
+
+          {title}
+
+        </h2>
+
+        <div className="space-y-3 text-gray-300 mb-8">
+
+          <p>
+
+            ⏱ 60 Minutes
+
+          </p>
+
+          <p>
+
+            🔥 Real JEE PYQs
+
+          </p>
+
+          <p>
+
+            🚀 Smart Test Engine
+
+          </p>
+
+        </div>
+
+        <Link
+          href={link}
+          className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
+        >
+
+          Start Test 🚀
+
+        </Link>
+
+      </div>
+
+    );
+
+  }
+
+  return(
 
     <main className="min-h-screen bg-[#050816] text-white">
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-10">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-12">
 
         <div className="bg-gradient-to-r from-purple-700 to-blue-700 rounded-[45px] p-12">
 
@@ -60,23 +140,25 @@ export default function JEETestsPage() {
 
               <div className="inline-block px-5 py-2 rounded-full bg-white/20 mb-6">
 
-                ⚡ JEE Smart Test Series
+                ⚡ Real JEE Test Series
 
               </div>
 
-              <h1 className="text-6xl font-black leading-tight mb-6">
+              <h1 className="text-7xl font-black leading-tight mb-6">
 
-                Real JEE
+                100+
                 <br />
 
-                Mock Tests 😎🔥
+                JEE Mock Tests 😎🔥
 
               </h1>
 
               <p className="text-xl text-gray-100 max-w-2xl leading-relaxed">
 
-                Smart filtered tests with
-                real PYQs and chapter-wise practice 🚀
+                Full syllabus,
+                half syllabus,
+                chapter tests,
+                PYQs and subject-wise practice 🚀
 
               </p>
 
@@ -94,63 +176,179 @@ export default function JEETestsPage() {
 
       </section>
 
-      {/* TESTS */}
+      {/* FULL TESTS */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
+      <section className="max-w-7xl mx-auto px-6 py-16">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            🚀
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Full Syllabus Tests
+
+          </h2>
+
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {tests.map((test,index)=>(
+          {fullTests.map((test,index)=>(
 
-            <div
+            <TestCard
               key={index}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-10 hover:border-purple-500 transition"
-            >
+              title={test.title}
+              link={test.link}
+            />
 
-              <div className="text-7xl mb-8">
+          ))}
 
-                {test.icon}
+        </div>
 
-              </div>
+      </section>
 
-              <h2 className="text-4xl font-black mb-6">
+      {/* HALF TESTS */}
 
-                {test.title}
+      <section className="max-w-7xl mx-auto px-6 py-16">
 
-              </h2>
+        <div className="flex items-center gap-4 mb-12">
 
-              <div className="space-y-3 text-gray-300 mb-10">
+          <div className="text-5xl">
 
-                <p>
+            📚
 
-                  ✅ Smart Auto Filtering
+          </div>
 
-                </p>
+          <h2 className="text-5xl font-black">
 
-                <p>
+            Half Syllabus Tests
 
-                  ✅ Real JEE Questions
+          </h2>
 
-                </p>
+        </div>
 
-                <p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                  ✅ 25 Questions
+          {halfTests.map((test,index)=>(
 
-                </p>
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
+            />
 
-              </div>
+          ))}
 
-              <Link
-                href={test.link}
-                className="block text-center py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
-              >
+        </div>
 
-                Start Test 🚀
+      </section>
 
-              </Link>
+      {/* PHYSICS */}
 
-            </div>
+      <section className="max-w-7xl mx-auto px-6 py-16">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            ⚡
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Physics Tests
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {physicsTests.map((test,index)=>(
+
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
+            />
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* CHEMISTRY */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            🧪
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Chemistry Tests
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {chemistryTests.map((test,index)=>(
+
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
+            />
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* MATHS */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            📘
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Maths Tests
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {mathsTests.map((test,index)=>(
+
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
+            />
 
           ))}
 
