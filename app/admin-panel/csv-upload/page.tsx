@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Papa from "papaparse";
 
-import { db } from "../../firebase";
+import { db } from "../../../firebase";
 
 import {
   collection,
