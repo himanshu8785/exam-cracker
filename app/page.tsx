@@ -14,10 +14,17 @@ export default function HomePage() {
     },
 
     {
-      title:"Test Series",
-      link:"/test-series",
-      icon:"📝",
-      desc:"Unlimited JEE/NEET mock tests"
+      title:"JEE Test Series",
+      link:"/jee-tests",
+      icon:"⚡",
+      desc:"Unlimited JEE mock tests"
+    },
+
+    {
+      title:"NEET Test Series",
+      link:"/neet-tests",
+      icon:"🧬",
+      desc:"Unlimited NEET mock tests"
     },
 
     {
@@ -46,13 +53,6 @@ export default function HomePage() {
       link:"/leaderboard",
       icon:"🏆",
       desc:"Compete with toppers"
-    },
-
-    {
-      title:"Profile",
-      link:"/profile",
-      icon:"👤",
-      desc:"Track your progress"
     },
 
     {
@@ -106,9 +106,15 @@ export default function HomePage() {
 
           <div className="hidden md:flex gap-8 text-lg">
 
-            <Link href="/test-series">
+            <Link href="/jee-tests">
 
-              Test Series
+              JEE Tests
+
+            </Link>
+
+            <Link href="/neet-tests">
+
+              NEET Tests
 
             </Link>
 
@@ -181,20 +187,20 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row justify-center gap-6">
 
             <Link
-              href="/test-series"
+              href="/jee-tests"
               className="px-12 py-6 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-bold shadow-2xl hover:scale-105 transition"
             >
 
-              Start Preparation 🚀
+              JEE Test Series ⚡
 
             </Link>
 
             <Link
-              href="/pricing"
+              href="/neet-tests"
               className="px-12 py-6 rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl text-xl font-bold hover:bg-white/10 transition"
             >
 
-              Buy Premium 💎
+              NEET Test Series 🧬
 
             </Link>
 
