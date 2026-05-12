@@ -2,115 +2,94 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 export default function SearchBar() {
 
-  const router = useRouter();
-
-  const [query,setQuery] =
+  const [search,setSearch] =
   useState("");
 
-  const pages = [
+  const suggestions = [
 
-    {
-      name:"Mock Tests",
-      link:"/mock-test"
-    },
+    "Physics",
 
-    {
-      name:"Rank Predictor",
-      link:"/rank-predictor"
-    },
+    "Chemistry",
 
-    {
-      name:"AI Doubt Solver",
-      link:"/ai-doubt-solver"
-    },
+    "Mathematics",
 
-    {
-      name:"Leaderboard",
-      link:"/leaderboard"
-    },
+    "Biology",
 
-    {
-      name:"Premium",
-      link:"/premium"
-    },
+    "Mock Test",
 
-    {
-      name:"History",
-      link:"/history"
-    },
+    "JEE",
 
-    {
-      name:"Subject Tests",
-      link:"/subject-tests"
-    },
-
-    {
-      name:"Analytics",
-      link:"/analytics"
-    }
+    "NEET"
 
   ];
 
-  function handleSearch(e){
+  function handleSearch(
+    e:any
+  ){
 
     e.preventDefault();
 
-    const result =
-    pages.find((page)=>
+    alert(
 
-      page.name
-      .toLowerCase()
-      .includes(
-        query.toLowerCase()
-      )
+      `Searching for: ${search}`
 
     );
-
-    if(result){
-
-      router.push(result.link);
-
-    }
-
-    else{
-
-      alert("No matching page found 🚀");
-
-    }
 
   }
 
   return (
 
-    <form
-      onSubmit={handleSearch}
-      className="flex items-center gap-3"
-    >
+    <div className="w-full">
 
-      <input
-        type="text"
-        placeholder="Search features..."
-        value={query}
-        onChange={(e)=>
-          setQuery(e.target.value)
-        }
-        className="bg-[#1e293b] border border-gray-700 rounded-2xl px-5 py-3 outline-none text-white w-56"
-      />
-
-      <button
-        type="submit"
-        className="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600"
+      <form
+        onSubmit={handleSearch}
+        className="flex flex-col md:flex-row gap-4"
       >
 
-        🔍
+        <input
+          type="text"
+          placeholder="Search notes, tests, PYQs..."
+          value={search}
+          onChange={(e)=>
+            setSearch(e.target.value)
+          }
+          className="flex-1 bg-[#1e293b] text-white rounded-2xl px-6 py-4 outline-none"
+        />
 
-      </button>
+        <button
+          type="submit"
+          className="px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold"
+        >
 
-    </form>
+          Search 🚀
+
+        </button>
+
+      </form>
+
+      <div className="flex flex-wrap gap-3 mt-6">
+
+        {suggestions.map((item,index)=>(
+
+          <button
+            key={index}
+            onClick={()=>
+              setSearch(item)
+            }
+            className="bg-[#111827] border border-gray-700 rounded-2xl px-4 py-2 text-sm hover:border-purple-500 transition"
+          >
+
+            {item}
+
+          </button>
+
+        ))}
+
+      </div>
+
+    </div>
 
   );
 
