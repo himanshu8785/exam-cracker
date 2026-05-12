@@ -19,7 +19,9 @@ export default function CSVUploadPage() {
   const [loading,setLoading] =
   useState(false);
 
-  async function handleFileUpload(event){
+  async function handleFileUpload(
+  event:any
+){
 
     const file =
     event.target.files[0];
