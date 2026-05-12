@@ -8,9 +8,9 @@ export default function HomePage() {
 
     {
       title:"AI Doubt Solver",
-      link:"/ai-doubt-solver",
+      link:"https://gemini.google.com/",
       icon:"🤖",
-      desc:"Solve doubts instantly with AI"
+      desc:"Solve doubts instantly with Gemini AI"
     },
 
     {
@@ -118,11 +118,15 @@ export default function HomePage() {
 
             </Link>
 
-            <Link href="/ai-doubt-solver">
+            <a
+              href="https://gemini.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
 
               AI Solver
 
-            </Link>
+            </a>
 
             <Link href="/study-material">
 
@@ -171,14 +175,13 @@ export default function HomePage() {
 
             <br />
 
-            With AI 🚀
+            With Smart Tests 🚀
 
           </h1>
 
           <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-14">
 
-            AI doubt solving,
-            unlimited mock tests,
+            Unlimited mock tests,
             PYQs, premium notes,
             rank prediction and real analytics 😎🔥
 
@@ -243,65 +246,19 @@ export default function HomePage() {
 
       </section>
 
-      {/* SEARCH */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
-
-          <h2 className="text-4xl font-black mb-8">
-
-            🔍 Search Anything
-
-          </h2>
-
-          <input
-            type="text"
-            placeholder="Search mock tests, PYQs, notes..."
-            className="w-full bg-[#111827] text-white rounded-3xl px-8 py-6 outline-none text-xl border border-white/10"
-          />
-
-          <div className="flex flex-wrap gap-4 mt-8">
-
-            {[
-              "JEE Main",
-              "JEE Advanced",
-              "NEET",
-              "Physics",
-              "Chemistry",
-              "Maths",
-              "Biology",
-              "PYQs"
-            ].map((item,index)=>(
-
-              <button
-                key={index}
-                className="px-6 py-3 rounded-2xl bg-purple-600/20 border border-purple-500/30 hover:bg-purple-600 transition"
-              >
-
-                {item}
-
-              </button>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
       {/* FEATURE CARDS */}
 
       <section className="max-w-7xl mx-auto px-6 py-10">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
+          {/* AI CARD */}
+
           <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-[40px] p-10">
 
             <div className="text-7xl mb-8">
 
-              🧠
+              🤖
 
             </div>
 
@@ -318,16 +275,20 @@ export default function HomePage() {
 
             </p>
 
-            <Link
-              href="/ai-doubt-solver"
+            <a
+              href="https://gemini.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block px-8 py-4 rounded-2xl bg-black text-lg font-bold"
             >
 
-              Solve Doubts 🚀
+              Open Gemini 🚀
 
-            </Link>
+            </a>
 
           </div>
+
+          {/* RANK */}
 
           <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
 
@@ -360,6 +321,8 @@ export default function HomePage() {
             </Link>
 
           </div>
+
+          {/* PREMIUM */}
 
           <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
 
@@ -410,6 +373,40 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
           {tools.map((tool,index)=>(
+
+            tool.link.startsWith("http")
+
+            ?
+
+            <a
+              key={index}
+              href={tool.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-10 hover:border-purple-500 hover:-translate-y-2 transition duration-300"
+            >
+
+              <div className="text-7xl mb-8 group-hover:scale-110 transition">
+
+                {tool.icon}
+
+              </div>
+
+              <h3 className="text-3xl font-black mb-4">
+
+                {tool.title}
+
+              </h3>
+
+              <p className="text-gray-400 leading-relaxed">
+
+                {tool.desc}
+
+              </p>
+
+            </a>
+
+            :
 
             <Link
               key={index}
