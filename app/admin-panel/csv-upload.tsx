@@ -6,7 +6,7 @@ import Papa from "papaparse";
 
 import {
   db
-} from "../../firebase";
+} from "../../../firebase";
 
 import {
   collection,
@@ -20,8 +20,8 @@ export default function CSVUploadPage() {
   useState(false);
 
   async function handleFileUpload(
-  event:any
-){
+    event:any
+  ){
 
     const file =
     event.target.files[0];
@@ -40,12 +40,12 @@ export default function CSVUploadPage() {
 
       skipEmptyLines:true,
 
-      complete: async function(results){
+      complete: async function(results:any){
 
         try{
 
           for(
-            let item of results.data
+            let item:any of results.data
           ){
 
             await addDoc(
@@ -55,29 +55,37 @@ export default function CSVUploadPage() {
               {
 
                 question:
-                item.question,
+                item.question || "",
 
                 options:[
-                  item.option1,
-                  item.option2,
-                  item.option3,
-                  item.option4
+
+                  item.option1 || "",
+
+                  item.option2 || "",
+
+                  item.option3 || "",
+
+                  item.option4 || ""
+
                 ],
 
                 answer:
-                item.answer,
+                item.answer || "",
 
                 subject:
-                item.subject,
+                item.subject || "",
 
                 chapter:
-                item.chapter,
+                item.chapter || "",
 
                 difficulty:
-                item.difficulty,
+                item.difficulty || "",
 
                 exam:
-                item.exam,
+                item.exam || "",
+
+                testSeries:
+                item.testSeries || "",
 
                 createdAt:
                 serverTimestamp()
@@ -88,7 +96,9 @@ export default function CSVUploadPage() {
 
           }
 
-          alert("CSV Questions Uploaded 🚀");
+          alert(
+            "CSV Questions Uploaded 🚀"
+          );
 
         }
 
@@ -96,7 +106,9 @@ export default function CSVUploadPage() {
 
           console.log(error);
 
-          alert("Upload Failed");
+          alert(
+            "Upload Failed ❌"
+          );
 
         }
 
@@ -117,14 +129,16 @@ export default function CSVUploadPage() {
         <h1 className="text-5xl font-black text-center mb-4">
 
           📄 <span className="text-purple-500">
-            CSV Question Upload
+
+            CSV Upload
+
           </span>
 
         </h1>
 
         <p className="text-center text-gray-400 text-lg mb-12">
 
-          Upload hundreds of JEE / NEET questions instantly 🚀
+          Upload JEE / NEET questions instantly 🚀
 
         </p>
 
@@ -142,12 +156,13 @@ export default function CSVUploadPage() {
 
           </h2>
 
-          <p className="text-gray-400 text-lg mb-10">
+          <p className="text-gray-400 text-lg mb-10 leading-relaxed">
 
             CSV should contain:
             question, option1, option2,
             option3, option4, answer,
-            subject, chapter, difficulty, exam
+            subject, chapter, difficulty,
+            exam, testSeries
 
           </p>
 
@@ -165,8 +180,11 @@ export default function CSVUploadPage() {
             >
 
               {loading
+
                 ? "Uploading..."
+
                 : "Ready To Upload"
+
               }
 
             </button>
