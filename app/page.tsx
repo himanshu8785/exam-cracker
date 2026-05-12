@@ -7,7 +7,7 @@ export default function HomePage() {
   const tools = [
 
     {
-      title:"Mock Tests",
+      title:"Test Series",
       link:"/test-series",
       icon:"📝"
     },
@@ -56,53 +56,224 @@ export default function HomePage() {
 
   ];
 
+  const categories = [
+
+    "JEE Main",
+
+    "JEE Advanced",
+
+    "NEET",
+
+    "Physics",
+
+    "Chemistry",
+
+    "Maths",
+
+    "Biology",
+
+    "PYQs"
+
+  ];
+
   return (
 
     <main className="min-h-screen bg-[#0b1120] text-white">
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 py-24 text-center">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-10">
 
-        <h1 className="text-7xl font-black leading-tight mb-8">
+        <div className="bg-gradient-to-r from-purple-700 to-blue-700 rounded-[50px] p-12">
 
-          Crack
-          {" "}
+          <h1 className="text-7xl font-black leading-tight mb-6">
 
-          <span className="text-purple-500">
+            Crack
+            {" "}
 
-            JEE & NEET
+            <span className="text-yellow-300">
 
-          </span>
+              JEE & NEET
 
-          <br />
+            </span>
 
-          With AI 🚀
+            <br />
 
-        </h1>
+            With AI 🚀
 
-        <p className="text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
+          </h1>
 
-          Mock tests, PYQs,
-          AI doubt solving,
-          premium notes and rank prediction 😎🔥
+          <p className="text-2xl text-gray-100 max-w-3xl leading-relaxed mb-10">
 
-        </p>
+            Unlimited mock tests,
+            AI doubt solving,
+            premium notes,
+            PYQs and rank prediction 😎🔥
 
-        <Link
-          href="/test-series"
-          className="inline-block px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-semibold"
-        >
+          </p>
 
-          Start Preparation 🚀
+          <div className="flex flex-col md:flex-row gap-5">
 
-        </Link>
+            <Link
+              href="/test-series"
+              className="px-10 py-5 rounded-2xl bg-black text-xl font-bold"
+            >
+
+              Start Mock Tests 🚀
+
+            </Link>
+
+            <Link
+              href="/pricing"
+              className="px-10 py-5 rounded-2xl border border-white text-xl font-bold"
+            >
+
+              Buy Premium 💎
+
+            </Link>
+
+          </div>
+
+        </div>
 
       </section>
 
-      {/* TOOLS */}
+      {/* SEARCH */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      <section className="max-w-7xl mx-auto px-6 py-10">
+
+        <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-8">
+
+          <input
+            type="text"
+            placeholder="Search notes, PYQs, mock tests..."
+            className="w-full bg-[#1e293b] text-white rounded-2xl px-6 py-5 outline-none text-lg"
+          />
+
+          <div className="flex flex-wrap gap-4 mt-8">
+
+            {categories.map((item,index)=>(
+
+              <button
+                key={index}
+                className="bg-[#1e293b] px-5 py-3 rounded-2xl text-sm hover:bg-purple-600 transition"
+              >
+
+                {item}
+
+              </button>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ANALYTICS CARDS */}
+
+      <section className="max-w-7xl mx-auto px-6 py-10">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
+
+            <div className="text-6xl mb-6">
+
+              📈
+
+            </div>
+
+            <h2 className="text-4xl font-black mb-4">
+
+              AIR Predictor
+            </h2>
+
+            <p className="text-gray-400 mb-8">
+
+              Predict your JEE/NEET rank instantly 😎
+
+            </p>
+
+            <Link
+              href="/rank-predictor"
+              className="inline-block px-6 py-4 rounded-2xl bg-purple-600 font-semibold"
+            >
+
+              Predict Rank 🚀
+
+            </Link>
+
+          </div>
+
+          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
+
+            <div className="text-6xl mb-6">
+
+              🔥
+
+            </div>
+
+            <h2 className="text-4xl font-black mb-4">
+
+              Daily Quiz
+            </h2>
+
+            <p className="text-gray-400 mb-8">
+
+              Daily JEE/NEET PYQs practice 😎
+
+            </p>
+
+            <Link
+              href="/daily-quiz"
+              className="inline-block px-6 py-4 rounded-2xl bg-blue-600 font-semibold"
+            >
+
+              Start Quiz 🚀
+
+            </Link>
+
+          </div>
+
+          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
+
+            <div className="text-6xl mb-6">
+
+              💎
+
+            </div>
+
+            <h2 className="text-4xl font-black mb-4">
+
+              Premium Access
+            </h2>
+
+            <p className="text-gray-400 mb-8">
+
+              Unlock all tools and notes 😎🔥
+
+            </p>
+
+            <Link
+              href="/pricing"
+              className="inline-block px-6 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold"
+            >
+
+              Upgrade 🚀
+
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ALL TOOLS */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16">
 
         <h2 className="text-5xl font-black text-center mb-16">
 
