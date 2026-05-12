@@ -306,11 +306,11 @@ export default function PricingPage(){
 
           {/* QR PLACEHOLDER */}
 
-          <div className="w-[280px] h-[280px] mx-auto bg-white rounded-[35px] flex items-center justify-center text-black text-3xl font-black mb-10">
-
-            UPI QR 😎
-
-          </div>
+          <img
+  src="/gpay-qr.jpg"
+  alt="UPI QR"
+  className="w-[280px] h-[280px] mx-auto rounded-[35px] object-cover mb-10"
+/>
 
           {/* WHATSAPP */}
 
