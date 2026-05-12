@@ -71,10 +71,81 @@ export default function MockTestPage() {
 
       });
 
-      const shuffled =
-      data.sort(
-        ()=>0.5 - Math.random()
+      /* AUTO SMART FILTER */
+
+      const urlParams =
+      new URLSearchParams(
+
+        window.location.search
+
       );
+
+      const exam =
+      urlParams.get("exam");
+
+      const subject =
+      urlParams.get("subject");
+
+      const chapter =
+      urlParams.get("chapter");
+
+      let filtered = data;
+
+      /* FILTER EXAM */
+
+      if(exam){
+
+        filtered =
+        filtered.filter(
+
+          (q:any)=>
+
+            q.exam === exam
+
+        );
+
+      }
+
+      /* FILTER SUBJECT */
+
+      if(subject){
+
+        filtered =
+        filtered.filter(
+
+          (q:any)=>
+
+            q.subject === subject
+
+        );
+
+      }
+
+      /* FILTER CHAPTER */
+
+      if(chapter){
+
+        filtered =
+        filtered.filter(
+
+          (q:any)=>
+
+            q.chapter === chapter
+
+        );
+
+      }
+
+      /* RANDOMIZE */
+
+      const shuffled =
+      filtered.sort(
+
+        ()=>0.5 - Math.random()
+
+      );
+
+      /* 25 QUESTIONS */
 
       setQuestions(
 
@@ -203,8 +274,6 @@ export default function MockTestPage() {
         <h1 className="text-4xl font-black text-center">
 
           No Questions Found 😭
-          <br />
-          Upload Questions From Admin Panel
 
         </h1>
 
@@ -273,7 +342,7 @@ export default function MockTestPage() {
 
           <h1 className="text-5xl font-black">
 
-            🚀 Dynamic Mock Test
+            🚀 Smart Mock Test
 
           </h1>
 
