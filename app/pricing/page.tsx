@@ -219,13 +219,37 @@ export default function PricingPage(){
 
                 </div>
 
-                <button
-                  className={`w-full py-5 rounded-2xl text-xl font-black bg-gradient-to-r ${plan.color}`}
-                >
+                <a
 
-                  Buy {plan.name} 🚀
+  href={
 
-                </button>
+    plan.name === "BASIC"
+
+    ?
+
+    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=29"
+
+    :
+
+    plan.name === "PRO"
+
+    ?
+
+    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=69"
+
+    :
+
+    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=299"
+
+  }
+
+  className={`block text-center w-full py-5 rounded-2xl text-xl font-black bg-gradient-to-r ${plan.color}`}
+
+>
+
+  Buy {plan.name} 🚀
+
+</a>
 
               </div>
 
