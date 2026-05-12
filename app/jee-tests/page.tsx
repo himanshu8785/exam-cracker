@@ -6,74 +6,117 @@ export default function JEETestSeriesPage(){
 
   const fullTests = Array.from(
     {length:20},
-    (_,i)=>({
+    (_,i)=>{
 
-      title:`JEE Full Test ${i+1}`,
+      let plan = "FREE";
 
-      premium:i >= 3,
+      if(i >= 3){
 
-      link:`/mock-test?exam=JEE&test=${i+1}`
+        plan = "BASIC";
 
-    })
+      }
+
+      if(i >= 8){
+
+        plan = "PRO";
+
+      }
+
+      if(i >= 15){
+
+        plan = "ELITE";
+
+      }
+
+      return{
+
+        title:`JEE Full Test ${i+1}`,
+
+        plan,
+
+        link:`/mock-test?exam=JEE&test=${i+1}`
+
+      };
+
+    }
   );
 
-  const halfTests = Array.from(
-    {length:10},
-    (_,i)=>({
+  function getBadge(plan:string){
 
-      title:`Half Syllabus Test ${i+1}`,
+    if(plan === "FREE"){
 
-      premium:i >= 2,
+      return(
 
-      link:`/mock-test?exam=JEE&half=${i+1}`
+        <div className="bg-green-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
 
-    })
-  );
+          FREE
 
-  const physicsTests = Array.from(
-    {length:10},
-    (_,i)=>({
+        </div>
 
-      title:`Physics Test ${i+1}`,
+      );
 
-      premium:i >= 2,
+    }
 
-      link:`/mock-test?subject=Physics&test=${i+1}`
+    if(plan === "BASIC"){
 
-    })
-  );
+      return(
 
-  function TestCard({title,link,premium}:any){
+        <div className="bg-purple-500 px-4 py-2 rounded-xl text-sm font-bold">
+
+          BASIC ₹19
+
+        </div>
+
+      );
+
+    }
+
+    if(plan === "PRO"){
+
+      return(
+
+        <div className="bg-blue-500 px-4 py-2 rounded-xl text-sm font-bold">
+
+          PRO ₹49
+
+        </div>
+
+      );
+
+    }
+
+    return(
+
+      <div className="bg-yellow-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
+
+        ELITE ₹299
+
+      </div>
+
+    );
+
+  }
+
+  function TestCard({title,link,plan}:any){
+
+    const locked =
+    plan !== "FREE";
 
     return(
 
       <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition relative overflow-hidden">
 
-        {
+        <div className="absolute top-4 right-4">
 
-          premium && (
+          {getBadge(plan)}
 
-            <div className="absolute top-4 right-4 bg-yellow-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
-
-              🔒 PREMIUM
-
-            </div>
-
-          )
-
-        }
+        </div>
 
         <div className="flex justify-between items-center mb-6">
 
           <div className="text-5xl">
 
             📝
-
-          </div>
-
-          <div className="bg-purple-600 px-4 py-2 rounded-xl text-sm font-semibold">
-
-            25 Questions
 
           </div>
 
@@ -109,7 +152,7 @@ export default function JEETestSeriesPage(){
 
         {
 
-          premium
+          locked
 
           ?
 
@@ -118,7 +161,7 @@ export default function JEETestSeriesPage(){
             className="block text-center py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-500 text-lg font-bold"
           >
 
-            Unlock Premium 💎
+            Unlock {plan} 💎
 
           </Link>
 
@@ -129,7 +172,7 @@ export default function JEETestSeriesPage(){
             className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
           >
 
-            Start Test 🚀
+            Start Free Test 🚀
 
           </Link>
 
@@ -193,9 +236,83 @@ export default function JEETestSeriesPage(){
 
       </section>
 
-      {/* FREE TESTS */}
+      {/* PLAN INFO */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-6 py-10">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div className="bg-purple-600 rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              BASIC ₹19
+
+            </h2>
+
+            <div className="space-y-4 text-lg">
+
+              <p>✅ 3 Full Tests</p>
+
+              <p>✅ 2 Half Tests</p>
+
+              <p>✅ Daily Quiz</p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-blue-600 rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              PRO ₹49
+
+            </h2>
+
+            <div className="space-y-4 text-lg">
+
+              <p>✅ 20 Full Tests</p>
+
+              <p>✅ Subject Tests</p>
+
+              <p>✅ Analytics</p>
+
+              <p>✅ Leaderboard</p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-yellow-500 text-black rounded-[35px] p-10">
+
+            <h2 className="text-4xl font-black mb-6">
+
+              ELITE ₹299
+
+            </h2>
+
+            <div className="space-y-4 text-lg font-semibold">
+
+              <p>✅ ALL Tests</p>
+
+              <p>✅ ALL Notes</p>
+
+              <p>✅ Future AI Tools</p>
+
+              <p>✅ Premium Features</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* TESTS */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
 
         <div className="flex items-center gap-4 mb-12">
 
@@ -221,81 +338,7 @@ export default function JEETestSeriesPage(){
               key={index}
               title={test.title}
               link={test.link}
-              premium={test.premium}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* HALF TESTS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            📚
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Half Syllabus Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {halfTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-              premium={test.premium}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* PHYSICS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            ⚡
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Physics Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {physicsTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-              premium={test.premium}
+              plan={test.plan}
             />
 
           ))}
