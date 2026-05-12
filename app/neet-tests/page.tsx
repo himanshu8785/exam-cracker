@@ -4,74 +4,79 @@ import Link from "next/link";
 
 export default function NEETTestSeriesPage(){
 
-  const fullTests = Array.from(
-    {length:20},
-    (_,i)=>{
+  function generateTests(
+    prefix:string,
+    subject?:string
+  ){
 
-      let plan = "FREE";
+    return Array.from(
+      {length:10},
+      (_,i)=>{
 
-      if(i >= 3){
+        let plan = "FREE";
 
-        plan = "BASIC";
+        if(i >= 2){
+
+          plan = "BASIC";
+
+        }
+
+        if(i >= 5){
+
+          plan = "PRO";
+
+        }
+
+        if(i >= 8){
+
+          plan = "ELITE";
+
+        }
+
+        return{
+
+          title:`${prefix} ${i+1}`,
+
+          plan,
+
+          link:subject
+
+          ?
+
+          `/mock-test?subject=${subject}&test=${i+1}`
+
+          :
+
+          `/mock-test?exam=NEET&test=${i+1}`
+
+        };
 
       }
+    );
 
-      if(i >= 8){
+  }
 
-        plan = "PRO";
-
-      }
-
-      if(i >= 15){
-
-        plan = "ELITE";
-
-      }
-
-      return{
-
-        title:`NEET Full Test ${i+1}`,
-
-        plan,
-
-        link:`/mock-test?exam=NEET&test=${i+1}`
-
-      };
-
-    }
+  const fullTests =
+  generateTests(
+    "NEET Full Test"
   );
 
-  const biologyTests = Array.from(
-    {length:10},
-    (_,i)=>({
-
-      title:`Biology Test ${i+1}`,
-
-      link:`/mock-test?subject=Biology&test=${i+1}`
-
-    })
+  const biologyTests =
+  generateTests(
+    "Biology Test",
+    "Biology"
   );
 
-  const chemistryTests = Array.from(
-    {length:10},
-    (_,i)=>({
-
-      title:`Chemistry Test ${i+1}`,
-
-      link:`/mock-test?subject=Chemistry&test=${i+1}`
-
-    })
+  const chemistryTests =
+  generateTests(
+    "Chemistry Test",
+    "Chemistry"
   );
 
-  const physicsTests = Array.from(
-    {length:10},
-    (_,i)=>({
-
-      title:`Physics Test ${i+1}`,
-
-      link:`/mock-test?subject=Physics&test=${i+1}`
-
-    })
+  const physicsTests =
+  generateTests(
+    "Physics Test",
+    "Physics"
   );
 
   function getBadge(plan:string){
@@ -130,28 +135,24 @@ export default function NEETTestSeriesPage(){
 
   }
 
-  function TestCard({title,link,plan}:any){
+  function TestCard({
+    title,
+    link,
+    plan
+  }:any){
 
     const locked =
-    plan && plan !== "FREE";
+    plan !== "FREE";
 
     return(
 
       <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-green-500 transition relative overflow-hidden">
 
-        {
+        <div className="absolute top-4 right-4">
 
-          plan && (
+          {getBadge(plan)}
 
-            <div className="absolute top-4 right-4">
-
-              {getBadge(plan)}
-
-            </div>
-
-          )
-
-        }
+        </div>
 
         <div className="flex justify-between items-center mb-6">
 
@@ -225,6 +226,53 @@ export default function NEETTestSeriesPage(){
 
   }
 
+  function TestSection({
+    title,
+    icon,
+    tests
+  }:any){
+
+    return(
+
+      <section className="max-w-7xl mx-auto px-6 py-16">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            {icon}
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            {title}
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {tests.map((test:any,index:number)=>(
+
+            <TestCard
+              key={index}
+              title={test.title}
+              link={test.link}
+              plan={test.plan}
+            />
+
+          ))}
+
+        </div>
+
+      </section>
+
+    );
+
+  }
+
   return(
 
     <main className="min-h-screen bg-[#050816] text-white">
@@ -277,7 +325,7 @@ export default function NEETTestSeriesPage(){
 
       </section>
 
-      {/* PLAN INFO */}
+      {/* PLANS */}
 
       <section className="max-w-7xl mx-auto px-6 py-10">
 
@@ -293,11 +341,11 @@ export default function NEETTestSeriesPage(){
 
             <div className="space-y-4 text-lg">
 
-              <p>✅ 3 Full Tests</p>
-
-              <p>✅ 2 Subject Tests</p>
+              <p>✅ 10 Tests</p>
 
               <p>✅ Daily Quiz</p>
+
+              <p>✅ Some PYQs</p>
 
             </div>
 
@@ -313,9 +361,7 @@ export default function NEETTestSeriesPage(){
 
             <div className="space-y-4 text-lg">
 
-              <p>✅ 20 Full Tests</p>
-
-              <p>✅ Subject Tests</p>
+              <p>✅ 50+ Tests</p>
 
               <p>✅ Analytics</p>
 
@@ -339,9 +385,7 @@ export default function NEETTestSeriesPage(){
 
               <p>✅ ALL Notes</p>
 
-              <p>✅ Future AI Tools</p>
-
-              <p>✅ Premium Features</p>
+              <p>✅ Future AI</p>
 
             </div>
 
@@ -351,150 +395,29 @@ export default function NEETTestSeriesPage(){
 
       </section>
 
-      {/* FULL TESTS */}
+      <TestSection
+        title="Full Syllabus Tests"
+        icon="🚀"
+        tests={fullTests}
+      />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <TestSection
+        title="Biology Tests"
+        icon="🌿"
+        tests={biologyTests}
+      />
 
-        <div className="flex items-center gap-4 mb-12">
+      <TestSection
+        title="Chemistry Tests"
+        icon="🧪"
+        tests={chemistryTests}
+      />
 
-          <div className="text-5xl">
-
-            🚀
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Full Syllabus Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {fullTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-              plan={test.plan}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* BIOLOGY */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            🌿
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Biology Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {biologyTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* CHEMISTRY */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            🧪
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Chemistry Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {chemistryTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* PHYSICS */}
-
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
-
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            ⚡
-
-          </div>
-
-          <h2 className="text-5xl font-black">
-
-            Physics Tests
-
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-          {physicsTests.map((test,index)=>(
-
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-            />
-
-          ))}
-
-        </div>
-
-      </section>
+      <TestSection
+        title="Physics Tests"
+        icon="⚡"
+        tests={physicsTests}
+      />
 
     </main>
 
