@@ -219,37 +219,30 @@ export default function PricingPage(){
 
                 </div>
 
-                <a
+                {/* BUY BUTTON */}
 
-  href={
+                <button
 
-    plan.name === "BASIC"
+                  onClick={()=>{
 
-    ?
+                    const paymentSection =
+                    document.getElementById("payment-section");
 
-    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=29"
+                    paymentSection?.scrollIntoView({
 
-    :
+                      behavior:"smooth"
 
-    plan.name === "PRO"
+                    });
 
-    ?
+                  }}
 
-    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=69"
+                  className={`w-full py-5 rounded-2xl text-xl font-black bg-gradient-to-r ${plan.color}`}
 
-    :
+                >
 
-    "upi://pay?pa=examcracker@naviaxis&pn=ExamCracker&am=299"
+                  Buy {plan.name} 🚀
 
-  }
-
-  className={`block text-center w-full py-5 rounded-2xl text-xl font-black bg-gradient-to-r ${plan.color}`}
-
->
-
-  Buy {plan.name} 🚀
-
-</a>
+                </button>
 
               </div>
 
@@ -263,7 +256,10 @@ export default function PricingPage(){
 
       {/* PAYMENT SECTION */}
 
-      <section className="max-w-5xl mx-auto px-6 pb-24">
+      <section
+        id="payment-section"
+        className="max-w-5xl mx-auto px-6 pb-24"
+      >
 
         <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12 text-center">
 
@@ -286,7 +282,7 @@ export default function PricingPage(){
 
           </p>
 
-          {/* UPI BOX */}
+          {/* UPI ID */}
 
           <div className="bg-[#111827] border border-white/10 rounded-3xl p-8 mb-10">
 
@@ -296,7 +292,7 @@ export default function PricingPage(){
 
             </p>
 
-            <h3 className="text-4xl font-black text-purple-400">
+            <h3 className="text-4xl font-black text-purple-400 break-all">
 
               examcracker@naviaxis
 
@@ -304,13 +300,13 @@ export default function PricingPage(){
 
           </div>
 
-          {/* QR PLACEHOLDER */}
+          {/* REAL QR */}
 
           <img
-  src="/gpay-qr.jpg"
-  alt="UPI QR"
-  className="w-[280px] h-[280px] mx-auto rounded-[35px] object-cover mb-10"
-/>
+            src="/gpay-qr.jpg"
+            alt="UPI QR"
+            className="w-[280px] h-[280px] mx-auto rounded-[35px] object-cover mb-10"
+          />
 
           {/* WHATSAPP */}
 
@@ -324,12 +320,12 @@ export default function PricingPage(){
 
             <p className="text-lg mb-6">
 
-              WhatsApp after payment for activation 😎🔥
+              Send screenshot after payment for premium activation 😎🔥
 
             </p>
 
             <a
-              href="https://wa.me/9336593375"
+              href="https://wa.me/"
               target="_blank"
               className="inline-block px-8 py-4 rounded-2xl bg-black text-lg font-bold"
             >
