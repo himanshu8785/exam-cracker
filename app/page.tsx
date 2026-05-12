@@ -4,11 +4,63 @@ import Link from "next/link";
 
 export default function HomePage() {
 
+  const tools = [
+
+    {
+      title:"Mock Tests",
+      link:"/test-series",
+      icon:"📝"
+    },
+
+    {
+      title:"AI Doubt Solver",
+      link:"/ai-doubt-solver",
+      icon:"🤖"
+    },
+
+    {
+      title:"Rank Predictor",
+      link:"/rank-predictor",
+      icon:"📊"
+    },
+
+    {
+      title:"Study Material",
+      link:"/study-material",
+      icon:"📚"
+    },
+
+    {
+      title:"Daily Quiz",
+      link:"/daily-quiz",
+      icon:"🔥"
+    },
+
+    {
+      title:"Leaderboard",
+      link:"/leaderboard",
+      icon:"🏆"
+    },
+
+    {
+      title:"Premium Plans",
+      link:"/pricing",
+      icon:"💎"
+    },
+
+    {
+      title:"Profile",
+      link:"/profile",
+      icon:"👤"
+    }
+
+  ];
+
   return (
 
     <main className="min-h-screen bg-[#0b1120] text-white">
 
-      {/* HERO SECTION */}
+      {/* HERO */}
 
       <section className="max-w-7xl mx-auto px-6 py-24 text-center">
 
@@ -31,110 +83,64 @@ export default function HomePage() {
 
         <p className="text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
 
-          Unlimited mock tests,
-          PYQs, AI doubt solving,
-          rank prediction and premium study material 😎🔥
+          Mock tests, PYQs,
+          AI doubt solving,
+          premium notes and rank prediction 😎🔥
 
         </p>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <Link
+          href="/test-series"
+          className="inline-block px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-semibold"
+        >
 
-          <Link
-            href="/test-series"
-            className="px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-semibold"
-          >
+          Start Preparation 🚀
 
-            Start Mock Tests 🚀
-
-          </Link>
-
-          <Link
-            href="/pricing"
-            className="px-10 py-5 rounded-2xl border border-gray-700 text-xl font-semibold"
-          >
-
-            View Premium Plans 💎
-
-          </Link>
-
-        </div>
+        </Link>
 
       </section>
 
-      {/* FEATURES */}
+      {/* TOOLS */}
 
       <section className="max-w-7xl mx-auto px-6 pb-24">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <h2 className="text-5xl font-black text-center mb-16">
 
-          <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
+          🚀 All Tools
 
-            <div className="text-7xl mb-8">
+        </h2>
 
-              📝
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-            </div>
+          {tools.map((tool,index)=>(
 
-            <h2 className="text-4xl font-black mb-6">
+            <Link
+              key={index}
+              href={tool.link}
+              className="bg-[#111827] border border-gray-800 rounded-[35px] p-10 hover:border-purple-500 transition"
+            >
 
-              Mock Tests
+              <div className="text-6xl mb-6">
 
-            </h2>
+                {tool.icon}
 
-            <p className="text-gray-400 text-lg leading-relaxed">
+              </div>
 
-              Unlimited JEE & NEET
-              mock tests with PYQs 😎
+              <h3 className="text-3xl font-black mb-4">
 
-            </p>
+                {tool.title}
 
-          </div>
+              </h3>
 
-          <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
+              <p className="text-gray-400">
 
-            <div className="text-7xl mb-8">
+                Open {tool.title} 😎
 
-              🤖
+              </p>
 
-            </div>
+            </Link>
 
-            <h2 className="text-4xl font-black mb-6">
-
-              AI Doubt Solver
-
-            </h2>
-
-            <p className="text-gray-400 text-lg leading-relaxed">
-
-              Solve Physics, Chemistry,
-              Maths & Biology doubts instantly 🚀
-
-            </p>
-
-          </div>
-
-          <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10">
-
-            <div className="text-7xl mb-8">
-
-              📚
-
-            </div>
-
-            <h2 className="text-4xl font-black mb-6">
-
-              Study Material
-
-            </h2>
-
-            <p className="text-gray-400 text-lg leading-relaxed">
-
-              Notes, NCERT,
-              formula sheets and PYQs 🔥
-
-            </p>
-
-          </div>
+          ))}
 
         </div>
 
