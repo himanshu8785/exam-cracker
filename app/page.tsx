@@ -7,91 +7,157 @@ export default function HomePage() {
   const tools = [
 
     {
-      title:"Test Series",
-      link:"/test-series",
-      icon:"📝"
+      title:"AI Doubt Solver",
+      link:"/ai-doubt-solver",
+      icon:"🤖",
+      desc:"Solve doubts instantly with AI"
     },
 
     {
-      title:"AI Doubt Solver",
-      link:"/ai-doubt-solver",
-      icon:"🤖"
+      title:"Test Series",
+      link:"/test-series",
+      icon:"📝",
+      desc:"Unlimited JEE/NEET mock tests"
     },
 
     {
       title:"Rank Predictor",
       link:"/rank-predictor",
-      icon:"📊"
+      icon:"📊",
+      desc:"Predict AIR & percentile"
     },
 
     {
       title:"Study Material",
       link:"/study-material",
-      icon:"📚"
+      icon:"📚",
+      desc:"Notes, NCERT & PYQs"
     },
 
     {
       title:"Daily Quiz",
       link:"/daily-quiz",
-      icon:"🔥"
+      icon:"🔥",
+      desc:"Daily challenge questions"
     },
 
     {
       title:"Leaderboard",
       link:"/leaderboard",
-      icon:"🏆"
-    },
-
-    {
-      title:"Premium Plans",
-      link:"/pricing",
-      icon:"💎"
+      icon:"🏆",
+      desc:"Compete with toppers"
     },
 
     {
       title:"Profile",
       link:"/profile",
-      icon:"👤"
+      icon:"👤",
+      desc:"Track your progress"
+    },
+
+    {
+      title:"Premium Plans",
+      link:"/pricing",
+      icon:"💎",
+      desc:"Unlock all premium features"
     }
 
   ];
 
-  const categories = [
+  const stats = [
 
-    "JEE Main",
+    {
+      value:"25K+",
+      label:"Students"
+    },
 
-    "JEE Advanced",
+    {
+      value:"10K+",
+      label:"PYQs"
+    },
 
-    "NEET",
+    {
+      value:"500+",
+      label:"Mock Tests"
+    },
 
-    "Physics",
-
-    "Chemistry",
-
-    "Maths",
-
-    "Biology",
-
-    "PYQs"
+    {
+      value:"99%",
+      label:"Success Rate"
+    }
 
   ];
 
   return (
 
-    <main className="min-h-screen bg-[#0b1120] text-white">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
+
+      {/* NAVBAR */}
+
+      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-black/20">
+
+        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+
+          <h1 className="text-3xl font-black">
+
+            🚀 Exam Cracker
+
+          </h1>
+
+          <div className="hidden md:flex gap-8 text-lg">
+
+            <Link href="/test-series">
+
+              Test Series
+
+            </Link>
+
+            <Link href="/ai-doubt-solver">
+
+              AI Solver
+
+            </Link>
+
+            <Link href="/study-material">
+
+              Notes
+
+            </Link>
+
+            <Link href="/pricing">
+
+              Premium
+
+            </Link>
+
+          </div>
+
+        </div>
+
+      </header>
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-10">
+      <section className="relative max-w-7xl mx-auto px-6 pt-28 pb-24">
 
-        <div className="bg-gradient-to-r from-purple-700 to-blue-700 rounded-[50px] p-12">
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-600/30 blur-[120px] rounded-full"></div>
 
-          <h1 className="text-7xl font-black leading-tight mb-6">
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/30 blur-[120px] rounded-full"></div>
+
+        <div className="relative z-10 text-center">
+
+          <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
+
+            🔥 India’s Next-Gen AI EdTech Platform
+
+          </div>
+
+          <h1 className="text-7xl md:text-8xl font-black leading-tight mb-8">
 
             Crack
             {" "}
 
-            <span className="text-yellow-300">
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
 
               JEE & NEET
 
@@ -103,29 +169,29 @@ export default function HomePage() {
 
           </h1>
 
-          <p className="text-2xl text-gray-100 max-w-3xl leading-relaxed mb-10">
+          <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-14">
 
-            Unlimited mock tests,
             AI doubt solving,
-            premium notes,
-            PYQs and rank prediction 😎🔥
+            unlimited mock tests,
+            PYQs, premium notes,
+            rank prediction and real analytics 😎🔥
 
           </p>
 
-          <div className="flex flex-col md:flex-row gap-5">
+          <div className="flex flex-col md:flex-row justify-center gap-6">
 
             <Link
               href="/test-series"
-              className="px-10 py-5 rounded-2xl bg-black text-xl font-bold"
+              className="px-12 py-6 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-bold shadow-2xl hover:scale-105 transition"
             >
 
-              Start Mock Tests 🚀
+              Start Preparation 🚀
 
             </Link>
 
             <Link
               href="/pricing"
-              className="px-10 py-5 rounded-2xl border border-white text-xl font-bold"
+              className="px-12 py-6 rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl text-xl font-bold hover:bg-white/10 transition"
             >
 
               Buy Premium 💎
@@ -138,25 +204,73 @@ export default function HomePage() {
 
       </section>
 
-      {/* SEARCH */}
+      {/* STATS */}
 
       <section className="max-w-7xl mx-auto px-6 py-10">
 
-        <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+
+          {stats.map((item,index)=>(
+
+            <div
+              key={index}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-10 text-center"
+            >
+
+              <h2 className="text-5xl font-black text-purple-400 mb-4">
+
+                {item.value}
+
+              </h2>
+
+              <p className="text-gray-300 text-lg">
+
+                {item.label}
+
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* SEARCH */}
+
+      <section className="max-w-7xl mx-auto px-6 py-16">
+
+        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
+
+          <h2 className="text-4xl font-black mb-8">
+
+            🔍 Search Anything
+
+          </h2>
 
           <input
             type="text"
-            placeholder="Search notes, PYQs, mock tests..."
-            className="w-full bg-[#1e293b] text-white rounded-2xl px-6 py-5 outline-none text-lg"
+            placeholder="Search mock tests, PYQs, notes..."
+            className="w-full bg-[#111827] text-white rounded-3xl px-8 py-6 outline-none text-xl border border-white/10"
           />
 
           <div className="flex flex-wrap gap-4 mt-8">
 
-            {categories.map((item,index)=>(
+            {[
+              "JEE Main",
+              "JEE Advanced",
+              "NEET",
+              "Physics",
+              "Chemistry",
+              "Maths",
+              "Biology",
+              "PYQs"
+            ].map((item,index)=>(
 
               <button
                 key={index}
-                className="bg-[#1e293b] px-5 py-3 rounded-2xl text-sm hover:bg-purple-600 transition"
+                className="px-6 py-3 rounded-2xl bg-purple-600/20 border border-purple-500/30 hover:bg-purple-600 transition"
               >
 
                 {item}
@@ -171,34 +285,68 @@ export default function HomePage() {
 
       </section>
 
-      {/* ANALYTICS CARDS */}
+      {/* FEATURE CARDS */}
 
       <section className="max-w-7xl mx-auto px-6 py-10">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
+          <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-[40px] p-10">
 
-            <div className="text-6xl mb-6">
+            <div className="text-7xl mb-8">
+
+              🧠
+
+            </div>
+
+            <h2 className="text-4xl font-black mb-6">
+
+              AI Doubt Solver
+
+            </h2>
+
+            <p className="text-lg text-white/90 mb-10">
+
+              Solve Physics, Chemistry,
+              Maths & Biology doubts instantly 😎🔥
+
+            </p>
+
+            <Link
+              href="/ai-doubt-solver"
+              className="inline-block px-8 py-4 rounded-2xl bg-black text-lg font-bold"
+            >
+
+              Solve Doubts 🚀
+
+            </Link>
+
+          </div>
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
+
+            <div className="text-7xl mb-8">
 
               📈
 
             </div>
 
-            <h2 className="text-4xl font-black mb-4">
+            <h2 className="text-4xl font-black mb-6">
 
-              AIR Predictor
+              Rank Predictor
+
             </h2>
 
-            <p className="text-gray-400 mb-8">
+            <p className="text-lg text-gray-300 mb-10">
 
-              Predict your JEE/NEET rank instantly 😎
+              Predict your percentile,
+              AIR and expected college 😎
 
             </p>
 
             <Link
               href="/rank-predictor"
-              className="inline-block px-6 py-4 rounded-2xl bg-purple-600 font-semibold"
+              className="inline-block px-8 py-4 rounded-2xl bg-purple-600 text-lg font-bold"
             >
 
               Predict Rank 🚀
@@ -207,58 +355,30 @@ export default function HomePage() {
 
           </div>
 
-          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
 
-            <div className="text-6xl mb-6">
-
-              🔥
-
-            </div>
-
-            <h2 className="text-4xl font-black mb-4">
-
-              Daily Quiz
-            </h2>
-
-            <p className="text-gray-400 mb-8">
-
-              Daily JEE/NEET PYQs practice 😎
-
-            </p>
-
-            <Link
-              href="/daily-quiz"
-              className="inline-block px-6 py-4 rounded-2xl bg-blue-600 font-semibold"
-            >
-
-              Start Quiz 🚀
-
-            </Link>
-
-          </div>
-
-          <div className="bg-[#111827] border border-gray-800 rounded-[35px] p-10">
-
-            <div className="text-6xl mb-6">
+            <div className="text-7xl mb-8">
 
               💎
 
             </div>
 
-            <h2 className="text-4xl font-black mb-4">
+            <h2 className="text-4xl font-black mb-6">
 
               Premium Access
+
             </h2>
 
-            <p className="text-gray-400 mb-8">
+            <p className="text-lg text-gray-300 mb-10">
 
-              Unlock all tools and notes 😎🔥
+              Unlock all tools,
+              notes and premium tests 😎🔥
 
             </p>
 
             <Link
               href="/pricing"
-              className="inline-block px-6 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 font-semibold"
+              className="inline-block px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
             >
 
               Upgrade 🚀
@@ -273,9 +393,9 @@ export default function HomePage() {
 
       {/* ALL TOOLS */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-6 py-24">
 
-        <h2 className="text-5xl font-black text-center mb-16">
+        <h2 className="text-6xl font-black text-center mb-20">
 
           🚀 All Tools
 
@@ -288,10 +408,10 @@ export default function HomePage() {
             <Link
               key={index}
               href={tool.link}
-              className="bg-[#111827] border border-gray-800 rounded-[35px] p-10 hover:border-purple-500 transition"
+              className="group bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-10 hover:border-purple-500 hover:-translate-y-2 transition duration-300"
             >
 
-              <div className="text-6xl mb-6">
+              <div className="text-7xl mb-8 group-hover:scale-110 transition">
 
                 {tool.icon}
 
@@ -303,9 +423,9 @@ export default function HomePage() {
 
               </h3>
 
-              <p className="text-gray-400">
+              <p className="text-gray-400 leading-relaxed">
 
-                Open {tool.title} 😎
+                {tool.desc}
 
               </p>
 
@@ -316,6 +436,14 @@ export default function HomePage() {
         </div>
 
       </section>
+
+      {/* FOOTER */}
+
+      <footer className="border-t border-white/10 py-10 text-center text-gray-400">
+
+        © 2025 Exam Cracker 🚀 | Built For JEE & NEET Aspirants
+
+      </footer>
 
     </main>
 
