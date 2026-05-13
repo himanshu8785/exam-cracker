@@ -1,333 +1,126 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import Link from "next/link";
 
-import {
-  auth,
-  db
-} from "../../firebase";
+export default function ProfilePage(){
 
-import {
-  onAuthStateChanged
-} from "firebase/auth";
+  const achievements = [
 
-import {
-  collection,
-  getDocs,
-  query,
-  where
-} from "firebase/firestore";
+    {
+      title:"7 Day Streak",
+      icon:"🔥"
+    },
 
-import ProtectedRoute from "../ProtectedRoute";
+    {
+      title:"100 Questions Solved",
+      icon:"🧠"
+    },
 
-import SkeletonCard from "../components/SkeletonCard";
+    {
+      title:"Top 10 Rank",
+      icon:"🏆"
+    },
 
-export default function ProfilePage() {
+    {
+      title:"Physics Master",
+      icon:"⚡"
+    }
 
-  const [user,setUser] =
-  useState(null);
+  ];
 
-  const [scores,setScores] =
-  useState([]);
+  const stats = [
 
-  const [loading,setLoading] =
-  useState(true);
+    {
+      title:"Tests Attempted",
+      value:"48",
+      icon:"📝"
+    },
 
-  useEffect(()=>{
+    {
+      title:"Average Score",
+      value:"182",
+      icon:"📈"
+    },
 
-    const unsubscribe =
-    onAuthStateChanged(auth,async(currentUser)=>{
+    {
+      title:"Accuracy",
+      value:"78%",
+      icon:"🎯"
+    },
 
-      if(!currentUser){
+    {
+      title:"Current Streak",
+      value:"12 Days",
+      icon:"🔥"
+    }
 
-        setLoading(false);
+  ];
 
-        return;
+  return(
 
-      }
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
-      setUser(currentUser);
+      {/* HERO */}
 
-      try{
+      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20">
 
-        const q = query(
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[50px] p-12 relative overflow-hidden">
 
-          collection(db,"scores"),
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/10 rounded-full blur-3xl"></div>
 
-          where(
-            "email",
-            "==",
-            currentUser.email
-          )
+          <div className="relative flex flex-col md:flex-row items-center gap-10">
 
-        );
+            {/* AVATAR */}
 
-        const querySnapshot =
-        await getDocs(q);
+            <div className="w-[180px] h-[180px] rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-[80px]">
 
-        const data = [];
-
-        querySnapshot.forEach((doc)=>{
-
-          data.push(doc.data());
-
-        });
-
-        setScores(data);
-
-      }
-
-      catch(error){
-
-        console.log(error);
-
-      }
-
-      setLoading(false);
-
-    });
-
-    return ()=>unsubscribe();
-
-  },[]);
-
-  if(loading){
-
-    return(
-
-      <ProtectedRoute>
-
-        <main className="min-h-screen bg-[#0b1120] text-white p-6">
-
-          <div className="max-w-6xl mx-auto">
-
-            <h1 className="text-5xl font-bold mb-10">
-
-              Loading Profile...
-
-            </h1>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
+              👨‍🎓
 
             </div>
 
-          </div>
+            {/* INFO */}
 
-        </main>
+            <div className="flex-1">
 
-      </ProtectedRoute>
+              <div className="inline-block px-5 py-2 rounded-full bg-yellow-400 text-black text-sm font-black mb-6">
 
-    );
+                💎 PRO MEMBER
 
-  }
+              </div>
 
-  const totalTests =
-  scores.length;
+              <h1 className="text-6xl md:text-7xl font-black mb-6">
 
-  const highestScore =
-  scores.length > 0
+                Exam Cracker 😎🔥
 
-    ? Math.max(
-        ...scores.map(
-          (item)=>item.score
-        )
-      )
+              </h1>
 
-    : 0;
+              <p className="text-2xl text-white/90 mb-8 leading-relaxed">
 
-  const averageScore =
-  scores.length > 0
+                JEE Aspirant • AIR Under 1000 Goal 🚀
 
-    ? Math.floor(
+              </p>
 
-        scores.reduce(
-          (acc,item)=>
-            acc + item.score,
-          0
-        ) / scores.length
+              <div className="flex flex-wrap gap-5">
 
-      )
+                <div className="bg-white/10 px-6 py-4 rounded-2xl text-lg font-bold">
 
-    : 0;
-
-  return (
-
-    <ProtectedRoute>
-
-      <main className="min-h-screen bg-[#0b1120] text-white p-6">
-
-        <div className="max-w-7xl mx-auto">
-
-          <div className="bg-[#111827] border border-gray-800 rounded-[40px] p-10 mb-10">
-
-            <div className="flex flex-col md:flex-row justify-between gap-8 items-center">
-
-              <div className="flex items-center gap-6">
-
-                <div className="w-28 h-28 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex justify-center items-center text-5xl font-black">
-
-                  {user?.email?.charAt(0).toUpperCase()}
+                  🔥 12 Day Streak
 
                 </div>
 
-                <div>
+                <div className="bg-white/10 px-6 py-4 rounded-2xl text-lg font-bold">
 
-                  <h1 className="text-5xl font-black mb-3">
+                  🏆 Rank #42
 
-                    Student Profile 🚀
+                </div>
 
-                  </h1>
+                <div className="bg-white/10 px-6 py-4 rounded-2xl text-lg font-bold">
 
-                  <p className="text-gray-400 text-xl">
-
-                    {user?.email}
-
-                  </p>
+                  📈 78% Accuracy
 
                 </div>
 
               </div>
-
-              <div className="bg-[#1e293b] rounded-3xl px-8 py-5 text-center">
-
-                <p className="text-gray-400 mb-2">
-
-                  Account Status
-
-                </p>
-
-                <h2 className="text-3xl font-black text-green-500">
-
-                  Active
-
-                </h2>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-            <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8 text-center">
-
-              <h2 className="text-5xl font-black text-purple-500 mb-4">
-
-                {totalTests}
-
-              </h2>
-
-              <p className="text-gray-400 text-xl">
-
-                Total Tests
-
-              </p>
-
-            </div>
-
-            <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8 text-center">
-
-              <h2 className="text-5xl font-black text-blue-500 mb-4">
-
-                {highestScore}
-
-              </h2>
-
-              <p className="text-gray-400 text-xl">
-
-                Highest Score
-
-              </p>
-
-            </div>
-
-            <div className="bg-[#111827] border border-gray-800 rounded-3xl p-8 text-center">
-
-              <h2 className="text-5xl font-black text-green-500 mb-4">
-
-                {averageScore}
-
-              </h2>
-
-              <p className="text-gray-400 text-xl">
-
-                Average Score
-
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="bg-[#111827] border border-gray-800 rounded-3xl p-10">
-
-            <h2 className="text-4xl font-bold mb-10">
-
-              📈 Recent Activity
-
-            </h2>
-
-            <div className="space-y-6">
-
-              {scores.length === 0 ? (
-
-                <div className="bg-[#1e293b] rounded-3xl p-8 text-center">
-
-                  <h3 className="text-3xl font-bold mb-3">
-
-                    No Activity Yet
-
-                  </h3>
-
-                  <p className="text-gray-400">
-
-                    Complete mock tests to track activity 🚀
-
-                  </p>
-
-                </div>
-
-              ) : (
-
-                scores.slice(0,5).map((item,index)=>(
-
-                  <div
-                    key={index}
-                    className="bg-[#1e293b] rounded-3xl p-6 flex justify-between items-center"
-                  >
-
-                    <div>
-
-                      <h3 className="text-2xl font-bold">
-
-                        Mock Test Attempt
-
-                      </h3>
-
-                      <p className="text-gray-400 mt-2">
-
-                        Exam Cracker Practice Session
-
-                      </p>
-
-                    </div>
-
-                    <div className="text-4xl font-black text-purple-500">
-
-                      {item.score}
-
-                    </div>
-
-                  </div>
-
-                ))
-
-              )}
 
             </div>
 
@@ -335,9 +128,262 @@ export default function ProfilePage() {
 
         </div>
 
-      </main>
+      </section>
 
-    </ProtectedRoute>
+      {/* STATS */}
+
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {stats.map((stat,index)=>(
+
+            <div
+              key={index}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center"
+            >
+
+              <div className="text-6xl mb-6">
+
+                {stat.icon}
+
+              </div>
+
+              <h2 className="text-5xl font-black mb-4 text-purple-400">
+
+                {stat.value}
+
+              </h2>
+
+              <p className="text-gray-400 text-lg">
+
+                {stat.title}
+
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* ACHIEVEMENTS */}
+
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            🏆
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Achievements
+
+          </h2>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {achievements.map((achievement,index)=>(
+
+            <div
+              key={index}
+              className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-[40px] p-10 text-black text-center"
+            >
+
+              <div className="text-7xl mb-6">
+
+                {achievement.icon}
+
+              </div>
+
+              <h3 className="text-3xl font-black leading-tight">
+
+                {achievement.title}
+
+              </h3>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* PERFORMANCE */}
+
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+          {/* STRONG SUBJECTS */}
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-10">
+
+            <div className="flex items-center gap-4 mb-10">
+
+              <div className="text-5xl">
+
+                😎
+
+              </div>
+
+              <h2 className="text-4xl font-black">
+
+                Strong Subjects
+
+              </h2>
+
+            </div>
+
+            <div className="space-y-6">
+
+              <div className="bg-green-500/20 border border-green-500/30 rounded-3xl p-6">
+
+                <h3 className="text-3xl font-black text-green-400 mb-3">
+
+                  Physics
+
+                </h3>
+
+                <p className="text-lg text-gray-300">
+
+                  Excellent in Modern Physics & Mechanics 🚀
+
+                </p>
+
+              </div>
+
+              <div className="bg-blue-500/20 border border-blue-500/30 rounded-3xl p-6">
+
+                <h3 className="text-3xl font-black text-blue-400 mb-3">
+
+                  Chemistry
+
+                </h3>
+
+                <p className="text-lg text-gray-300">
+
+                  Strong in Physical Chemistry 😎🔥
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* WEAK SUBJECTS */}
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-10">
+
+            <div className="flex items-center gap-4 mb-10">
+
+              <div className="text-5xl">
+
+                😭
+
+              </div>
+
+              <h2 className="text-4xl font-black">
+
+                Improve These
+
+              </h2>
+
+            </div>
+
+            <div className="space-y-6">
+
+              <div className="bg-red-500/20 border border-red-500/30 rounded-3xl p-6">
+
+                <h3 className="text-3xl font-black text-red-400 mb-3">
+
+                  Probability
+
+                </h3>
+
+                <p className="text-lg text-gray-300">
+
+                  Practice more PYQs and mock tests ⚡
+
+                </p>
+
+              </div>
+
+              <div className="bg-orange-500/20 border border-orange-500/30 rounded-3xl p-6">
+
+                <h3 className="text-3xl font-black text-orange-400 mb-3">
+
+                  Organic Chemistry
+
+                </h3>
+
+                <p className="text-lg text-gray-300">
+
+                  Revise reaction mechanisms daily 🔥
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* PREMIUM CTA */}
+
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-12 text-center">
+
+          <div className="text-8xl mb-8">
+
+            💎
+
+          </div>
+
+          <h2 className="text-6xl font-black mb-8">
+
+            Unlock Elite Profile Features
+
+          </h2>
+
+          <p className="text-2xl text-white/90 mb-10 leading-relaxed">
+
+            Get advanced badges,
+            AI recommendations,
+            personalized insights and elite ranks 😎🔥
+
+          </p>
+
+          <Link
+            href="/pricing"
+            className="inline-block px-12 py-5 rounded-3xl bg-black text-2xl font-black"
+          >
+
+            Upgrade to ELITE 🚀
+
+          </Link>
+
+        </div>
+
+      </section>
+
+    </main>
 
   );
 
