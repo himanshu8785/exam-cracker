@@ -1,193 +1,395 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import Link from "next/link";
 
-import SkeletonCard from "../components/SkeletonCard";
+export default function LeaderboardPage(){
 
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit
-} from "firebase/firestore";
+  const toppers = [
 
-import { db } from "../../firebase";
+    {
 
-export default function LeaderboardPage() {
+      rank:1,
 
-  const [leaders,setLeaders] =
-  useState([]);
+      name:"Aarav Sharma",
 
-  const [loading,setLoading] =
-  useState(true);
+      score:"298",
 
-  useEffect(()=>{
+      accuracy:"99%",
 
-    async function fetchLeaderboard(){
+      streak:"45 Days",
 
-      try{
+      badge:"🏆 AIR 1"
 
-        const q = query(
+    },
 
-          collection(db,"scores"),
+    {
 
-          orderBy("score","desc"),
+      rank:2,
 
-          limit(10)
+      name:"Priya Verma",
 
-        );
+      score:"292",
 
-        const querySnapshot =
-        await getDocs(q);
+      accuracy:"97%",
 
-        const users = [];
+      streak:"39 Days",
 
-        querySnapshot.forEach((doc)=>{
+      badge:"🥈 Topper"
 
-          users.push(doc.data());
+    },
 
-        });
+    {
 
-        setLeaders(users);
+      rank:3,
 
-      }
+      name:"Rohan Gupta",
 
-      catch(error){
+      score:"287",
 
-        console.log(error);
+      accuracy:"96%",
 
-      }
+      streak:"35 Days",
 
-      setLoading(false);
+      badge:"🥉 Elite"
 
     }
 
-    fetchLeaderboard();
+  ];
 
-  },[]);
+  const leaderboard = [
 
-  if(loading){
+    {
+      rank:4,
+      name:"Aditya Singh",
+      score:"281",
+      accuracy:"94%"
+    },
+
+    {
+      rank:5,
+      name:"Sneha Patel",
+      score:"276",
+      accuracy:"92%"
+    },
+
+    {
+      rank:6,
+      name:"Yash Kumar",
+      score:"272",
+      accuracy:"91%"
+    },
+
+    {
+      rank:7,
+      name:"Kunal Mehta",
+      score:"268",
+      accuracy:"89%"
+    },
+
+    {
+      rank:8,
+      name:"Ananya Roy",
+      score:"264",
+      accuracy:"88%"
+    },
+
+    {
+      rank:9,
+      name:"Harsh Jain",
+      score:"259",
+      accuracy:"87%"
+    },
+
+    {
+      rank:10,
+      name:"Simran Kaur",
+      score:"255",
+      accuracy:"85%"
+    }
+
+  ];
 
   return(
 
-    <main className="min-h-screen bg-[#0b1120] text-white p-6">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
-      <div className="max-w-5xl mx-auto">
+      {/* HERO */}
 
-        <h1 className="text-5xl font-bold mb-10">
+      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
 
-          Loading Leaderboard...
+        <div className="inline-block px-6 py-3 rounded-full bg-yellow-500/20 border border-yellow-500/30 mb-8">
 
-        </h1>
-
-        <div className="space-y-6">
-
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
+          🏆 National Rankings
 
         </div>
 
-      </div>
+        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
 
-    </main>
+          Student
+          {" "}
 
-  );
+          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
 
-}
+            Leaderboard
 
-  return (
-
-    <main className="min-h-screen bg-[#0b1120] text-white p-6">
-
-      <div className="max-w-5xl mx-auto">
-
-        <h1 className="text-5xl font-bold text-center mb-4">
-
-          🏆 <span className="text-purple-500">
-            Real Leaderboard
           </span>
+
+          <br />
+
+          Rankings 🚀
 
         </h1>
 
-        <p className="text-center text-gray-400 text-lg mb-12">
+        <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
 
-          Top students of Exam Cracker 🚀
+          Compete with top JEE & NEET aspirants,
+          improve your rank
+          and become AIR 1 😎🔥
 
         </p>
 
-        <div className="space-y-6">
+      </section>
 
-          {leaders.length === 0 ? (
+      {/* TOP 3 */}
 
-            <div className="bg-[#111827] p-10 rounded-3xl border border-gray-800 text-center">
+      <section className="max-w-7xl mx-auto px-6 pb-24">
 
-              <h2 className="text-3xl font-bold mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
-                No Scores Yet
+          {toppers.map((topper,index)=>(
 
-              </h2>
+            <div
+              key={index}
+              className={`relative rounded-[45px] p-[2px]
 
-              <p className="text-gray-400">
+              ${topper.rank === 1
 
-                Complete mock tests to appear here 🚀
+                ?
 
-              </p>
+                "scale-105"
 
-            </div>
+                :
 
-          ) : (
+                ""
 
-            leaders.map((user,index)=>(
+              }`}
+            >
 
-              <div
-                key={index}
-                className="bg-[#111827] border border-gray-800 rounded-3xl p-6 flex justify-between items-center hover:border-purple-500 transition"
-              >
+              <div className={`absolute inset-0 rounded-[45px]
 
-                <div className="flex items-center gap-5">
+              ${topper.rank === 1
 
-                  <div className="w-16 h-16 rounded-full bg-purple-600 flex justify-center items-center text-2xl font-bold">
+                ?
 
-                    {index + 1}
+                "bg-gradient-to-br from-yellow-400 to-orange-500"
 
-                  </div>
+                :
 
-                  <div>
+                topper.rank === 2
 
-                    <h2 className="text-2xl font-bold">
+                ?
 
-                      {user.email}
+                "bg-gradient-to-br from-gray-300 to-gray-500"
 
-                    </h2>
+                :
 
-                    <p className="text-gray-400">
+                "bg-gradient-to-br from-orange-700 to-orange-900"
 
-                      Exam Cracker Student
+              }`}></div>
 
-                    </p>
+              <div className="relative bg-[#0B1120] rounded-[43px] p-10 text-center">
 
-                  </div>
+                <div className="text-8xl mb-6">
+
+                  {
+
+                    topper.rank === 1
+
+                    ?
+
+                    "👑"
+
+                    :
+
+                    topper.rank === 2
+
+                    ?
+
+                    "🥈"
+
+                    :
+
+                    "🥉"
+
+                  }
 
                 </div>
 
-                <div className="text-4xl font-bold text-purple-500">
+                <div className="inline-block px-5 py-2 rounded-full bg-white/10 mb-6 text-lg font-bold">
 
-                  {user.score}
+                  {topper.badge}
+
+                </div>
+
+                <h2 className="text-4xl font-black mb-4">
+
+                  {topper.name}
+
+                </h2>
+
+                <div className="text-7xl font-black text-yellow-400 mb-6">
+
+                  #{topper.rank}
+
+                </div>
+
+                <div className="space-y-4 text-lg">
+
+                  <p>
+
+                    🎯 Accuracy:
+                    {" "}
+                    {topper.accuracy}
+
+                  </p>
+
+                  <p>
+
+                    📈 Score:
+                    {" "}
+                    {topper.score}
+
+                  </p>
+
+                  <p>
+
+                    🔥 Streak:
+                    {" "}
+                    {topper.streak}
+
+                  </p>
 
                 </div>
 
               </div>
 
-            ))
+            </div>
 
-          )}
+          ))}
 
         </div>
 
-      </div>
+      </section>
+
+      {/* FULL LEADERBOARD */}
+
+      <section className="max-w-6xl mx-auto px-6 pb-24">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="text-5xl">
+
+            🚀
+
+          </div>
+
+          <h2 className="text-5xl font-black">
+
+            Top Rankings
+
+          </h2>
+
+        </div>
+
+        <div className="space-y-6">
+
+          {leaderboard.map((student,index)=>(
+
+            <div
+              key={index}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+            >
+
+              <div className="flex items-center gap-6">
+
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-2xl font-black">
+
+                  {student.rank}
+
+                </div>
+
+                <div>
+
+                  <h3 className="text-3xl font-black mb-2">
+
+                    {student.name}
+
+                  </h3>
+
+                  <p className="text-gray-400 text-lg">
+
+                    Accuracy:
+                    {" "}
+                    {student.accuracy}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="text-5xl font-black text-purple-400">
+
+                {student.score}
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* PREMIUM CTA */}
+
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-12 text-center">
+
+          <div className="text-8xl mb-8">
+
+            💎
+
+          </div>
+
+          <h2 className="text-6xl font-black mb-8">
+
+            Unlock Premium Rankings
+
+          </h2>
+
+          <p className="text-2xl text-white/90 mb-10 leading-relaxed">
+
+            Access national rankings,
+            advanced leaderboard stats,
+            streak rankings and AI insights 😎🔥
+
+          </p>
+
+          <Link
+            href="/pricing"
+            className="inline-block px-12 py-5 rounded-3xl bg-black text-2xl font-black"
+          >
+
+            Upgrade to PRO 🚀
+
+          </Link>
+
+        </div>
+
+      </section>
 
     </main>
 
