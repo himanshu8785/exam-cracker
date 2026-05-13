@@ -1,6 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 export default function PricingPage(){
+
+  const [selectedPlan,setSelectedPlan] =
+  useState<any>(null);
 
   const plans = [
 
@@ -123,7 +128,7 @@ export default function PricingPage(){
 
       </section>
 
-      {/* PRICING CARDS */}
+      {/* PRICING */}
 
       <section className="max-w-7xl mx-auto px-6 pb-24">
 
@@ -225,14 +230,7 @@ export default function PricingPage(){
 
                   onClick={()=>{
 
-                    const paymentSection =
-                    document.getElementById("payment-section");
-
-                    paymentSection?.scrollIntoView({
-
-                      behavior:"smooth"
-
-                    });
+                    setSelectedPlan(plan);
 
                   }}
 
@@ -254,91 +252,112 @@ export default function PricingPage(){
 
       </section>
 
-      {/* PAYMENT SECTION */}
+      {/* QR POPUP */}
 
-      <section
-        id="payment-section"
-        className="max-w-5xl mx-auto px-6 pb-24"
-      >
+      {
 
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12 text-center">
+        selectedPlan && (
 
-          <div className="text-8xl mb-8">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center items-center z-50 p-6">
 
-            💳
+            <div className="bg-[#0B1120] border border-white/10 rounded-[45px] p-10 max-w-md w-full relative">
+
+              {/* CLOSE */}
+
+              <button
+
+                onClick={()=>{
+
+                  setSelectedPlan(null);
+
+                }}
+
+                className="absolute top-5 right-5 w-12 h-12 rounded-full bg-red-500 text-2xl font-black"
+
+              >
+
+                ×
+
+              </button>
+
+              <div className="text-center">
+
+                <div className="text-7xl mb-6">
+
+                  💳
+
+                </div>
+
+                <h2 className="text-5xl font-black mb-4">
+
+                  {selectedPlan.name}
+
+                </h2>
+
+                <p className="text-3xl text-purple-400 font-black mb-8">
+
+                  {selectedPlan.price}
+
+                </p>
+
+                {/* QR */}
+
+                <img
+                  src="/gpay-qr.jpg"
+                  alt="UPI QR"
+                  className="w-[260px] h-[260px] mx-auto rounded-[35px] object-cover mb-8"
+                />
+
+                {/* UPI */}
+
+                <div className="bg-[#111827] rounded-3xl p-5 mb-8">
+
+                  <p className="text-gray-400 mb-2">
+
+                    UPI ID
+
+                  </p>
+
+                  <h3 className="text-2xl font-black break-all text-green-400">
+
+                    examcracker@naviaxis
+
+                  </h3>
+
+                </div>
+
+                {/* TEXT */}
+
+                <p className="text-gray-300 leading-relaxed mb-8">
+
+                  Scan QR using GPay,
+                  PhonePe or Paytm
+                  and send payment screenshot
+                  on WhatsApp 😎🔥
+
+                </p>
+
+                {/* WHATSAPP */}
+
+                <a
+                  href="https://wa.me/"
+                  target="_blank"
+                  className="block w-full py-5 rounded-2xl bg-green-600 text-xl font-black"
+                >
+
+                  Send Screenshot 🚀
+
+                </a>
+
+              </div>
+
+            </div>
 
           </div>
 
-          <h2 className="text-5xl font-black mb-8">
+        )
 
-            Pay Using UPI 😎🔥
-
-          </h2>
-
-          <p className="text-xl text-gray-300 mb-10 leading-relaxed">
-
-            Pay on the UPI ID below and send payment screenshot
-            on WhatsApp for instant premium activation 🚀
-
-          </p>
-
-          {/* UPI ID */}
-
-          <div className="bg-[#111827] border border-white/10 rounded-3xl p-8 mb-10">
-
-            <p className="text-gray-400 text-lg mb-3">
-
-              Your UPI ID
-
-            </p>
-
-            <h3 className="text-4xl font-black text-purple-400 break-all">
-
-              examcracker@naviaxis
-
-            </h3>
-
-          </div>
-
-          {/* REAL QR */}
-
-          <img
-            src="/gpay-qr.jpg"
-            alt="UPI QR"
-            className="w-[280px] h-[280px] mx-auto rounded-[35px] object-cover mb-10"
-          />
-
-          {/* WHATSAPP */}
-
-          <div className="bg-green-600 rounded-3xl p-8 max-w-2xl mx-auto">
-
-            <h3 className="text-3xl font-black mb-4">
-
-              📲 Send Payment Screenshot
-
-            </h3>
-
-            <p className="text-lg mb-6">
-
-              Send screenshot after payment for premium activation 😎🔥
-
-            </p>
-
-            <a
-              href="https://wa.me/"
-              target="_blank"
-              className="inline-block px-8 py-4 rounded-2xl bg-black text-lg font-bold"
-            >
-
-              Open WhatsApp 🚀
-
-            </a>
-
-          </div>
-
-        </div>
-
-      </section>
+      }
 
     </main>
 
