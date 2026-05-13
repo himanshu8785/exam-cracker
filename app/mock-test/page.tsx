@@ -1,19 +1,11 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import {
 
   useEffect,
   useState
 
 } from "react";
-
-import {
-
-  useSearchParams
-
-} from "next/navigation";
 
 import {
 
@@ -32,12 +24,6 @@ import {
 } from "../../firebase";
 
 export default function MockTestPage(){
-
-  const searchParams =
-  useSearchParams();
-
-  const testId =
-  searchParams.get("testId");
 
   const [questions,setQuestions] =
   useState<any[]>([]);
@@ -79,7 +65,7 @@ export default function MockTestPage(){
           collection(db,"questions")
         );
 
-        let data =
+        const data =
         snapshot.docs.map(doc=>({
 
           id:doc.id,
@@ -88,21 +74,6 @@ export default function MockTestPage(){
 
         }));
 
-        /* FILTER TEST */
-
-        if(testId){
-
-          data =
-          data.filter(
-
-            (q:any)=>
-
-              q.testId === testId
-
-          );
-
-        }
-
         /* SHUFFLE */
 
         const shuffled =
@@ -110,7 +81,7 @@ export default function MockTestPage(){
           Math.random() - 0.5
         );
 
-        /* LIMIT */
+        /* 25 QUESTIONS */
 
         setQuestions(
           shuffled.slice(0,25)
@@ -130,7 +101,7 @@ export default function MockTestPage(){
 
     loadQuestions();
 
-  },[testId]);
+  },[]);
 
   /* TIMER */
 
@@ -273,11 +244,6 @@ export default function MockTestPage(){
 
             ),
 
-            testId:
-            testId ||
-
-            "random-test",
-
             createdAt:
             serverTimestamp()
 
@@ -364,19 +330,7 @@ export default function MockTestPage(){
 
             <p className="text-gray-400 text-xl">
 
-              {
-
-                testId
-
-                ?
-
-                `Test Series: ${testId}`
-
-                :
-
-                "Random Practice Test 😎🔥"
-
-              }
+              Real JEE & NEET Test Engine 😎🔥
 
             </p>
 
@@ -415,6 +369,8 @@ export default function MockTestPage(){
           submitted
 
           ?
+
+          /* RESULT */
 
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-16 text-center">
 
@@ -555,6 +511,8 @@ export default function MockTestPage(){
 
               </div>
 
+              {/* QUESTION */}
+
               <h3 className="text-4xl font-black leading-relaxed mb-12">
 
                 {
@@ -565,6 +523,8 @@ export default function MockTestPage(){
                 }
 
               </h3>
+
+              {/* OPTIONS */}
 
               <div className="space-y-6">
 
@@ -621,6 +581,8 @@ export default function MockTestPage(){
                 }
 
               </div>
+
+              {/* BUTTONS */}
 
               <div className="flex flex-wrap gap-5 mt-12">
 
@@ -746,6 +708,8 @@ export default function MockTestPage(){
                 }
 
               </div>
+
+              {/* LEGEND */}
 
               <div className="mt-10 space-y-4 text-lg">
 
