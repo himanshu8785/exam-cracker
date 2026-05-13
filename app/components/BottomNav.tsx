@@ -1,78 +1,114 @@
 "use client";
 
 import Link from "next/link";
-
 import { usePathname } from "next/navigation";
 
-export default function BottomNav() {
+export default function BottomNav(){
 
-  const pathname = usePathname();
+  const pathname =
+  usePathname();
 
   const navItems = [
 
     {
-      name:"Home",
-      link:"/"
+      label:"Home",
+      href:"/",
+      icon:"🏠"
     },
 
     {
-      name:"Tests",
-      link:"/mock-test"
+      label:"JEE",
+      href:"/jee-tests",
+      icon:"⚡"
     },
 
     {
-      name:"Rank",
-      link:"/rank-predictor"
+      label:"NEET",
+      href:"/neet-tests",
+      icon:"🧬"
     },
 
     {
-      name:"Profile",
-      link:"/profile"
+      label:"Quiz",
+      href:"/daily-quiz",
+      icon:"🔥"
     },
 
     {
-      name:"Premium",
-      link:"/premium"
+      label:"Leaderboard",
+      href:"/leaderboard",
+      icon:"🏆"
+    },
+
+    {
+      label:"Analytics",
+      href:"/analytics",
+      icon:"📈"
+    },
+
+    {
+      label:"Rank",
+      href:"/rank-predictor",
+      icon:"🎯"
+    },
+
+    {
+      label:"Profile",
+      href:"/profile",
+      icon:"👤"
     }
 
   ];
 
-  return (
+  return(
 
-    <div className="fixed bottom-0 left-0 w-full bg-[#111827] border-t border-gray-800 md:hidden z-50">
+    <div className="fixed bottom-0 left-0 w-full z-50 px-4 pb-4">
 
-      <div className="grid grid-cols-5">
+      <div className="max-w-7xl mx-auto">
 
-        {navItems.map((item,index)=>(
+        <div className="bg-[#0B1120]/90 backdrop-blur-2xl border border-white/10 rounded-[35px] px-4 py-4 shadow-2xl">
 
-          <Link
-            href={item.link}
-            key={index}
-          >
+          <div className="flex justify-between items-center gap-2 overflow-x-auto scrollbar-hide">
 
-            <div
-              className={`flex flex-col items-center justify-center py-4 text-sm transition
+            {navItems.map((item,index)=>(
 
-              ${pathname === item.link
+              <Link
+                key={index}
+                href={item.href}
+                className={`min-w-[90px] flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300
 
-                ? "text-purple-500"
+                ${pathname === item.href
 
-                : "text-gray-400"
+                  ?
 
-              }`}
-            >
+                  "bg-gradient-to-r from-purple-600 to-blue-600 text-white scale-105"
 
-              <p className="font-semibold">
+                  :
 
-                {item.name}
+                  "text-gray-400 hover:text-white hover:bg-white/5"
 
-              </p>
+                }`}
+              >
 
-            </div>
+                <div className="text-2xl">
 
-          </Link>
+                  {item.icon}
 
-        ))}
+                </div>
+
+                <p className="text-sm font-bold whitespace-nowrap">
+
+                  {item.label}
+
+                </p>
+
+              </Link>
+
+            ))}
+
+          </div>
+
+        </div>
 
       </div>
 
