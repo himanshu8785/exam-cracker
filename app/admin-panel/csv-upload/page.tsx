@@ -10,7 +10,8 @@ import {
 
 import {
   collection,
-  addDoc
+  addDoc,
+  serverTimestamp
 } from "firebase/firestore";
 
 export default function CSVUploadPage(){
@@ -57,35 +58,59 @@ export default function CSVUploadPage(){
 
               {
 
+                /* QUESTION */
+
                 question:
                 item.question,
 
-                options:[
+                /* OPTIONS */
 
-                  item.option1,
+                option1:
+                item.option1,
 
-                  item.option2,
+                option2:
+                item.option2,
 
-                  item.option3,
+                option3:
+                item.option3,
 
-                  item.option4
+                option4:
+                item.option4,
 
-                ],
+                /* ANSWER */
 
                 answer:
                 item.answer,
 
+                /* EXTRA */
+
                 exam:
-                item.exam,
+                item.exam ||
+
+                "JEE",
 
                 subject:
-                item.subject,
+                item.subject ||
+
+                "Physics",
+
+                testId:
+                item.testId ||
+
+                "default-test",
 
                 chapter:
-                item.chapter,
+                item.chapter ||
+
+                "",
 
                 difficulty:
-                item.difficulty
+                item.difficulty ||
+
+                "Medium",
+
+                createdAt:
+                serverTimestamp()
 
               }
 
@@ -125,6 +150,8 @@ export default function CSVUploadPage(){
 
         <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-12">
 
+          {/* HEADER */}
+
           <div className="text-center mb-10">
 
             <div className="text-8xl mb-6">
@@ -146,6 +173,8 @@ export default function CSVUploadPage(){
             </p>
 
           </div>
+
+          {/* BOX */}
 
           <div className="bg-[#111827] rounded-3xl p-10 border border-white/10">
 
@@ -183,6 +212,24 @@ export default function CSVUploadPage(){
               )
 
             }
+
+          </div>
+
+          {/* CSV FORMAT */}
+
+          <div className="mt-10 bg-[#111827] border border-white/10 rounded-3xl p-6">
+
+            <h2 className="text-2xl font-black mb-4">
+
+              CSV Format 😎🔥
+
+            </h2>
+
+            <div className="text-gray-300 leading-relaxed overflow-x-auto">
+
+              question,option1,option2,option3,option4,answer,exam,subject,testId
+
+            </div>
 
           </div>
 
