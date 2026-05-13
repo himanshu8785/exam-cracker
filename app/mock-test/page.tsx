@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import {
+
+  useEffect,
+  useState
+
+} from "react";
 
 import {
 
   collection,
+  getDocs,
   addDoc,
   serverTimestamp
 
@@ -19,93 +25,92 @@ import {
 
 export default function MockTestPage(){
 
-  const questions = [
+  const [questions,setQuestions] =
+  useState<any[]>([]);
 
-    {
-
-      question:"What is acceleration due to gravity?",
-
-      options:[
-
-        "9.8 m/s²",
-
-        "10 m/s²",
-
-        "8 m/s²",
-
-        "12 m/s²"
-
-      ],
-
-      answer:"9.8 m/s²"
-
-    },
-
-    {
-
-      question:"DNA is located in?",
-
-      options:[
-
-        "Nucleus",
-
-        "Ribosome",
-
-        "Cytoplasm",
-
-        "Membrane"
-
-      ],
-
-      answer:"Nucleus"
-
-    },
-
-    {
-
-      question:"Mole concept belongs to?",
-
-      options:[
-
-        "Physics",
-
-        "Maths",
-
-        "Chemistry",
-
-        "Biology"
-
-      ],
-
-      answer:"Chemistry"
-
-    }
-
-  ];
+  const [loading,setLoading] =
+  useState(true);
 
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
-  const [selected,setSelected] =
-  useState("");
-
-  const [score,setScore] =
-  useState(0);
+  const [selectedAnswers,setSelectedAnswers] =
+  useState<any>({});
 
   const [submitted,setSubmitted] =
   useState(false);
 
-  const [loading,setLoading] =
-  useState(false);
+  const [score,setScore] =
+  useState(0);
+
+  const [correctAnswers,setCorrectAnswers] =
+  useState(0);
+
+  const [wrongAnswers,setWrongAnswers] =
+  useState(0);
 
   const [timeLeft,setTimeLeft] =
-  useState(180);
+  useState(3600);
+
+  /* LOAD QUESTIONS */
+
+  useEffect(()=>{
+
+    async function loadQuestions(){
+
+      try{
+
+        const snapshot =
+        await getDocs(
+          collection(db,"questions")
+        );
+
+        const data =
+        snapshot.docs.map(doc=>({
+
+          id:doc.id,
+
+          ...doc.data()
+
+        }));
+
+        /* SHUFFLE */
+
+        const shuffled =
+        data.sort(()=>
+          Math.random() - 0.5
+        );
+
+        /* 25 QUESTIONS */
+
+        setQuestions(
+          shuffled.slice(0,25)
+        );
+
+      }
+
+      catch(error){
+
+        console.log(error);
+
+      }
+
+      setLoading(false);
+
+    }
+
+    loadQuestions();
+
+  },[]);
 
   /* TIMER */
 
   useEffect(()=>{
 
-    const timer = setInterval(()=>{
+    if(submitted) return;
+
+    const timer =
+    setInterval(()=>{
 
       setTimeLeft(prev=>{
 
@@ -113,7 +118,7 @@ export default function MockTestPage(){
 
           clearInterval(timer);
 
-          submitQuiz();
+          submitTest();
 
           return 0;
 
@@ -127,13 +132,74 @@ export default function MockTestPage(){
 
     return()=>clearInterval(timer);
 
-  },[]);
+  },[submitted]);
 
-  async function submitQuiz(){
+  /* SELECT ANSWER */
+
+  function selectAnswer(
+    answer:string
+  ){
+
+    setSelectedAnswers({
+
+      ...selectedAnswers,
+
+      [currentQuestion]:answer
+
+    });
+
+  }
+
+  /* SUBMIT */
+
+  async function submitTest(){
+
+    let finalScore = 0;
+
+    let correct = 0;
+
+    let wrong = 0;
+
+    questions.forEach((q,index)=>{
+
+      const selected =
+      selectedAnswers[index];
+
+      if(selected){
+
+        if(
+
+          selected === q.answer
+
+        ){
+
+          finalScore += 4;
+
+          correct++;
+
+        }
+
+        else{
+
+          finalScore -= 1;
+
+          wrong++;
+
+        }
+
+      }
+
+    });
+
+    setScore(finalScore);
+
+    setCorrectAnswers(correct);
+
+    setWrongAnswers(wrong);
 
     setSubmitted(true);
 
-    setLoading(true);
+    /* SAVE RESULT */
 
     try{
 
@@ -158,7 +224,11 @@ export default function MockTestPage(){
 
             email:user.email,
 
-            score,
+            score:finalScore,
+
+            correctAnswers:correct,
+
+            wrongAnswers:wrong,
 
             totalQuestions:
             questions.length,
@@ -167,7 +237,8 @@ export default function MockTestPage(){
 
             Math.round(
 
-              (score / (questions.length * 4))
+              (correct /
+              questions.length)
 
               * 100
 
@@ -190,165 +261,98 @@ export default function MockTestPage(){
 
     }
 
-    setLoading(false);
-
   }
 
-  function nextQuestion(){
+  /* TIMER FORMAT */
 
-    if(selected === ""){
-
-      alert(
-        "Select an option 😎🔥"
-      );
-
-      return;
-
-    }
-
-    let updatedScore = score;
-
-    if(
-
-      selected ===
-      questions[currentQuestion].answer
-
-    ){
-
-      updatedScore += 4;
-
-      setScore(updatedScore);
-
-    }
-
-    if(
-
-      currentQuestion <
-      questions.length - 1
-
-    ){
-
-      setCurrentQuestion(
-        prev=>prev + 1
-      );
-
-      setSelected("");
-
-    }
-
-    else{
-
-      submitQuiz();
-
-    }
-
-  }
+  const hours =
+  Math.floor(timeLeft / 3600);
 
   const minutes =
-  Math.floor(timeLeft / 60);
+  Math.floor(
+    (timeLeft % 3600) / 60
+  );
 
   const seconds =
   timeLeft % 60;
+
+  /* LOADING */
+
+  if(loading){
+
+    return(
+
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black">
+
+        Loading Questions 😎🔥
+
+      </main>
+
+    );
+
+  }
+
+  /* NO QUESTIONS */
+
+  if(questions.length === 0){
+
+    return(
+
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black text-center px-6">
+
+        No Questions Found 😭🔥
+
+      </main>
+
+    );
+
+  }
 
   return(
 
     <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
-      {/* HERO */}
+      {/* HEADER */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
+      <section className="max-w-7xl mx-auto px-6 pt-12 pb-10">
 
-        <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-8 flex flex-col lg:flex-row justify-between items-center gap-8">
 
-          🚀 Real Mock Test
+          {/* TITLE */}
 
-        </div>
+          <div>
 
-        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
+            <h1 className="text-5xl font-black mb-3">
 
-          Smart
-          {" "}
+              🚀 Advanced Mock Test
 
-          <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
+            </h1>
 
-            Mock Test
+            <p className="text-gray-400 text-xl">
 
-          </span>
-
-        </h1>
-
-      </section>
-
-      {/* TOP STATS */}
-
-      <section className="max-w-5xl mx-auto px-6 pb-16">
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
-
-            <div className="text-5xl mb-4">
-
-              📝
-
-            </div>
-
-            <h2 className="text-5xl font-black text-purple-400 mb-3">
-
-              {currentQuestion + 1}
-
-            </h2>
-
-            <p className="text-gray-400">
-
-              Current Question
+              Real JEE & NEET Test Engine 😎🔥
 
             </p>
 
           </div>
 
-          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
+          {/* TIMER */}
 
-            <div className="text-5xl mb-4">
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-6 rounded-3xl text-center">
 
-              🎯
-
-            </div>
-
-            <h2 className="text-5xl font-black text-green-400 mb-3">
-
-              {score}
-
-            </h2>
-
-            <p className="text-gray-400">
-
-              Current Score
-
-            </p>
-
-          </div>
-
-          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
-
-            <div className="text-5xl mb-4">
-
-              ⏱
-
-            </div>
-
-            <h2 className="text-5xl font-black text-blue-400 mb-3">
-
-              {minutes}:
-              {seconds.toString().padStart(2,"0")}
-
-            </h2>
-
-            <p className="text-gray-400">
+            <div className="text-lg mb-2">
 
               Time Left
 
-            </p>
+            </div>
+
+            <div className="text-5xl font-black">
+
+              {hours}:
+              {minutes.toString().padStart(2,"0")}:
+              {seconds.toString().padStart(2,"0")}
+
+            </div>
 
           </div>
 
@@ -356,15 +360,17 @@ export default function MockTestPage(){
 
       </section>
 
-      {/* QUIZ */}
+      {/* MAIN */}
 
-      <section className="max-w-5xl mx-auto px-6 pb-24">
+      <section className="max-w-7xl mx-auto px-6 pb-24">
 
         {
 
           submitted
 
           ?
+
+          /* RESULT */
 
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-16 text-center">
 
@@ -374,144 +380,366 @@ export default function MockTestPage(){
 
             </div>
 
-            <h2 className="text-6xl font-black mb-8">
+            <h2 className="text-7xl font-black mb-10">
 
               Test Submitted 😎🔥
 
             </h2>
 
-            <div className="text-8xl font-black mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
 
-              {score}
+              <div className="bg-black/20 rounded-3xl p-8">
 
-            </div>
+                <h3 className="text-5xl font-black mb-3">
 
-            <p className="text-2xl mb-10">
+                  {score}
 
-              Accuracy:
-              {" "}
+                </h3>
 
-              {
+                <p>
 
-                Math.round(
+                  Final Score
 
-                  (score / (questions.length * 4))
+                </p>
 
-                  * 100
+              </div>
 
-                )
+              <div className="bg-black/20 rounded-3xl p-8">
 
-              }%
+                <h3 className="text-5xl font-black mb-3">
 
-            </p>
+                  {correctAnswers}
 
-            {
+                </h3>
 
-              loading
+                <p>
 
-              ?
+                  Correct
 
-              <p className="text-xl">
+                </p>
 
-                Saving Result... 😎🔥
+              </div>
 
-              </p>
+              <div className="bg-black/20 rounded-3xl p-8">
 
-              :
+                <h3 className="text-5xl font-black mb-3">
 
-              <p className="text-xl">
+                  {wrongAnswers}
 
-                Result Saved Successfully 🚀
+                </h3>
 
-              </p>
+                <p>
 
-            }
+                  Wrong
 
-          </div>
+                </p>
 
-          :
+              </div>
 
-          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12">
+              <div className="bg-black/20 rounded-3xl p-8">
 
-            <h2 className="text-4xl font-black leading-relaxed mb-12">
+                <h3 className="text-5xl font-black mb-3">
 
-              {
+                  {
 
-                questions[currentQuestion]
-                .question
+                    Math.round(
 
-              }
+                      (correctAnswers /
+                      questions.length)
 
-            </h2>
+                      * 100
 
-            <div className="space-y-6">
+                    )
 
-              {
+                  }%
 
-                questions[currentQuestion]
-                .options
-                .map((option,index)=>(
+                </h3>
 
-                  <button
+                <p>
 
-                    key={index}
+                  Accuracy
 
-                    onClick={()=>{
+                </p>
 
-                      setSelected(option);
-
-                    }}
-
-                    className={`w-full p-6 rounded-3xl border text-left text-xl transition
-
-                    ${selected === option
-
-                      ?
-
-                      "bg-purple-600 border-purple-400"
-
-                      :
-
-                      "bg-[#111827] border-white/10 hover:border-purple-400"
-
-                    }`}
-
-                  >
-
-                    {option}
-
-                  </button>
-
-                ))
-
-              }
+              </div>
 
             </div>
 
             <button
 
-              onClick={nextQuestion}
+              onClick={()=>{
 
-              className="w-full mt-10 py-6 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 text-2xl font-black"
+                window.location.reload();
+
+              }}
+
+              className="px-12 py-5 rounded-3xl bg-black text-2xl font-black"
 
             >
 
-              {
-
-                currentQuestion ===
-                questions.length - 1
-
-                ?
-
-                "Submit Test 🚀"
-
-                :
-
-                "Next Question 🚀"
-
-              }
+              Restart Test 🚀
 
             </button>
+
+          </div>
+
+          :
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+
+            {/* QUESTION AREA */}
+
+            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12">
+
+              <div className="flex justify-between items-center mb-10">
+
+                <h2 className="text-3xl font-black">
+
+                  Question
+                  {" "}
+                  {currentQuestion + 1}
+                  {" "}
+                  / {questions.length}
+
+                </h2>
+
+                <div className="bg-purple-600 px-5 py-2 rounded-2xl text-lg font-bold">
+
+                  +4 / -1 😎🔥
+
+                </div>
+
+              </div>
+
+              {/* QUESTION */}
+
+              <h3 className="text-4xl font-black leading-relaxed mb-12">
+
+                {
+
+                  questions[currentQuestion]
+                  ?.question
+
+                }
+
+              </h3>
+
+              {/* OPTIONS */}
+
+              <div className="space-y-6">
+
+                {
+
+                  [
+
+                    questions[currentQuestion]
+                    ?.option1,
+
+                    questions[currentQuestion]
+                    ?.option2,
+
+                    questions[currentQuestion]
+                    ?.option3,
+
+                    questions[currentQuestion]
+                    ?.option4
+
+                  ].map((option,index)=>(
+
+                    <button
+
+                      key={index}
+
+                      onClick={()=>{
+
+                        selectAnswer(option);
+
+                      }}
+
+                      className={`w-full p-6 rounded-3xl border text-left text-xl transition
+
+                      ${selectedAnswers[currentQuestion] === option
+
+                        ?
+
+                        "bg-purple-600 border-purple-400"
+
+                        :
+
+                        "bg-[#111827] border-white/10 hover:border-purple-400"
+
+                      }`}
+
+                    >
+
+                      {option}
+
+                    </button>
+
+                  ))
+
+                }
+
+              </div>
+
+              {/* BUTTONS */}
+
+              <div className="flex flex-wrap gap-5 mt-12">
+
+                <button
+
+                  disabled={currentQuestion === 0}
+
+                  onClick={()=>{
+
+                    setCurrentQuestion(
+
+                      prev=>prev - 1
+
+                    );
+
+                  }}
+
+                  className="px-8 py-4 rounded-2xl bg-[#111827] text-xl font-bold disabled:opacity-40"
+
+                >
+
+                  Previous
+
+                </button>
+
+                <button
+
+                  disabled={
+                    currentQuestion ===
+                    questions.length - 1
+                  }
+
+                  onClick={()=>{
+
+                    setCurrentQuestion(
+
+                      prev=>prev + 1
+
+                    );
+
+                  }}
+
+                  className="px-8 py-4 rounded-2xl bg-purple-600 text-xl font-bold"
+
+                >
+
+                  Next
+
+                </button>
+
+                <button
+
+                  onClick={submitTest}
+
+                  className="ml-auto px-10 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 text-xl font-black"
+
+                >
+
+                  Submit Test 🚀
+
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* QUESTION PALETTE */}
+
+            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-8 h-fit sticky top-6">
+
+              <h2 className="text-3xl font-black mb-8">
+
+                Question Palette 😎🔥
+
+              </h2>
+
+              <div className="grid grid-cols-5 gap-4">
+
+                {
+
+                  questions.map((_,index)=>(
+
+                    <button
+
+                      key={index}
+
+                      onClick={()=>{
+
+                        setCurrentQuestion(index);
+
+                      }}
+
+                      className={`w-14 h-14 rounded-2xl font-black text-lg transition
+
+                      ${currentQuestion === index
+
+                        ?
+
+                        "bg-purple-600"
+
+                        :
+
+                        selectedAnswers[index]
+
+                        ?
+
+                        "bg-green-500 text-black"
+
+                        :
+
+                        "bg-[#111827]"
+
+                      }`}
+
+                    >
+
+                      {index + 1}
+
+                    </button>
+
+                  ))
+
+                }
+
+              </div>
+
+              {/* LEGEND */}
+
+              <div className="mt-10 space-y-4 text-lg">
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded bg-green-500"></div>
+
+                  Answered
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded bg-purple-600"></div>
+
+                  Current
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded bg-[#111827]"></div>
+
+                  Unanswered
+
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
 
