@@ -1,113 +1,105 @@
 "use client";
 
-import Link from "next/link";
+import {
+
+  useEffect,
+  useState
+
+} from "react";
+
+import {
+
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit
+
+} from "firebase/firestore";
+
+import {
+
+  db
+
+} from "../../firebase";
 
 export default function LeaderboardPage(){
 
-  const toppers = [
+  const [loading,setLoading] =
+  useState(true);
 
-    {
+  const [leaders,setLeaders] =
+  useState<any[]>([]);
 
-      rank:1,
+  /* LOAD LEADERBOARD */
 
-      name:"Aarav Sharma",
+  useEffect(()=>{
 
-      score:"298",
+    async function loadLeaderboard(){
 
-      accuracy:"99%",
+      try{
 
-      streak:"45 Days",
+        const q =
+        query(
 
-      badge:"🏆 AIR 1"
+          collection(db,"results"),
 
-    },
+          orderBy(
+            "score",
+            "desc"
+          ),
 
-    {
+          limit(20)
 
-      rank:2,
+        );
 
-      name:"Priya Verma",
+        const snapshot =
+        await getDocs(q);
 
-      score:"292",
+        const data =
+        snapshot.docs.map((doc,index)=>({
 
-      accuracy:"97%",
+          id:doc.id,
 
-      streak:"39 Days",
+          rank:index + 1,
 
-      badge:"🥈 Topper"
+          ...doc.data()
 
-    },
+        }));
 
-    {
+        setLeaders(data);
 
-      rank:3,
+      }
 
-      name:"Rohan Gupta",
+      catch(error){
 
-      score:"287",
+        console.log(error);
 
-      accuracy:"96%",
+      }
 
-      streak:"35 Days",
-
-      badge:"🥉 Elite"
+      setLoading(false);
 
     }
 
-  ];
+    loadLeaderboard();
 
-  const leaderboard = [
+  },[]);
 
-    {
-      rank:4,
-      name:"Aditya Singh",
-      score:"281",
-      accuracy:"94%"
-    },
+  /* LOADING */
 
-    {
-      rank:5,
-      name:"Sneha Patel",
-      score:"276",
-      accuracy:"92%"
-    },
+  if(loading){
 
-    {
-      rank:6,
-      name:"Yash Kumar",
-      score:"272",
-      accuracy:"91%"
-    },
+    return(
 
-    {
-      rank:7,
-      name:"Kunal Mehta",
-      score:"268",
-      accuracy:"89%"
-    },
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black">
 
-    {
-      rank:8,
-      name:"Ananya Roy",
-      score:"264",
-      accuracy:"88%"
-    },
+        Loading Leaderboard 😎🔥
 
-    {
-      rank:9,
-      name:"Harsh Jain",
-      score:"259",
-      accuracy:"87%"
-    },
+      </main>
 
-    {
-      rank:10,
-      name:"Simran Kaur",
-      score:"255",
-      accuracy:"85%"
-    }
+    );
 
-  ];
+  }
 
   return(
 
@@ -115,17 +107,17 @@ export default function LeaderboardPage(){
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
 
         <div className="inline-block px-6 py-3 rounded-full bg-yellow-500/20 border border-yellow-500/30 mb-8">
 
-          🏆 National Rankings
+          🏆 Real Rankings
 
         </div>
 
         <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
 
-          Student
+          Global
           {" "}
 
           <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
@@ -134,17 +126,11 @@ export default function LeaderboardPage(){
 
           </span>
 
-          <br />
-
-          Rankings 🚀
-
         </h1>
 
         <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
 
-          Compete with top JEE & NEET aspirants,
-          improve your rank
-          and become AIR 1 😎🔥
+          Compete with real JEE & NEET aspirants 😎🔥
 
         </p>
 
@@ -152,134 +138,132 @@ export default function LeaderboardPage(){
 
       {/* TOP 3 */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      {
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        leaders.length >= 3 && (
 
-          {toppers.map((topper,index)=>(
+          <section className="max-w-7xl mx-auto px-6 pb-24">
 
-            <div
-              key={index}
-              className={`relative rounded-[45px] p-[2px]
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
-              ${topper.rank === 1
+              {
 
-                ?
+                leaders.slice(0,3).map((user,index)=>(
 
-                "scale-105"
+                  <div
+                    key={index}
+                    className={`relative rounded-[45px] p-[2px]
 
-                :
+                    ${user.rank === 1
 
-                ""
+                      ?
 
-              }`}
-            >
+                      "scale-105"
 
-              <div className={`absolute inset-0 rounded-[45px]
+                      :
 
-              ${topper.rank === 1
+                      ""
 
-                ?
+                    }`}
+                  >
 
-                "bg-gradient-to-br from-yellow-400 to-orange-500"
+                    <div className={`absolute inset-0 rounded-[45px]
 
-                :
+                    ${user.rank === 1
 
-                topper.rank === 2
+                      ?
 
-                ?
+                      "bg-gradient-to-br from-yellow-400 to-orange-500"
 
-                "bg-gradient-to-br from-gray-300 to-gray-500"
+                      :
 
-                :
+                      user.rank === 2
 
-                "bg-gradient-to-br from-orange-700 to-orange-900"
+                      ?
 
-              }`}></div>
+                      "bg-gradient-to-br from-gray-300 to-gray-500"
 
-              <div className="relative bg-[#0B1120] rounded-[43px] p-10 text-center">
+                      :
 
-                <div className="text-8xl mb-6">
+                      "bg-gradient-to-br from-orange-700 to-orange-900"
 
-                  {
+                    }`}></div>
 
-                    topper.rank === 1
+                    <div className="relative bg-[#0B1120] rounded-[43px] p-10 text-center">
 
-                    ?
+                      <div className="text-8xl mb-6">
 
-                    "👑"
+                        {
 
-                    :
+                          user.rank === 1
 
-                    topper.rank === 2
+                          ?
 
-                    ?
+                          "👑"
 
-                    "🥈"
+                          :
 
-                    :
+                          user.rank === 2
 
-                    "🥉"
+                          ?
 
-                  }
+                          "🥈"
 
-                </div>
+                          :
 
-                <div className="inline-block px-5 py-2 rounded-full bg-white/10 mb-6 text-lg font-bold">
+                          "🥉"
 
-                  {topper.badge}
+                        }
 
-                </div>
+                      </div>
 
-                <h2 className="text-4xl font-black mb-4">
+                      <div className="text-7xl font-black text-yellow-400 mb-6">
 
-                  {topper.name}
+                        #{user.rank}
 
-                </h2>
+                      </div>
 
-                <div className="text-7xl font-black text-yellow-400 mb-6">
+                      <h2 className="text-4xl font-black mb-6 break-words">
 
-                  #{topper.rank}
+                        {user.name}
 
-                </div>
+                      </h2>
 
-                <div className="space-y-4 text-lg">
+                      <div className="space-y-4 text-lg">
 
-                  <p>
+                        <p>
 
-                    🎯 Accuracy:
-                    {" "}
-                    {topper.accuracy}
+                          🎯 Accuracy:
+                          {" "}
+                          {user.accuracy}%
 
-                  </p>
+                        </p>
 
-                  <p>
+                        <p>
 
-                    📈 Score:
-                    {" "}
-                    {topper.score}
+                          📈 Score:
+                          {" "}
+                          {user.score}
 
-                  </p>
+                        </p>
 
-                  <p>
+                      </div>
 
-                    🔥 Streak:
-                    {" "}
-                    {topper.streak}
+                    </div>
 
-                  </p>
+                  </div>
 
-                </div>
+                ))
 
-              </div>
+              }
 
             </div>
 
-          ))}
+          </section>
 
-        </div>
+        )
 
-      </section>
+      }
 
       {/* FULL LEADERBOARD */}
 
@@ -301,93 +285,102 @@ export default function LeaderboardPage(){
 
         </div>
 
-        <div className="space-y-6">
+        {
 
-          {leaderboard.map((student,index)=>(
+          leaders.length === 0
 
-            <div
-              key={index}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
-            >
+          ?
 
-              <div className="flex items-center gap-6">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-16 text-center text-3xl font-black">
 
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-2xl font-black">
-
-                  {student.rank}
-
-                </div>
-
-                <div>
-
-                  <h3 className="text-3xl font-black mb-2">
-
-                    {student.name}
-
-                  </h3>
-
-                  <p className="text-gray-400 text-lg">
-
-                    Accuracy:
-                    {" "}
-                    {student.accuracy}
-
-                  </p>
-
-                </div>
-
-              </div>
-
-              <div className="text-5xl font-black text-purple-400">
-
-                {student.score}
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* PREMIUM CTA */}
-
-      <section className="max-w-5xl mx-auto px-6 pb-24">
-
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-12 text-center">
-
-          <div className="text-8xl mb-8">
-
-            💎
+            No Leaderboard Data Yet 😭🔥
 
           </div>
 
-          <h2 className="text-6xl font-black mb-8">
+          :
 
-            Unlock Premium Rankings
+          <div className="space-y-6">
 
-          </h2>
+            {
 
-          <p className="text-2xl text-white/90 mb-10 leading-relaxed">
+              leaders.map((user,index)=>(
 
-            Access national rankings,
-            advanced leaderboard stats,
-            streak rankings and AI insights 😎🔥
+                <div
+                  key={index}
+                  className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+                >
 
-          </p>
+                  <div className="flex items-center gap-6">
 
-          <Link
-            href="/pricing"
-            className="inline-block px-12 py-5 rounded-3xl bg-black text-2xl font-black"
-          >
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-black
 
-            Upgrade to PRO 🚀
+                    ${user.rank === 1
 
-          </Link>
+                      ?
 
-        </div>
+                      "bg-yellow-400 text-black"
+
+                      :
+
+                      user.rank === 2
+
+                      ?
+
+                      "bg-gray-300 text-black"
+
+                      :
+
+                      user.rank === 3
+
+                      ?
+
+                      "bg-orange-700"
+
+                      :
+
+                      "bg-gradient-to-r from-purple-500 to-blue-500"
+
+                    }`}>
+
+                      {user.rank}
+
+                    </div>
+
+                    <div>
+
+                      <h3 className="text-3xl font-black mb-2 break-words">
+
+                        {user.name}
+
+                      </h3>
+
+                      <p className="text-gray-400 text-lg">
+
+                        Accuracy:
+                        {" "}
+                        {user.accuracy}%
+
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="text-5xl font-black text-purple-400">
+
+                    {user.score}
+
+                  </div>
+
+                </div>
+
+              ))
+
+            }
+
+          </div>
+
+        }
 
       </section>
 

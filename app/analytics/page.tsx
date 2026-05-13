@@ -1,90 +1,199 @@
 "use client";
 
-import Link from "next/link";
+import {
+
+  useEffect,
+  useState
+
+} from "react";
+
+import {
+
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy
+
+} from "firebase/firestore";
+
+import {
+
+  auth,
+  db
+
+} from "../../firebase";
 
 export default function AnalyticsPage(){
 
-  const stats = [
+  const [loading,setLoading] =
+  useState(true);
 
-    {
-      title:"Tests Attempted",
-      value:"48",
-      icon:"📝",
-      color:"from-blue-500 to-cyan-500"
-    },
+  const [results,setResults] =
+  useState<any[]>([]);
 
-    {
-      title:"Average Score",
-      value:"182",
-      icon:"📈",
-      color:"from-purple-500 to-pink-500"
-    },
+  const [stats,setStats] =
+  useState({
 
-    {
-      title:"Accuracy",
-      value:"78%",
-      icon:"🎯",
-      color:"from-green-500 to-emerald-500"
-    },
+    totalTests:0,
 
-    {
-      title:"Current Streak",
-      value:"12 Days",
-      icon:"🔥",
-      color:"from-orange-500 to-red-500"
+    avgScore:0,
+
+    accuracy:0,
+
+    bestScore:0
+
+  });
+
+  /* LOAD REAL RESULTS */
+
+  useEffect(()=>{
+
+    async function loadResults(){
+
+      try{
+
+        const user =
+        auth.currentUser;
+
+        if(!user){
+
+          setLoading(false);
+
+          return;
+
+        }
+
+        const q =
+        query(
+
+          collection(db,"results"),
+
+          where(
+            "uid",
+            "==",
+            user.uid
+          ),
+
+          orderBy(
+            "createdAt",
+            "desc"
+          )
+
+        );
+
+        const snapshot =
+        await getDocs(q);
+
+        const data =
+        snapshot.docs.map(doc=>({
+
+          id:doc.id,
+
+          ...doc.data()
+
+        }));
+
+        setResults(data);
+
+        /* CALCULATE STATS */
+
+        if(data.length > 0){
+
+          const totalTests =
+          data.length;
+
+          const totalScore =
+          data.reduce(
+
+            (acc:any,item:any)=>
+
+              acc + item.score,
+
+            0
+
+          );
+
+          const avgScore =
+          Math.round(
+            totalScore / totalTests
+          );
+
+          const totalAccuracy =
+          data.reduce(
+
+            (acc:any,item:any)=>
+
+              acc + item.accuracy,
+
+            0
+
+          );
+
+          const avgAccuracy =
+          Math.round(
+
+            totalAccuracy /
+            totalTests
+
+          );
+
+          const bestScore =
+          Math.max(
+
+            ...data.map(
+              (item:any)=>
+              item.score
+            )
+
+          );
+
+          setStats({
+
+            totalTests,
+
+            avgScore,
+
+            accuracy:
+            avgAccuracy,
+
+            bestScore
+
+          });
+
+        }
+
+      }
+
+      catch(error){
+
+        console.log(error);
+
+      }
+
+      setLoading(false);
+
     }
 
-  ];
+    loadResults();
 
-  const subjects = [
+  },[]);
 
-    {
-      name:"Physics",
-      score:"72%",
-      weak:"Rotation",
-      strong:"Modern Physics",
-      color:"from-blue-500 to-cyan-500"
-    },
+  /* LOADING */
 
-    {
-      name:"Chemistry",
-      score:"81%",
-      weak:"Organic Chemistry",
-      strong:"Physical Chemistry",
-      color:"from-green-500 to-emerald-500"
-    },
+  if(loading){
 
-    {
-      name:"Maths",
-      score:"69%",
-      weak:"Probability",
-      strong:"Calculus",
-      color:"from-purple-500 to-pink-500"
-    }
+    return(
 
-  ];
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black">
 
-  const recentTests = [
+        Loading Analytics 😎🔥
 
-    {
-      name:"JEE Full Test 12",
-      score:"210",
-      accuracy:"82%"
-    },
+      </main>
 
-    {
-      name:"Physics Test 4",
-      score:"78",
-      accuracy:"76%"
-    },
+    );
 
-    {
-      name:"Chemistry Test 8",
-      score:"91",
-      accuracy:"88%"
-    }
-
-  ];
+  }
 
   return(
 
@@ -92,11 +201,11 @@ export default function AnalyticsPage(){
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
 
         <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
 
-          📈 Performance Dashboard
+          📈 Real Analytics
 
         </div>
 
@@ -107,23 +216,11 @@ export default function AnalyticsPage(){
 
           <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
 
-            Analytics
+            Performance
 
           </span>
 
-          <br />
-
-          Dashboard 🚀
-
         </h1>
-
-        <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-
-          Analyze your performance,
-          improve weak chapters
-          and track your preparation 😎🔥
-
-        </p>
 
       </section>
 
@@ -133,125 +230,101 @@ export default function AnalyticsPage(){
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          {stats.map((stat,index)=>(
+          {/* TOTAL TESTS */}
 
-            <div
-              key={index}
-              className="relative rounded-[40px] p-[2px]"
-            >
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
 
-              <div className={`absolute inset-0 rounded-[40px] bg-gradient-to-br ${stat.color}`}></div>
+            <div className="text-6xl mb-6">
 
-              <div className="relative bg-[#0B1120] rounded-[38px] p-8 text-center">
-
-                <div className="text-6xl mb-6">
-
-                  {stat.icon}
-
-                </div>
-
-                <h2 className="text-5xl font-black mb-4">
-
-                  {stat.value}
-
-                </h2>
-
-                <p className="text-gray-400 text-lg">
-
-                  {stat.title}
-
-                </p>
-
-              </div>
+              📝
 
             </div>
 
-          ))}
+            <h2 className="text-5xl font-black text-purple-400 mb-4">
 
-        </div>
+              {stats.totalTests}
 
-      </section>
+            </h2>
 
-      {/* SUBJECT ANALYSIS */}
+            <p className="text-gray-400 text-lg">
 
-      <section className="max-w-7xl mx-auto px-6 pb-20">
+              Tests Attempted
 
-        <div className="flex items-center gap-4 mb-12">
-
-          <div className="text-5xl">
-
-            📚
+            </p>
 
           </div>
 
-          <h2 className="text-5xl font-black">
+          {/* AVG SCORE */}
 
-            Subject Analysis
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
 
-          </h2>
+            <div className="text-6xl mb-6">
 
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          {subjects.map((subject,index)=>(
-
-            <div
-              key={index}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10"
-            >
-
-              <div className={`inline-block px-5 py-2 rounded-full bg-gradient-to-r ${subject.color} mb-8`}>
-
-                {subject.name}
-
-              </div>
-
-              <h3 className="text-6xl font-black mb-8">
-
-                {subject.score}
-
-              </h3>
-
-              <div className="space-y-6">
-
-                <div>
-
-                  <p className="text-gray-400 mb-2">
-
-                    Weak Topic 😭
-
-                  </p>
-
-                  <h4 className="text-2xl font-bold text-red-400">
-
-                    {subject.weak}
-
-                  </h4>
-
-                </div>
-
-                <div>
-
-                  <p className="text-gray-400 mb-2">
-
-                    Strong Topic 😎🔥
-
-                  </p>
-
-                  <h4 className="text-2xl font-bold text-green-400">
-
-                    {subject.strong}
-
-                  </h4>
-
-                </div>
-
-              </div>
+              🎯
 
             </div>
 
-          ))}
+            <h2 className="text-5xl font-black text-green-400 mb-4">
+
+              {stats.avgScore}
+
+            </h2>
+
+            <p className="text-gray-400 text-lg">
+
+              Average Score
+
+            </p>
+
+          </div>
+
+          {/* ACCURACY */}
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
+
+            <div className="text-6xl mb-6">
+
+              📈
+
+            </div>
+
+            <h2 className="text-5xl font-black text-blue-400 mb-4">
+
+              {stats.accuracy}%
+
+            </h2>
+
+            <p className="text-gray-400 text-lg">
+
+              Accuracy
+
+            </p>
+
+          </div>
+
+          {/* BEST SCORE */}
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
+
+            <div className="text-6xl mb-6">
+
+              🏆
+
+            </div>
+
+            <h2 className="text-5xl font-black text-yellow-400 mb-4">
+
+              {stats.bestScore}
+
+            </h2>
+
+            <p className="text-gray-400 text-lg">
+
+              Best Score
+
+            </p>
+
+          </div>
 
         </div>
 
@@ -259,7 +332,7 @@ export default function AnalyticsPage(){
 
       {/* RECENT TESTS */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      <section className="max-w-6xl mx-auto px-6 pb-24">
 
         <div className="flex items-center gap-4 mb-12">
 
@@ -277,83 +350,64 @@ export default function AnalyticsPage(){
 
         </div>
 
-        <div className="space-y-6">
+        {
 
-          {recentTests.map((test,index)=>(
+          results.length === 0
 
-            <div
-              key={index}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
-            >
+          ?
 
-              <div>
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-16 text-center text-3xl font-black">
 
-                <h3 className="text-3xl font-black mb-2">
-
-                  {test.name}
-
-                </h3>
-
-                <p className="text-gray-400 text-lg">
-
-                  Accuracy:
-                  {" "}
-                  {test.accuracy}
-
-                </p>
-
-              </div>
-
-              <div className="text-5xl font-black text-purple-400">
-
-                {test.score}
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
-
-      </section>
-
-      {/* PREMIUM CTA */}
-
-      <section className="max-w-5xl mx-auto px-6 pb-24">
-
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-12 text-center">
-
-          <div className="text-8xl mb-8">
-
-            💎
+            No Tests Attempted Yet 😭🔥
 
           </div>
 
-          <h2 className="text-6xl font-black mb-8">
+          :
 
-            Unlock Advanced Analytics
+          <div className="space-y-6">
 
-          </h2>
+            {
 
-          <p className="text-2xl text-white/90 mb-10 leading-relaxed">
+              results.map((result,index)=>(
 
-            Get detailed insights,
-            chapter analysis,
-            rank prediction and AI-powered performance reports 😎🔥
+                <div
+                  key={index}
+                  className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+                >
 
-          </p>
+                  <div>
 
-          <Link
-            href="/pricing"
-            className="inline-block px-12 py-5 rounded-3xl bg-black text-2xl font-black"
-          >
+                    <h3 className="text-3xl font-black mb-3">
 
-            Upgrade to PRO 🚀
+                      Mock Test 🚀
 
-          </Link>
+                    </h3>
 
-        </div>
+                    <p className="text-gray-400 text-lg">
+
+                      Accuracy:
+                      {" "}
+                      {result.accuracy}%
+
+                    </p>
+
+                  </div>
+
+                  <div className="text-5xl font-black text-purple-400">
+
+                    {result.score}
+
+                  </div>
+
+                </div>
+
+              ))
+
+            }
+
+          </div>
+
+        }
 
       </section>
 
