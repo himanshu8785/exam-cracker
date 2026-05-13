@@ -9,6 +9,12 @@ import {
 
 import {
 
+  useSearchParams
+
+} from "next/navigation";
+
+import {
+
   collection,
   getDocs,
   addDoc,
@@ -24,6 +30,12 @@ import {
 } from "../../firebase";
 
 export default function MockTestPage(){
+
+  const searchParams =
+  useSearchParams();
+
+  const testId =
+  searchParams.get("testId");
 
   const [questions,setQuestions] =
   useState<any[]>([]);
@@ -65,7 +77,7 @@ export default function MockTestPage(){
           collection(db,"questions")
         );
 
-        const data =
+        let data =
         snapshot.docs.map(doc=>({
 
           id:doc.id,
@@ -74,6 +86,21 @@ export default function MockTestPage(){
 
         }));
 
+        /* FILTER TEST */
+
+        if(testId){
+
+          data =
+          data.filter(
+
+            (q:any)=>
+
+              q.testId === testId
+
+          );
+
+        }
+
         /* SHUFFLE */
 
         const shuffled =
@@ -81,7 +108,7 @@ export default function MockTestPage(){
           Math.random() - 0.5
         );
 
-        /* 25 QUESTIONS */
+        /* LIMIT */
 
         setQuestions(
           shuffled.slice(0,25)
@@ -101,7 +128,7 @@ export default function MockTestPage(){
 
     loadQuestions();
 
-  },[]);
+  },[testId]);
 
   /* TIMER */
 
@@ -244,6 +271,11 @@ export default function MockTestPage(){
 
             ),
 
+            testId:
+            testId ||
+
+            "random-test",
+
             createdAt:
             serverTimestamp()
 
@@ -330,7 +362,17 @@ export default function MockTestPage(){
 
             <p className="text-gray-400 text-xl">
 
-              Real JEE & NEET Test Engine 😎🔥
+              {
+                testId
+
+                ?
+
+                `Test Series: ${testId}`
+
+                :
+
+                "Random Practice Test 😎🔥"
+              }
 
             </p>
 
