@@ -21,7 +21,7 @@ import {
   auth,
   db
 
-} from "@/firebase";
+} from "../../firebase";
 
 export default function MockTestPage(){
 
