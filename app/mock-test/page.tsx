@@ -1,26 +1,87 @@
 "use client";
 
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect,useState } from "react";
 
 import {
-  db
-} from "../../firebase";
 
-import {
   collection,
-  getDocs
+  addDoc,
+  serverTimestamp
+
 } from "firebase/firestore";
+
+import {
+
+  auth,
+  db
+
+} from "@/firebase";
 
 export default function MockTestPage(){
 
-  const [questions,setQuestions] =
-  useState<any[]>([]);
+  const questions = [
 
-  const [loading,setLoading] =
-  useState(true);
+    {
+
+      question:"What is acceleration due to gravity?",
+
+      options:[
+
+        "9.8 m/s²",
+
+        "10 m/s²",
+
+        "8 m/s²",
+
+        "12 m/s²"
+
+      ],
+
+      answer:"9.8 m/s²"
+
+    },
+
+    {
+
+      question:"DNA is located in?",
+
+      options:[
+
+        "Nucleus",
+
+        "Ribosome",
+
+        "Cytoplasm",
+
+        "Membrane"
+
+      ],
+
+      answer:"Nucleus"
+
+    },
+
+    {
+
+      question:"Mole concept belongs to?",
+
+      options:[
+
+        "Physics",
+
+        "Maths",
+
+        "Chemistry",
+
+        "Biology"
+
+      ],
+
+      answer:"Chemistry"
+
+    }
+
+  ];
 
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
@@ -34,149 +95,92 @@ export default function MockTestPage(){
   const [submitted,setSubmitted] =
   useState(false);
 
+  const [loading,setLoading] =
+  useState(false);
+
   const [timeLeft,setTimeLeft] =
-  useState(1500);
+  useState(180);
+
+  /* TIMER */
 
   useEffect(()=>{
 
-    fetchQuestions();
+    const timer = setInterval(()=>{
 
-  },[]);
+      setTimeLeft(prev=>{
 
-  async function fetchQuestions(){
+        if(prev <= 1){
 
-    try{
+          clearInterval(timer);
 
-      const querySnapshot =
-      await getDocs(
+          submitQuiz();
 
-        collection(
-          db,
-          "questions"
-        )
+          return 0;
 
-      );
+        }
 
-      const data:any[] = [];
-
-      querySnapshot.forEach((doc)=>{
-
-        data.push({
-
-          id:doc.id,
-
-          ...doc.data()
-
-        });
+        return prev - 1;
 
       });
 
-      /* URL PARAMS */
+    },1000);
 
-      const urlParams =
-      new URLSearchParams(
+    return()=>clearInterval(timer);
 
-        window.location.search
+  },[]);
 
-      );
+  async function submitQuiz(){
 
-      const exam =
-      urlParams.get("exam");
+    setSubmitted(true);
 
-      const subject =
-      urlParams.get("subject");
+    setLoading(true);
 
-      const chapter =
-      urlParams.get("chapter");
+    try{
 
-      const test =
-      urlParams.get("test");
+      const user =
+      auth.currentUser;
 
-      let filtered = data;
+      if(user){
 
-      /* FILTER EXAM */
+        await addDoc(
 
-      if(exam){
+          collection(db,"results"),
 
-        filtered =
-        filtered.filter(
+          {
 
-          (q:any)=>
+            uid:user.uid,
 
-            q.exam === exam
+            name:
 
-        );
+            user.displayName ||
 
-      }
+            "Exam Cracker User",
 
-      /* FILTER SUBJECT */
+            email:user.email,
 
-      if(subject){
+            score,
 
-        filtered =
-        filtered.filter(
+            totalQuestions:
+            questions.length,
 
-          (q:any)=>
+            accuracy:
 
-            q.subject === subject
+            Math.round(
 
-        );
+              (score / (questions.length * 4))
 
-      }
+              * 100
 
-      /* FILTER CHAPTER */
+            ),
 
-      if(chapter){
+            createdAt:
+            serverTimestamp()
 
-        filtered =
-        filtered.filter(
-
-          (q:any)=>
-
-            q.chapter === chapter
+          }
 
         );
 
       }
-
-      /* TEST-ID ENGINE */
-
-      if(test){
-
-        const testNumber =
-        parseInt(test);
-
-        filtered =
-        filtered.filter(
-
-          (
-            _:any,
-            index:number
-          )=>
-
-            index % 10 ===
-            testNumber % 10
-
-        );
-
-      }
-
-      /* RANDOMIZE */
-
-      const shuffled =
-      filtered.sort(
-
-        ()=>0.5 - Math.random()
-
-      );
-
-      /* 25 QUESTIONS */
-
-      setQuestions(
-
-        shuffled.slice(0,25)
-
-      );
 
     }
 
@@ -190,38 +194,12 @@ export default function MockTestPage(){
 
   }
 
-  useEffect(()=>{
-
-    if(submitted){
-
-      return;
-
-    }
-
-    if(timeLeft <= 0){
-
-      setSubmitted(true);
-
-      return;
-
-    }
-
-    const timer = setInterval(()=>{
-
-      setTimeLeft(prev=>prev - 1);
-
-    },1000);
-
-    return ()=>clearInterval(timer);
-
-  },[timeLeft,submitted]);
-
   function nextQuestion(){
 
     if(selected === ""){
 
       alert(
-        "Select an option 😎"
+        "Select an option 😎🔥"
       );
 
       return;
@@ -233,7 +211,7 @@ export default function MockTestPage(){
     if(
 
       selected ===
-      questions[currentQuestion]?.answer
+      questions[currentQuestion].answer
 
     ){
 
@@ -260,7 +238,7 @@ export default function MockTestPage(){
 
     else{
 
-      setSubmitted(true);
+      submitQuiz();
 
     }
 
@@ -272,208 +250,274 @@ export default function MockTestPage(){
   const seconds =
   timeLeft % 60;
 
-  if(loading){
-
-    return(
-
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center">
-
-        <h1 className="text-5xl font-black">
-
-          Loading Questions 🚀
-
-        </h1>
-
-      </main>
-
-    );
-
-  }
-
-  if(questions.length === 0){
-
-    return(
-
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center">
-
-        <h1 className="text-4xl font-black text-center">
-
-          No Questions Found 😭
-
-        </h1>
-
-      </main>
-
-    );
-
-  }
-
-  if(submitted){
-
-    return(
-
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center p-6">
-
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-12 text-center max-w-2xl w-full">
-
-          <div className="text-8xl mb-8">
-
-            🎉
-
-          </div>
-
-          <h1 className="text-6xl font-black text-purple-400 mb-6">
-
-            Test Submitted
-
-          </h1>
-
-          <p className="text-3xl mb-4">
-
-            Your Score 😎🔥
-
-          </p>
-
-          <div className="text-7xl font-black mb-8">
-
-            {score}
-
-          </div>
-
-          <button
-            onClick={()=>
-              window.location.reload()
-            }
-            className="px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
-          >
-
-            Restart Test 🚀
-
-          </button>
-
-        </div>
-
-      </main>
-
-    );
-
-  }
-
   return(
 
-    <main className="min-h-screen bg-[#050816] text-white p-6">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
-      <div className="max-w-5xl mx-auto">
+      {/* HERO */}
 
-        <div className="flex justify-between items-center mb-10">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center">
 
-          <h1 className="text-5xl font-black">
+        <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
 
-            🚀 Real Test Series
-
-          </h1>
-
-          <div className="bg-red-500 px-6 py-3 rounded-2xl text-xl font-bold">
-
-            ⏱ {minutes}:
-            {seconds.toString().padStart(2,"0")}
-
-          </div>
+          🚀 Real Mock Test
 
         </div>
 
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10">
+        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
 
-          <div className="flex justify-between items-center mb-8">
+          Smart
+          {" "}
 
-            <h2 className="text-2xl font-bold">
+          <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
 
-              Question
-              {" "}
+            Mock Test
+
+          </span>
+
+        </h1>
+
+      </section>
+
+      {/* TOP STATS */}
+
+      <section className="max-w-5xl mx-auto px-6 pb-16">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
+
+            <div className="text-5xl mb-4">
+
+              📝
+
+            </div>
+
+            <h2 className="text-5xl font-black text-purple-400 mb-3">
+
               {currentQuestion + 1}
-              {" "}
-              / {questions.length}
 
             </h2>
 
-            <div className="bg-[#111827] px-5 py-2 rounded-2xl">
+            <p className="text-gray-400">
 
-              Score:
-              {" "}
+              Current Question
+
+            </p>
+
+          </div>
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
+
+            <div className="text-5xl mb-4">
+
+              🎯
+
+            </div>
+
+            <h2 className="text-5xl font-black text-green-400 mb-3">
+
+              {score}
+
+            </h2>
+
+            <p className="text-gray-400">
+
+              Current Score
+
+            </p>
+
+          </div>
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 text-center">
+
+            <div className="text-5xl mb-4">
+
+              ⏱
+
+            </div>
+
+            <h2 className="text-5xl font-black text-blue-400 mb-3">
+
+              {minutes}:
+              {seconds.toString().padStart(2,"0")}
+
+            </h2>
+
+            <p className="text-gray-400">
+
+              Time Left
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* QUIZ */}
+
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+
+        {
+
+          submitted
+
+          ?
+
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-16 text-center">
+
+            <div className="text-8xl mb-8">
+
+              🎉
+
+            </div>
+
+            <h2 className="text-6xl font-black mb-8">
+
+              Test Submitted 😎🔥
+
+            </h2>
+
+            <div className="text-8xl font-black mb-10">
+
               {score}
 
             </div>
 
-          </div>
+            <p className="text-2xl mb-10">
 
-          <h3 className="text-4xl font-black leading-relaxed mb-10">
+              Accuracy:
+              {" "}
+
+              {
+
+                Math.round(
+
+                  (score / (questions.length * 4))
+
+                  * 100
+
+                )
+
+              }%
+
+            </p>
 
             {
-              questions[currentQuestion]
-              ?.question
+
+              loading
+
+              ?
+
+              <p className="text-xl">
+
+                Saving Result... 😎🔥
+
+              </p>
+
+              :
+
+              <p className="text-xl">
+
+                Result Saved Successfully 🚀
+
+              </p>
+
             }
 
-          </h3>
+          </div>
 
-          <div className="space-y-5">
+          :
 
-            {
-              questions[currentQuestion]
-              ?.options?.map(
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12">
 
-                (
-                  option:any,
-                  index:number
-                )=>(
+            <h2 className="text-4xl font-black leading-relaxed mb-12">
+
+              {
+
+                questions[currentQuestion]
+                .question
+
+              }
+
+            </h2>
+
+            <div className="space-y-6">
+
+              {
+
+                questions[currentQuestion]
+                .options
+                .map((option,index)=>(
 
                   <button
+
                     key={index}
-                    onClick={()=>
-                      setSelected(option)
-                    }
-                    className={`w-full p-5 rounded-2xl border text-left transition
+
+                    onClick={()=>{
+
+                      setSelected(option);
+
+                    }}
+
+                    className={`w-full p-6 rounded-3xl border text-left text-xl transition
 
                     ${selected === option
 
-                      ? "bg-purple-600 border-purple-500"
+                      ?
 
-                      : "bg-[#111827] border-gray-700 hover:border-purple-500"
+                      "bg-purple-600 border-purple-400"
+
+                      :
+
+                      "bg-[#111827] border-white/10 hover:border-purple-400"
 
                     }`}
+
                   >
 
                     {option}
 
                   </button>
 
-                )
+                ))
 
-              )
-            }
+              }
+
+            </div>
+
+            <button
+
+              onClick={nextQuestion}
+
+              className="w-full mt-10 py-6 rounded-3xl bg-gradient-to-r from-purple-600 to-blue-600 text-2xl font-black"
+
+            >
+
+              {
+
+                currentQuestion ===
+                questions.length - 1
+
+                ?
+
+                "Submit Test 🚀"
+
+                :
+
+                "Next Question 🚀"
+
+              }
+
+            </button>
 
           </div>
 
-          <button
-            onClick={nextQuestion}
-            className="w-full mt-10 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
-          >
+        }
 
-            {
-
-              currentQuestion ===
-              questions.length - 1
-
-              ? "Submit Test 🚀"
-
-              : "Next Question 🚀"
-
-            }
-
-          </button>
-
-        </div>
-
-      </div>
+      </section>
 
     </main>
 
