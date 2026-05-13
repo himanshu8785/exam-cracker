@@ -2,228 +2,392 @@
 
 import { useState } from "react";
 
-export default function RankPredictorPage() {
+export default function RankPredictorPage(){
 
-  const [score,setScore] = useState("");
+  const [exam,setExam] =
+  useState("JEE");
 
-  const [category,setCategory] =
-  useState("General");
+  const [marks,setMarks] =
+  useState("");
 
-  const [result,setResult] = useState(null);
+  const [result,setResult] =
+  useState<any>(null);
 
   function predictRank(){
 
-    const marks = Number(score);
+    const score =
+    parseInt(marks);
 
-    if(!marks && marks !== 0){
-
-      alert("Enter valid marks");
+    if(!score){
 
       return;
 
     }
 
-    let percentile = 0;
+    /* JEE */
 
-    let rank = 0;
+    if(exam === "JEE"){
 
-    // Percentile Prediction
+      let percentile = 0;
+      let rank = 0;
+      let college = "";
 
-    if(marks >= 290){
+      if(score >= 280){
 
-      percentile = 99.95;
-      rank = 500;
+        percentile = 99.9;
+        rank = 500;
+        college = "IIT Bombay";
+
+      }
+
+      else if(score >= 240){
+
+        percentile = 99.5;
+        rank = 2500;
+        college = "IIT Delhi";
+
+      }
+
+      else if(score >= 200){
+
+        percentile = 98.7;
+        rank = 8000;
+        college = "NIT Trichy";
+
+      }
+
+      else if(score >= 150){
+
+        percentile = 96;
+        rank = 25000;
+        college = "IIIT Hyderabad";
+
+      }
+
+      else{
+
+        percentile = 85;
+        rank = 80000;
+        college = "Good Private College";
+
+      }
+
+      setResult({
+
+        percentile,
+        rank,
+        college
+
+      });
 
     }
 
-    else if(marks >= 250){
-
-      percentile = 99.5;
-      rank = 4000;
-
-    }
-
-    else if(marks >= 200){
-
-      percentile = 98;
-      rank = 18000;
-
-    }
-
-    else if(marks >= 150){
-
-      percentile = 95;
-      rank = 40000;
-
-    }
-
-    else if(marks >= 100){
-
-      percentile = 85;
-      rank = 90000;
-
-    }
-
-    else if(marks >= 50){
-
-      percentile = 70;
-      rank = 150000;
-
-    }
+    /* NEET */
 
     else{
 
-      percentile = 50;
-      rank = 250000;
+      let percentile = 0;
+      let rank = 0;
+      let college = "";
+
+      if(score >= 680){
+
+        percentile = 99.9;
+        rank = 100;
+        college = "AIIMS Delhi";
+
+      }
+
+      else if(score >= 650){
+
+        percentile = 99;
+        rank = 2500;
+        college = "Top Government Medical College";
+
+      }
+
+      else if(score >= 600){
+
+        percentile = 97;
+        rank = 12000;
+        college = "Government Medical College";
+
+      }
+
+      else if(score >= 500){
+
+        percentile = 92;
+        rank = 50000;
+        college = "Semi Government College";
+
+      }
+
+      else{
+
+        percentile = 80;
+        rank = 120000;
+        college = "Private Medical College";
+
+      }
+
+      setResult({
+
+        percentile,
+        rank,
+        college
+
+      });
 
     }
-
-    // Category Adjustment
-
-    if(category === "OBC"){
-
-      rank = Math.floor(rank * 0.9);
-
-    }
-
-    else if(category === "SC"){
-
-      rank = Math.floor(rank * 0.7);
-
-    }
-
-    else if(category === "ST"){
-
-      rank = Math.floor(rank * 0.5);
-
-    }
-
-    setResult({
-
-      percentile,
-      rank
-
-    });
 
   }
 
-  return (
+  return(
 
-    <main className="min-h-screen bg-[#0b1120] text-white p-6">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
-      <div className="max-w-4xl mx-auto">
+      {/* HERO */}
 
-        <h1 className="text-5xl font-bold text-center mb-4">
+      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
 
-          📈 <span className="text-purple-500">
-            Rank Predictor
+        <div className="inline-block px-6 py-3 rounded-full bg-blue-500/20 border border-blue-500/30 mb-8">
+
+          📊 Smart Rank Predictor
+
+        </div>
+
+        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
+
+          Predict Your
+          {" "}
+
+          <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+
+            Rank
+
           </span>
+
+          <br />
+
+          Instantly 🚀
 
         </h1>
 
-        <p className="text-center text-gray-400 text-lg mb-12">
+        <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
 
-          Predict your JEE Main rank instantly 🚀
+          Predict your percentile,
+          AIR and expected college
+          for JEE & NEET 😎🔥
 
         </p>
 
-        <div className="bg-[#111827] border border-gray-800 rounded-3xl p-10">
+      </section>
 
-          <div className="space-y-6">
+      {/* PREDICTOR */}
 
-            <div>
+      <section className="max-w-4xl mx-auto px-6 pb-24">
 
-              <label className="block mb-3 text-lg text-gray-400">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12">
 
-                Enter Expected Score
+          {/* TABS */}
 
-              </label>
-
-              <input
-                type="number"
-                placeholder="Enter marks out of 300"
-                value={score}
-                onChange={(e)=>setScore(e.target.value)}
-                className="w-full p-5 rounded-2xl bg-[#1e293b] outline-none text-lg"
-              />
-
-            </div>
-
-            <div>
-
-              <label className="block mb-3 text-lg text-gray-400">
-
-                Select Category
-
-              </label>
-
-              <select
-                value={category}
-                onChange={(e)=>setCategory(e.target.value)}
-                className="w-full p-5 rounded-2xl bg-[#1e293b] outline-none text-lg"
-              >
-
-                <option>General</option>
-                <option>OBC</option>
-                <option>SC</option>
-                <option>ST</option>
-
-              </select>
-
-            </div>
+          <div className="flex gap-6 mb-10">
 
             <button
-              onClick={predictRank}
-              className="w-full py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-semibold"
+
+              onClick={()=>setExam("JEE")}
+
+              className={`flex-1 py-5 rounded-2xl text-2xl font-black transition
+
+              ${exam === "JEE"
+
+                ?
+
+                "bg-gradient-to-r from-purple-600 to-blue-600"
+
+                :
+
+                "bg-[#111827]"
+
+              }`}
+
             >
 
-              Predict Rank
+              ⚡ JEE
+
+            </button>
+
+            <button
+
+              onClick={()=>setExam("NEET")}
+
+              className={`flex-1 py-5 rounded-2xl text-2xl font-black transition
+
+              ${exam === "NEET"
+
+                ?
+
+                "bg-gradient-to-r from-green-600 to-emerald-500"
+
+                :
+
+                "bg-[#111827]"
+
+              }`}
+
+            >
+
+              🧬 NEET
 
             </button>
 
           </div>
 
+          {/* INPUT */}
+
+          <div className="mb-10">
+
+            <label className="block text-2xl font-bold mb-5">
+
+              Enter Your Expected Marks 😎🔥
+
+            </label>
+
+            <input
+
+              type="number"
+
+              placeholder={
+
+                exam === "JEE"
+
+                ?
+
+                "Enter marks out of 300"
+
+                :
+
+                "Enter marks out of 720"
+
+              }
+
+              value={marks}
+
+              onChange={(e)=>setMarks(e.target.value)}
+
+              className="w-full bg-[#111827] border border-white/10 rounded-3xl px-8 py-6 text-2xl outline-none"
+
+            />
+
+          </div>
+
+          {/* BUTTON */}
+
+          <button
+
+            onClick={predictRank}
+
+            className={`w-full py-6 rounded-3xl text-2xl font-black
+
+            ${exam === "JEE"
+
+              ?
+
+              "bg-gradient-to-r from-purple-600 to-blue-600"
+
+              :
+
+              "bg-gradient-to-r from-green-600 to-emerald-500"
+
+            }`}
+
+          >
+
+            Predict Rank 🚀
+
+          </button>
+
         </div>
 
-        {result && (
+      </section>
 
-          <div className="mt-10 bg-[#111827] border border-purple-500 rounded-3xl p-10">
+      {/* RESULT */}
 
-            <h2 className="text-4xl font-bold mb-8 text-center">
+      {
 
-              🎯 Prediction Result
+        result && (
 
-            </h2>
+          <section className="max-w-6xl mx-auto px-6 pb-24">
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-              <div className="bg-[#1e293b] p-8 rounded-3xl text-center">
+              {/* PERCENTILE */}
 
-                <h3 className="text-2xl text-gray-400 mb-4">
+              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
 
-                  Expected Percentile
+                <div className="text-6xl mb-6">
 
-                </h3>
+                  🎯
 
-                <p className="text-5xl font-bold text-purple-500">
+                </div>
+
+                <h2 className="text-5xl font-black text-blue-400 mb-4">
 
                   {result.percentile}
+
+                </h2>
+
+                <p className="text-xl text-gray-400">
+
+                  Percentile
 
                 </p>
 
               </div>
 
-              <div className="bg-[#1e293b] p-8 rounded-3xl text-center">
+              {/* RANK */}
 
-                <h3 className="text-2xl text-gray-400 mb-4">
+              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
 
-                  Expected Rank
+                <div className="text-6xl mb-6">
 
-                </h3>
+                  🏆
 
-                <p className="text-5xl font-bold text-purple-500">
+                </div>
+
+                <h2 className="text-5xl font-black text-purple-400 mb-4">
 
                   AIR {result.rank}
+
+                </h2>
+
+                <p className="text-xl text-gray-400">
+
+                  Predicted Rank
+
+                </p>
+
+              </div>
+
+              {/* COLLEGE */}
+
+              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 text-center">
+
+                <div className="text-6xl mb-6">
+
+                  🏫
+
+                </div>
+
+                <h2 className="text-4xl font-black text-green-400 mb-4 leading-tight">
+
+                  {result.college}
+
+                </h2>
+
+                <p className="text-xl text-gray-400">
+
+                  Expected College
 
                 </p>
 
@@ -231,11 +395,50 @@ export default function RankPredictorPage() {
 
             </div>
 
+          </section>
+
+        )
+
+      }
+
+      {/* PREMIUM CTA */}
+
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-12 text-center">
+
+          <div className="text-8xl mb-8">
+
+            💎
+
           </div>
 
-        )}
+          <h2 className="text-6xl font-black mb-8">
 
-      </div>
+            Unlock Advanced Predictions
+
+          </h2>
+
+          <p className="text-2xl text-white/90 mb-10 leading-relaxed">
+
+            Get detailed college prediction,
+            branch prediction,
+            category cutoffs and AI insights 😎🔥
+
+          </p>
+
+          <a
+            href="/pricing"
+            className="inline-block px-12 py-5 rounded-3xl bg-black text-2xl font-black"
+          >
+
+            Upgrade to PRO 🚀
+
+          </a>
+
+        </div>
+
+      </section>
 
     </main>
 
