@@ -10,55 +10,43 @@ export default function BottomNav(){
 
   const navItems = [
 
-    {
-      label:"Home",
-      href:"/",
-      icon:"🏠"
-    },
+  {
+    label:"Home",
+    href:"/",
+    icon:"🏠"
+  },
 
-    {
-      label:"JEE",
-      href:"/jee-tests",
-      icon:"⚡"
-    },
+  {
+    label:"JEE",
+    href:"/jee-tests",
+    icon:"⚡"
+  },
 
-    {
-      label:"NEET",
-      href:"/neet-tests",
-      icon:"🧬"
-    },
+  {
+    label:"NEET",
+    href:"/neet-tests",
+    icon:"🧬"
+  },
 
-    {
-      label:"Quiz",
-      href:"/daily-quiz",
-      icon:"🔥"
-    },
+  {
+    label:"AI",
+    href:"/ai-doubt-solver",
+    icon:"🤖"
+  },
 
-    {
-      label:"Leaderboard",
-      href:"/leaderboard",
-      icon:"🏆"
-    },
+  {
+    label:"Premium",
+    href:"/premium",
+    icon:"💎"
+  },
 
-    {
-      label:"Analytics",
-      href:"/analytics",
-      icon:"📈"
-    },
+  {
+    label:"Profile",
+    href:"/profile",
+    icon:"👤"
+  }
 
-    {
-      label:"Rank",
-      href:"/rank-predictor",
-      icon:"🎯"
-    },
-
-    {
-      label:"Profile",
-      href:"/profile",
-      icon:"👤"
-    }
-
-  ];
+];
 
   return(
 
