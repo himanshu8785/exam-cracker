@@ -48,25 +48,49 @@ export default function BottomNav(){
 
     {
       label:"JEE",
-      href:"/jee-tests",
+      href:
+      loggedIn
+      ?
+      "/jee-tests"
+      :
+      "/login",
+
       icon:"⚡"
     },
 
     {
       label:"NEET",
-      href:"/neet-tests",
+      href:
+      loggedIn
+      ?
+      "/neet-tests"
+      :
+      "/login",
+
       icon:"🧬"
     },
 
     {
       label:"AI",
-      href:"https://gemini.google.com/",
+      href:
+      loggedIn
+      ?
+      "https://gemini.google.com/"
+      :
+      "/login",
+
       icon:"🤖"
     },
 
     {
       label:"Premium",
-      href:"/pricing",
+      href:
+      loggedIn
+      ?
+      "/pricing"
+      :
+      "/login",
+
       icon:"💎"
     },
 
