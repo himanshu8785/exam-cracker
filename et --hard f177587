@@ -1,0 +1,84 @@
+[33m6f11436[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m restored stable mock engine
+[33mf177587[m restored stable mock engine
+[33m4ff97fb[m restored stable mock engine
+[33m61bcbc0[m restored stable mock engine
+[33m74fd6b8[m fixed search params build error
+[33mfef5472[m fixed search params build error
+[33m65f984f[m upgraded mock test engine
+[33m7963d69[m ultimate profile redesign
+[33m8d04e70[m fixed csv uploader
+[33ma79c68c[m real firebase profile
+[33m0760750[m real firebase analytics
+[33m2c57ba9[m fixed firebase path
+[33ma7befa3[m final advanced mock engine
+[33mbc56db6[m real firebase score saving
+[33m2cf883e[m fixed global bottom nav
+[33mbc8c59c[m professional bottom nav
+[33m8e7bb29[m professional profile dashboard
+[33m1c3cec4[m professional daily quiz
+[33m0443b73[m professional rank predictor
+[33m2f2e9ff[m professional leaderboard
+[33m965d0b8[m professional analytics dashboard
+[33m040de59[m professional study material page
+[33m8f4cb95[m professional qr popup pricing
+[33mc37d4f1[m final professional pricing page
+[33m4737dc9[m added real gpay qr
+[33m276aca8[m upi direct payment buttons
+[33m728592b[m professional pricing page
+[33mf6ce991[m full neet premium fix
+[33m6d452da[m professional neet test series
+[33m65a379b[m central premium system
+[33m277f45e[m real plan based premium system
+[33m630893c[m premium lock test series
+[33m2650aa4[m gemini redirect ai solver
+[33m3022e60[m real test id engine
+[33mc873177[m real allen style test series
+[33mcda3284[m smart jee auto filter tests
+[33m017a2c9[m real smart auto filter engine
+[33m369b95f[m real csv firebase uploader
+[33m65f2b64[m fixed csv upload route
+[33m632922c[m admin panel upload fix
+[33m8bba362[m final homepage fix
+[33ma2d97a0[m real allen style jee neet tests
+[33m67de5a3[m real dynamic mock test engine
+[33m9fdf0d7[m ultra premium homepage
+[33mc3ebd6f[m premium modern homepage
+[33m3fdcfbb[m restore all tools homepage
+[33mc50bed9[m modern homepage
+[33maff2588[m jee neet dashboard
+[33mef64c45[m real mock test engine
+[33mac0e4c8[m real test series system
+[33mf5e1186[m stable final version
+[33m8540571[m final render fix
+[33m10059c7[m disable strict typescript
+[33m2b01d4d[m searchbar ts fix
+[33m2b4e599[m analytics ts fix
+[33mf58d2c9[m 100 percent csv fix
+[33mbb04d65[m full csv fix
+[33m577a7dd[m typescript fix
+[33mb8ae570[m papaparse fix
+[33m3e66345[m all latest updates
+[33m849bcf1[m force redeploy
+[33maebe1a0[m latest updates
+[33me59c84c[m final deploy fix
+[33m82c449e[m fixed next config
+[33m1b05933[m ignore ts errors
+[33m0301720[m converted protected route to js
+[33m23dcda0[m final protected route fix
+[33mf7d16bc[m disabled strict typescript
+[33md485cf0[m typescript protected route fixed
+[33mf59ee6d[m fixed protected route types
+[33m4eea1fc[m final edtech platform
+[33m4744625[m added google login
+[33ma43a437[m Update firebase.js
+[33m3a5794a[m Update firebase.js
+[33mab6c69f[m hard reset firebase
+[33m2bb28f6[m new firebase final fix
+[33m39a7827[m connected new firebase
+[33mf1f1e6e[m fixed firebase config
+[33mae37fa9[m updated dashboard
+[33m213d1ec[m added firestore score saving
+[33m709779c[m fixed all errors
+[33m0c19d5e[m fixed final typescript error
+[33m6a25ea4[m fixed typescript error
+[33m215a5c8[m first commit

@@ -3,21 +3,48 @@
 import Link from "next/link";
 
 import {
-  usePathname
-} from "next/navigation";
+  useEffect,
+  useState
+} from "react";
+
+import { usePathname } from "next/navigation";
+
+import {
+  onAuthStateChanged
+} from "firebase/auth";
+
+import { auth }
+from "../../firebase";
 
 export default function BottomNav(){
 
   const pathname =
   usePathname();
 
-  const navItems = [
+  const [loggedIn,setLoggedIn] =
+  useState(false);
 
-    {
-      label:"Home",
-      href:"/",
-      icon:"🏠"
-    },
+  useEffect(()=>{
+
+    const unsubscribe =
+
+    onAuthStateChanged(
+
+      auth,
+
+      (user)=>{
+
+        setLoggedIn(!!user);
+
+      }
+
+    );
+
+    return()=>unsubscribe();
+
+  },[]);
+
+  const navItems = [
 
     {
       label:"JEE",
@@ -32,49 +59,93 @@ export default function BottomNav(){
     },
 
     {
+      label:"AI",
+      href:"https://gemini.google.com/",
+      icon:"🤖"
+    },
+
+    {
       label:"Premium",
       href:"/pricing",
       icon:"💎"
     },
 
     {
-      label:"Profile",
-      href:"/profile",
+
+      label:
+      loggedIn
+      ?
+      "Profile"
+      :
+      "Login",
+
+      href:
+      loggedIn
+      ?
+      "/profile"
+      :
+      "/login",
+
       icon:"👤"
+
     }
 
   ];
 
   return(
 
-    <div className="fixed bottom-0 left-0 w-full z-50">
+    <div className="fixed bottom-0 left-0 w-full z-50 px-4 pb-4">
 
-      {/* BLUR BG */}
+      <div className="max-w-7xl mx-auto">
 
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-3xl border-t border-white/10"></div>
+        <div className="bg-[#0B1120]/90 backdrop-blur-2xl border border-white/10 rounded-[35px] px-4 py-4 shadow-2xl">
 
-      <div className="relative max-w-2xl mx-auto px-3 pb-3 pt-2">
+          <div className="flex justify-between items-center gap-2 overflow-x-auto scrollbar-hide">
 
-        <div className="grid grid-cols-5 gap-2">
+            {navItems.map((item,index)=>(
 
-          {
+              item.href.startsWith("http")
 
-            navItems.map((item,index)=>(
+              ?
+
+              <a
+                key={index}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-w-[90px] flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 text-gray-400 hover:text-white hover:bg-white/5"
+              >
+
+                <div className="text-2xl">
+
+                  {item.icon}
+
+                </div>
+
+                <p className="text-sm font-bold whitespace-nowrap">
+
+                  {item.label}
+
+                </p>
+
+              </a>
+
+              :
 
               <Link
                 key={index}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 py-3 rounded-2xl transition-all duration-300
+                className={`min-w-[90px] flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300
 
                 ${pathname === item.href
 
                   ?
 
-                  "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-xl scale-105"
+                  "bg-gradient-to-r from-purple-600 to-blue-600 text-white scale-105"
 
                   :
 
-                  "text-gray-400 active:scale-95"
+                  "text-gray-400 hover:text-white hover:bg-white/5"
 
                 }`}
               >
@@ -85,7 +156,7 @@ export default function BottomNav(){
 
                 </div>
 
-                <p className="text-[11px] font-bold">
+                <p className="text-sm font-bold whitespace-nowrap">
 
                   {item.label}
 
@@ -93,9 +164,9 @@ export default function BottomNav(){
 
               </Link>
 
-            ))
+            ))}
 
-          }
+          </div>
 
         </div>
 

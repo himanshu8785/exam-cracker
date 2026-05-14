@@ -6,17 +6,16 @@ import {
 } from "react";
 
 import {
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
+
+import {
   collection,
   getDocs,
   query,
-  where,
-  orderBy,
-  limit
+  where
 } from "firebase/firestore";
-
-import {
-  onAuthStateChanged
-} from "firebase/auth";
 
 import {
   auth,
@@ -25,25 +24,23 @@ import {
 
 export default function ProfilePage(){
 
+  const [user,setUser] =
+  useState<any>(null);
+
   const [loading,setLoading] =
   useState(true);
 
-  const [userData,setUserData] =
-  useState<any>(null);
-
-  const [recentTests,setRecentTests] =
+  const [results,setResults] =
   useState<any[]>([]);
 
   const [stats,setStats] =
   useState({
 
-    totalTests:0,
+    tests:0,
 
-    bestScore:0,
+    average:0,
 
-    avgScore:0,
-
-    accuracy:0
+    highest:0
 
   });
 
@@ -54,124 +51,90 @@ export default function ProfilePage(){
 
       auth,
 
-      async(user)=>{
+      async(currentUser)=>{
 
-        if(!user){
+        if(currentUser){
 
-          setLoading(false);
+          setUser(currentUser);
 
-          return;
+          try{
 
-        }
+            const q =
+            query(
 
-        setUserData(user);
+              collection(db,"results"),
 
-        try{
-
-          const q =
-          query(
-
-            collection(db,"results"),
-
-            where(
-              "uid",
-              "==",
-              user.uid
-            ),
-
-            orderBy(
-              "createdAt",
-              "desc"
-            ),
-
-            limit(10)
-
-          );
-
-          const snapshot =
-          await getDocs(q);
-
-          const results =
-          snapshot.docs.map(doc=>({
-
-            id:doc.id,
-
-            ...doc.data()
-
-          }));
-
-          setRecentTests(results);
-
-          if(results.length > 0){
-
-            const totalTests =
-            results.length;
-
-            const totalScore =
-            results.reduce(
-
-              (acc:any,item:any)=>
-
-                acc + item.score,
-
-              0
-
-            );
-
-            const avgScore =
-            Math.round(
-              totalScore / totalTests
-            );
-
-            const bestScore =
-            Math.max(
-
-              ...results.map(
-                (item:any)=>
-                item.score
+              where(
+                "uid",
+                "==",
+                currentUser.uid
               )
 
             );
 
-            const totalAccuracy =
-            results.reduce(
+            const snapshot =
+            await getDocs(q);
 
-              (acc:any,item:any)=>
+            const data =
+            snapshot.docs.map(doc=>({
 
-                acc + item.accuracy,
+              id:doc.id,
 
-              0
+              ...doc.data()
 
-            );
+            }));
 
-            const avgAccuracy =
-            Math.round(
+            setResults(data);
 
-              totalAccuracy /
-              totalTests
+            if(data.length > 0){
 
-            );
+              const total =
+              data.reduce(
 
-            setStats({
+                (acc:any,item:any)=>
 
-              totalTests,
+                  acc + item.score,
 
-              bestScore,
+                0
 
-              avgScore,
+              );
 
-              accuracy:
-              avgAccuracy
+              const highest =
+              Math.max(
 
-            });
+                ...data.map(
+
+                  (item:any)=>
+
+                    item.score
+
+                )
+
+              );
+
+              setStats({
+
+                tests:data.length,
+
+                average:
+                Math.round(
+                  total /
+                  data.length
+                ),
+
+                highest
+
+              });
+
+            }
 
           }
 
-        }
+          catch(error){
 
-        catch(error){
+            console.log(error);
 
-          console.log(error);
+          }
 
         }
 
@@ -185,11 +148,19 @@ export default function ProfilePage(){
 
   },[]);
 
+  async function logout(){
+
+    await signOut(auth);
+
+    window.location.href = "/";
+
+  }
+
   if(loading){
 
     return(
 
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black">
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-3xl font-black">
 
         Loading Profile 😎🔥
 
@@ -201,175 +172,99 @@ export default function ProfilePage(){
 
   return(
 
-    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden pb-32">
 
       {/* HERO */}
 
-      <section className="relative overflow-hidden">
+      <section className="relative max-w-7xl mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-10 overflow-hidden">
 
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-500/20 blur-3xl rounded-full"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] md:w-[500px] h-[250px] md:h-[500px] bg-purple-600/20 blur-[120px] rounded-full"></div>
 
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/20 blur-3xl rounded-full"></div>
+        <div className="relative z-10 text-center">
 
-        <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 relative z-10">
+          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-5xl md:text-7xl font-black mx-auto mb-6 shadow-2xl">
 
-          <div className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[50px] p-10 md:p-14 shadow-2xl">
+            {
 
-            <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-start">
+              user?.displayName
 
-              {/* IMAGE */}
+              ?
 
-              <div className="relative">
+              user.displayName[0]
 
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 blur-2xl opacity-60 rounded-full"></div>
+              :
 
-                <div className="relative w-[180px] h-[180px] rounded-full overflow-hidden border-4 border-white/20 bg-[#111827] flex items-center justify-center text-[80px]">
+              "U"
 
-                  {
-
-                    userData?.photoURL
-
-                    ?
-
-                    <img
-                      src={userData.photoURL}
-                      alt="profile"
-                      className="w-full h-full object-cover"
-                    />
-
-                    :
-
-                    "👨‍🎓"
-
-                  }
-
-                </div>
-
-              </div>
-
-              {/* USER INFO */}
-
-              <div className="flex-1 text-center lg:text-left">
-
-                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-black text-sm mb-8">
-
-                  💎 VERIFIED EXAM CRACKER USER
-
-                </div>
-
-                <h1 className="text-5xl md:text-7xl font-black leading-tight mb-6 break-words">
-
-                  {
-                    userData?.displayName ||
-                    "Exam Cracker User"
-                  }
-
-                </h1>
-
-                <p className="text-2xl text-gray-300 mb-10 break-words">
-
-                  {
-                    userData?.email ||
-                    "No Email"
-                  }
-
-                </p>
-
-                {/* QUICK STATS */}
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-
-                  <div className="bg-white/10 border border-white/10 rounded-3xl p-6 text-center">
-
-                    <div className="text-4xl mb-3">
-                      📝
-                    </div>
-
-                    <h2 className="text-4xl font-black text-purple-400 mb-2">
-
-                      {stats.totalTests}
-
-                    </h2>
-
-                    <p className="text-gray-400 font-semibold">
-
-                      Tests Attempted
-
-                    </p>
-
-                  </div>
-
-                  <div className="bg-white/10 border border-white/10 rounded-3xl p-6 text-center">
-
-                    <div className="text-4xl mb-3">
-                      🏆
-                    </div>
-
-                    <h2 className="text-4xl font-black text-yellow-400 mb-2">
-
-                      {stats.bestScore}
-
-                    </h2>
-
-                    <p className="text-gray-400 font-semibold">
-
-                      Best Score
-
-                    </p>
-
-                  </div>
-
-                  <div className="bg-white/10 border border-white/10 rounded-3xl p-6 text-center">
-
-                    <div className="text-4xl mb-3">
-                      📈
-                    </div>
-
-                    <h2 className="text-4xl font-black text-blue-400 mb-2">
-
-                      {stats.accuracy}%
-
-                    </h2>
-
-                    <p className="text-gray-400 font-semibold">
-
-                      Accuracy
-
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
+            }
 
           </div>
+
+          <h1 className="text-3xl md:text-6xl font-black mb-4">
+
+            {
+
+              user?.displayName ||
+
+              "Exam Cracker User"
+
+            }
+
+          </h1>
+
+          <p className="text-sm md:text-xl text-gray-400 mb-8">
+
+            {user?.email}
+
+          </p>
+
+          <button
+
+            onClick={logout}
+
+            className="px-8 py-4 rounded-[22px] bg-gradient-to-r from-red-500 to-pink-500 text-sm md:text-lg font-black"
+
+          >
+
+            Logout 🚀
+
+          </button>
 
         </div>
 
       </section>
 
-      {/* ANALYTICS */}
+      {/* STATS */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-20">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-6">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
 
-          <div className="bg-gradient-to-br from-purple-600/20 to-purple-900/20 border border-purple-500/20 rounded-[40px] p-10 backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[40px] p-5 md:p-8 text-center">
 
-            <div className="text-6xl mb-6">
-              🎯
-            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-purple-400 mb-3">
 
-            <h2 className="text-5xl font-black text-purple-400 mb-4">
-
-              {stats.avgScore}
+              {stats.tests}
 
             </h2>
 
-            <p className="text-gray-400 text-xl">
+            <p className="text-sm md:text-lg text-gray-300">
+
+              Tests Attempted
+
+            </p>
+
+          </div>
+
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[40px] p-5 md:p-8 text-center">
+
+            <h2 className="text-3xl md:text-5xl font-black text-blue-400 mb-3">
+
+              {stats.average}
+
+            </h2>
+
+            <p className="text-sm md:text-lg text-gray-300">
 
               Average Score
 
@@ -377,59 +272,15 @@ export default function ProfilePage(){
 
           </div>
 
-          <div className="bg-gradient-to-br from-green-600/20 to-emerald-900/20 border border-green-500/20 rounded-[40px] p-10 backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[40px] p-5 md:p-8 text-center col-span-2 md:col-span-1">
 
-            <div className="text-6xl mb-6">
-              🚀
-            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-green-400 mb-3">
 
-            <h2 className="text-5xl font-black text-green-400 mb-4">
-
-              {stats.totalTests}
+              {stats.highest}
 
             </h2>
 
-            <p className="text-gray-400 text-xl">
-
-              Tests Completed
-
-            </p>
-
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-600/20 to-cyan-900/20 border border-blue-500/20 rounded-[40px] p-10 backdrop-blur-xl">
-
-            <div className="text-6xl mb-6">
-              ⚡
-            </div>
-
-            <h2 className="text-5xl font-black text-blue-400 mb-4">
-
-              {stats.accuracy}%
-
-            </h2>
-
-            <p className="text-gray-400 text-xl">
-
-              Accuracy Rate
-
-            </p>
-
-          </div>
-
-          <div className="bg-gradient-to-br from-yellow-600/20 to-orange-900/20 border border-yellow-500/20 rounded-[40px] p-10 backdrop-blur-xl">
-
-            <div className="text-6xl mb-6">
-              👑
-            </div>
-
-            <h2 className="text-5xl font-black text-yellow-400 mb-4">
-
-              {stats.bestScore}
-
-            </h2>
-
-            <p className="text-gray-400 text-xl">
+            <p className="text-sm md:text-lg text-gray-300">
 
               Highest Score
 
@@ -441,19 +292,15 @@ export default function ProfilePage(){
 
       </section>
 
-      {/* RECENT TESTS */}
+      {/* TEST HISTORY */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
 
-        <div className="flex items-center gap-4 mb-10">
+        <div className="flex justify-between items-center mb-8">
 
-          <div className="text-5xl">
-            📊
-          </div>
+          <h2 className="text-3xl md:text-5xl font-black">
 
-          <h2 className="text-5xl font-black">
-
-            Recent Tests
+            Test History 😎🔥
 
           </h2>
 
@@ -461,78 +308,85 @@ export default function ProfilePage(){
 
         {
 
-          recentTests.length === 0
+          results.length === 0
 
           ?
 
-          <div className="bg-white/5 border border-white/10 rounded-[40px] p-16 text-center backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 rounded-[28px] md:rounded-[40px] p-10 text-center text-gray-400">
 
-            <div className="text-8xl mb-8">
-              😭
-            </div>
-
-            <h2 className="text-4xl font-black mb-4">
-
-              No Tests Attempted Yet
-
-            </h2>
-
-            <p className="text-gray-400 text-xl">
-
-              Start attempting mock tests to see your performance.
-
-            </p>
+            No tests attempted yet 😭🔥
 
           </div>
 
           :
 
-          <div className="space-y-6">
+          <div className="space-y-5">
 
             {
 
-              recentTests.map((item,index)=>(
+              results.map((item,index)=>(
 
                 <div
                   key={index}
-                  className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[35px] p-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8"
+                  className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[40px] p-5 md:p-8"
                 >
 
-                  <div>
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5">
 
-                    <h3 className="text-3xl font-black mb-3">
+                    <div>
 
-                      🚀 Mock Test #{index + 1}
+                      <h3 className="text-2xl md:text-4xl font-black mb-3">
 
-                    </h3>
+                        Mock Test Result 🚀
 
-                    <div className="flex flex-wrap gap-4 text-lg text-gray-300">
+                      </h3>
 
-                      <div>
-                        Accuracy: {item.accuracy}%
-                      </div>
+                      <p className="text-sm md:text-lg text-gray-400">
 
-                      <div>
-                        Exam: {item.exam || "JEE"}
-                      </div>
+                        Accuracy:
+                        {" "}
 
-                    </div>
+                        {item.accuracy || 0}%
 
-                  </div>
-
-                  <div className="text-right">
-
-                    <div className="text-6xl font-black text-purple-400 mb-2">
-
-                      {item.score}
+                      </p>
 
                     </div>
 
-                    <p className="text-gray-400 text-lg">
+                    <div className="flex gap-4">
 
-                      Score
+                      <div className="bg-black/20 rounded-[20px] px-5 py-4 text-center">
 
-                    </p>
+                        <h4 className="text-2xl md:text-4xl font-black text-purple-400">
+
+                          {item.score}
+
+                        </h4>
+
+                        <p className="text-xs md:text-sm text-gray-400">
+
+                          Score
+
+                        </p>
+
+                      </div>
+
+                      <div className="bg-black/20 rounded-[20px] px-5 py-4 text-center">
+
+                        <h4 className="text-2xl md:text-4xl font-black text-green-400">
+
+                          {item.correctAnswers}
+
+                        </h4>
+
+                        <p className="text-xs md:text-sm text-gray-400">
+
+                          Correct
+
+                        </p>
+
+                      </div>
+
+                    </div>
 
                   </div>
 
