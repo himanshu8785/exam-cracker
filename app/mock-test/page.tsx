@@ -1,26 +1,20 @@
 "use client";
 
 import {
-
   useEffect,
   useState
-
 } from "react";
 
 import {
-
   collection,
   getDocs,
   addDoc,
   serverTimestamp
-
 } from "firebase/firestore";
 
 import {
-
   auth,
   db
-
 } from "../../firebase";
 
 export default function MockTestPage(){
@@ -74,14 +68,10 @@ export default function MockTestPage(){
 
         }));
 
-        /* SHUFFLE */
-
         const shuffled =
         data.sort(()=>
           Math.random() - 0.5
         );
-
-        /* 25 QUESTIONS */
 
         setQuestions(
           shuffled.slice(0,25)
@@ -167,11 +157,7 @@ export default function MockTestPage(){
 
       if(selected){
 
-        if(
-
-          selected === q.answer
-
-        ){
+        if(selected === q.answer){
 
           finalScore += 4;
 
@@ -217,7 +203,6 @@ export default function MockTestPage(){
             uid:user.uid,
 
             name:
-
             user.displayName ||
 
             "Exam Cracker User",
@@ -263,7 +248,7 @@ export default function MockTestPage(){
 
   }
 
-  /* TIMER FORMAT */
+  /* TIMER */
 
   const hours =
   Math.floor(timeLeft / 3600);
@@ -282,7 +267,7 @@ export default function MockTestPage(){
 
     return(
 
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black">
+      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-3xl font-black">
 
         Loading Questions 😎🔥
 
@@ -292,45 +277,27 @@ export default function MockTestPage(){
 
   }
 
-  /* NO QUESTIONS */
-
-  if(questions.length === 0){
-
-    return(
-
-      <main className="min-h-screen bg-[#050816] text-white flex justify-center items-center text-4xl font-black text-center px-6">
-
-        No Questions Found 😭🔥
-
-      </main>
-
-    );
-
-  }
-
   return(
 
-    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden pb-32">
 
       {/* HEADER */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-12 pb-10">
+      <section className="sticky top-0 z-40 backdrop-blur-2xl bg-[#050816]/80 border-b border-white/10">
 
-        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-8 flex flex-col lg:flex-row justify-between items-center gap-8">
-
-          {/* TITLE */}
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col md:flex-row justify-between items-center gap-5">
 
           <div>
 
-            <h1 className="text-5xl font-black mb-3">
+            <h1 className="text-3xl md:text-5xl font-black mb-2 text-center md:text-left">
 
-              🚀 Advanced Mock Test
+              🚀 Mock Test
 
             </h1>
 
-            <p className="text-gray-400 text-xl">
+            <p className="text-sm md:text-lg text-gray-400 text-center md:text-left">
 
-              Real JEE & NEET Test Engine 😎🔥
+              Professional exam simulation 😎🔥
 
             </p>
 
@@ -338,15 +305,15 @@ export default function MockTestPage(){
 
           {/* TIMER */}
 
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-6 rounded-3xl text-center">
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4 rounded-[24px] text-center shadow-2xl">
 
-            <div className="text-lg mb-2">
+            <div className="text-xs md:text-sm mb-1">
 
               Time Left
 
             </div>
 
-            <div className="text-5xl font-black">
+            <div className="text-2xl md:text-4xl font-black">
 
               {hours}:
               {minutes.toString().padStart(2,"0")}:
@@ -360,59 +327,57 @@ export default function MockTestPage(){
 
       </section>
 
-      {/* MAIN */}
+      {/* RESULT */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      {
 
-        {
+        submitted
 
-          submitted
+        ?
 
-          ?
+        <section className="max-w-5xl mx-auto px-4 md:px-6 py-10">
 
-          /* RESULT */
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[28px] md:rounded-[45px] p-6 md:p-14 text-center">
 
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[45px] p-16 text-center">
-
-            <div className="text-8xl mb-8">
+            <div className="text-6xl md:text-8xl mb-6">
 
               🎉
 
             </div>
 
-            <h2 className="text-7xl font-black mb-10">
+            <h2 className="text-3xl md:text-6xl font-black mb-10">
 
               Test Submitted 😎🔥
 
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-10">
 
-              <div className="bg-black/20 rounded-3xl p-8">
+              <div className="bg-black/20 rounded-[22px] p-5 md:p-8">
 
-                <h3 className="text-5xl font-black mb-3">
+                <h3 className="text-3xl md:text-5xl font-black mb-2">
 
                   {score}
 
                 </h3>
 
-                <p>
+                <p className="text-sm md:text-base">
 
-                  Final Score
+                  Score
 
                 </p>
 
               </div>
 
-              <div className="bg-black/20 rounded-3xl p-8">
+              <div className="bg-black/20 rounded-[22px] p-5 md:p-8">
 
-                <h3 className="text-5xl font-black mb-3">
+                <h3 className="text-3xl md:text-5xl font-black mb-2">
 
                   {correctAnswers}
 
                 </h3>
 
-                <p>
+                <p className="text-sm md:text-base">
 
                   Correct
 
@@ -420,15 +385,15 @@ export default function MockTestPage(){
 
               </div>
 
-              <div className="bg-black/20 rounded-3xl p-8">
+              <div className="bg-black/20 rounded-[22px] p-5 md:p-8">
 
-                <h3 className="text-5xl font-black mb-3">
+                <h3 className="text-3xl md:text-5xl font-black mb-2">
 
                   {wrongAnswers}
 
                 </h3>
 
-                <p>
+                <p className="text-sm md:text-base">
 
                   Wrong
 
@@ -436,9 +401,9 @@ export default function MockTestPage(){
 
               </div>
 
-              <div className="bg-black/20 rounded-3xl p-8">
+              <div className="bg-black/20 rounded-[22px] p-5 md:p-8">
 
-                <h3 className="text-5xl font-black mb-3">
+                <h3 className="text-3xl md:text-5xl font-black mb-2">
 
                   {
 
@@ -455,7 +420,7 @@ export default function MockTestPage(){
 
                 </h3>
 
-                <p>
+                <p className="text-sm md:text-base">
 
                   Accuracy
 
@@ -473,7 +438,7 @@ export default function MockTestPage(){
 
               }}
 
-              className="px-12 py-5 rounded-3xl bg-black text-2xl font-black"
+              className="px-8 py-4 rounded-[22px] bg-black text-base md:text-xl font-black"
 
             >
 
@@ -483,17 +448,23 @@ export default function MockTestPage(){
 
           </div>
 
-          :
+        </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+        :
 
-            {/* QUESTION AREA */}
+        /* TEST UI */
 
-            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-12">
+        <section className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
 
-              <div className="flex justify-between items-center mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 md:gap-10">
 
-                <h2 className="text-3xl font-black">
+            {/* QUESTION */}
+
+            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[45px] p-5 md:p-12">
+
+              <div className="flex justify-between items-center mb-8">
+
+                <h2 className="text-xl md:text-3xl font-black">
 
                   Question
                   {" "}
@@ -503,17 +474,17 @@ export default function MockTestPage(){
 
                 </h2>
 
-                <div className="bg-purple-600 px-5 py-2 rounded-2xl text-lg font-bold">
+                <div className="bg-purple-600 px-4 py-2 rounded-2xl text-xs md:text-base font-bold">
 
-                  +4 / -1 😎🔥
+                  +4 / -1
 
                 </div>
 
               </div>
 
-              {/* QUESTION */}
+              {/* QUESTION TEXT */}
 
-              <h3 className="text-4xl font-black leading-relaxed mb-12">
+              <h3 className="text-2xl md:text-4xl font-black leading-relaxed mb-10">
 
                 {
 
@@ -526,23 +497,19 @@ export default function MockTestPage(){
 
               {/* OPTIONS */}
 
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
 
                 {
 
                   [
 
-                    questions[currentQuestion]
-                    ?.option1,
+                    questions[currentQuestion]?.option1,
 
-                    questions[currentQuestion]
-                    ?.option2,
+                    questions[currentQuestion]?.option2,
 
-                    questions[currentQuestion]
-                    ?.option3,
+                    questions[currentQuestion]?.option3,
 
-                    questions[currentQuestion]
-                    ?.option4
+                    questions[currentQuestion]?.option4
 
                   ].map((option,index)=>(
 
@@ -556,7 +523,7 @@ export default function MockTestPage(){
 
                       }}
 
-                      className={`w-full p-6 rounded-3xl border text-left text-xl transition
+                      className={`w-full p-4 md:p-6 rounded-[22px] border text-left text-base md:text-xl transition-all duration-300
 
                       ${selectedAnswers[currentQuestion] === option
 
@@ -584,7 +551,7 @@ export default function MockTestPage(){
 
               {/* BUTTONS */}
 
-              <div className="flex flex-wrap gap-5 mt-12">
+              <div className="flex flex-wrap gap-4 mt-10">
 
                 <button
 
@@ -600,7 +567,7 @@ export default function MockTestPage(){
 
                   }}
 
-                  className="px-8 py-4 rounded-2xl bg-[#111827] text-xl font-bold disabled:opacity-40"
+                  className="px-6 py-4 rounded-[20px] bg-[#111827] text-sm md:text-lg font-bold disabled:opacity-40"
 
                 >
 
@@ -625,7 +592,7 @@ export default function MockTestPage(){
 
                   }}
 
-                  className="px-8 py-4 rounded-2xl bg-purple-600 text-xl font-bold"
+                  className="px-6 py-4 rounded-[20px] bg-purple-600 text-sm md:text-lg font-bold"
 
                 >
 
@@ -637,11 +604,11 @@ export default function MockTestPage(){
 
                   onClick={submitTest}
 
-                  className="ml-auto px-10 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 text-xl font-black"
+                  className="ml-auto px-8 py-4 rounded-[20px] bg-gradient-to-r from-green-500 to-emerald-500 text-sm md:text-lg font-black"
 
                 >
 
-                  Submit Test 🚀
+                  Submit 🚀
 
                 </button>
 
@@ -649,17 +616,17 @@ export default function MockTestPage(){
 
             </div>
 
-            {/* QUESTION PALETTE */}
+            {/* PALETTE */}
 
-            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[45px] p-8 h-fit sticky top-6">
+            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[28px] md:rounded-[45px] p-5 md:p-8 h-fit lg:sticky top-32">
 
-              <h2 className="text-3xl font-black mb-8">
+              <h2 className="text-2xl md:text-3xl font-black mb-8">
 
-                Question Palette 😎🔥
+                Questions 😎🔥
 
               </h2>
 
-              <div className="grid grid-cols-5 gap-4">
+              <div className="grid grid-cols-5 gap-3">
 
                 {
 
@@ -675,7 +642,7 @@ export default function MockTestPage(){
 
                       }}
 
-                      className={`w-14 h-14 rounded-2xl font-black text-lg transition
+                      className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl font-black text-sm md:text-lg transition-all
 
                       ${currentQuestion === index
 
@@ -709,43 +676,13 @@ export default function MockTestPage(){
 
               </div>
 
-              {/* LEGEND */}
-
-              <div className="mt-10 space-y-4 text-lg">
-
-                <div className="flex items-center gap-4">
-
-                  <div className="w-5 h-5 rounded bg-green-500"></div>
-
-                  Answered
-
-                </div>
-
-                <div className="flex items-center gap-4">
-
-                  <div className="w-5 h-5 rounded bg-purple-600"></div>
-
-                  Current
-
-                </div>
-
-                <div className="flex items-center gap-4">
-
-                  <div className="w-5 h-5 rounded bg-[#111827]"></div>
-
-                  Unanswered
-
-                </div>
-
-              </div>
-
             </div>
 
           </div>
 
-        }
+        </section>
 
-      </section>
+      }
 
     </main>
 

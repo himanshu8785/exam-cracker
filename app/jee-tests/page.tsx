@@ -11,7 +11,7 @@ export default function JEETestsPage(){
       title:"JEE Full Test 1",
 
       description:
-      "Full syllabus mock test for JEE aspirants 😎🔥",
+      "Complete syllabus mock test 😎🔥",
 
       icon:"🚀",
 
@@ -25,7 +25,7 @@ export default function JEETestsPage(){
       title:"Physics Test",
 
       description:
-      "Advanced Physics practice set 😎🔥",
+      "Advanced Physics practice 😎🔥",
 
       icon:"⚡",
 
@@ -39,7 +39,7 @@ export default function JEETestsPage(){
       title:"Chemistry Test",
 
       description:
-      "Physical + Organic + Inorganic practice 😎🔥",
+      "Organic + Physical + IOC 😎🔥",
 
       icon:"🧪",
 
@@ -53,7 +53,7 @@ export default function JEETestsPage(){
       title:"Maths Test",
 
       description:
-      "High-level JEE Maths questions 😎🔥",
+      "JEE level Maths practice 😎🔥",
 
       icon:"📐",
 
@@ -66,44 +66,55 @@ export default function JEETestsPage(){
 
   return(
 
-    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden pb-32">
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
+      <section className="relative max-w-7xl mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-10 md:pb-16 overflow-hidden">
 
-        <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] md:w-[450px] h-[250px] md:h-[450px] bg-purple-600/20 blur-[120px] rounded-full"></div>
 
-          🚀 JEE Test Series
+        <div className="relative z-10 text-center">
+
+          <div className="inline-block px-5 py-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-sm md:text-base mb-6">
+
+            ⚡ India’s Smartest JEE Practice Platform
+
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[1.05]">
+
+            Crack
+            {" "}
+
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
+
+              JEE
+
+            </span>
+
+            <br />
+
+            With Smart Tests 🚀
+
+          </h1>
+
+          <p className="text-base md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+
+            Attempt premium level mock tests,
+            improve speed and boost your AIR 😎🔥
+
+          </p>
 
         </div>
-
-        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
-
-          Crack
-          {" "}
-
-          <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
-
-            JEE
-
-          </span>
-
-        </h1>
-
-        <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-
-          Attempt professional level JEE mock tests 😎🔥
-
-        </p>
 
       </section>
 
       {/* TESTS */}
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-8">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
 
           {
 
@@ -111,39 +122,51 @@ export default function JEETestsPage(){
 
               <div
                 key={index}
-                className="relative rounded-[45px] p-[2px]"
+                className="group relative overflow-hidden rounded-[28px] md:rounded-[40px] p-[1px]"
               >
 
-                <div className={`absolute inset-0 rounded-[45px] bg-gradient-to-br ${test.color}`}></div>
+                {/* BORDER GRADIENT */}
 
-                <div className="relative bg-[#0B1120] rounded-[43px] p-10 h-full">
+                <div className={`absolute inset-0 rounded-[28px] md:rounded-[40px] bg-gradient-to-br ${test.color}`}></div>
 
-                  <div className="text-7xl mb-8">
+                {/* CARD */}
 
-                    {test.icon}
+                <div className="relative bg-[#0B1120] rounded-[28px] md:rounded-[38px] p-5 md:p-8 h-full overflow-hidden">
+
+                  {/* GLOW */}
+
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500"></div>
+
+                  <div className="relative z-10">
+
+                    <div className="text-5xl md:text-7xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition duration-300">
+
+                      {test.icon}
+
+                    </div>
+
+                    <h2 className="text-2xl md:text-5xl font-black mb-5 leading-tight">
+
+                      {test.title}
+
+                    </h2>
+
+                    <p className="text-sm md:text-lg text-gray-300 leading-relaxed mb-8">
+
+                      {test.description}
+
+                    </p>
+
+                    <Link
+                      href="/mock-test"
+                      className={`inline-flex items-center gap-3 px-6 py-4 rounded-[22px] bg-gradient-to-r ${test.color} text-sm md:text-lg font-black active:scale-95 transition-all duration-300`}
+                    >
+
+                      Start Test 🚀
+
+                    </Link>
 
                   </div>
-
-                  <h2 className="text-5xl font-black mb-6 leading-tight">
-
-                    {test.title}
-
-                  </h2>
-
-                  <p className="text-gray-300 text-xl leading-relaxed mb-10">
-
-                    {test.description}
-
-                  </p>
-
-                  <Link
-                    href="/mock-test"
-                    className={`inline-flex items-center gap-3 px-8 py-5 rounded-3xl bg-gradient-to-r ${test.color} text-2xl font-black`}
-                  >
-
-                    Start Test 🚀
-
-                  </Link>
 
                 </div>
 
