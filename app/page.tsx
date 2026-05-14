@@ -1,68 +1,150 @@
 "use client";
 
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  onAuthStateChanged
+} from "firebase/auth";
+
+import { auth }
+from "../firebase";
+
 import Link from "next/link";
 
 export default function HomePage() {
+  const [loggedIn,setLoggedIn] =
+useState(false);
+
+useEffect(()=>{
+
+  const unsubscribe =
+
+  onAuthStateChanged(
+
+    auth,
+
+    (user)=>{
+
+      setLoggedIn(!!user);
+
+    }
+
+  );
+
+  return()=>unsubscribe();
+
+},[]);
 
   const tools = [
 
-    {
-      title:"AI Doubt Solver",
-      link:"https://gemini.google.com/",
-      icon:"🤖",
-      desc:"Solve doubts instantly with Gemini AI"
-    },
+  {
+    title:"AI Doubt Solver",
+    link:
+    loggedIn
+    ?
+    "https://gemini.google.com/"
+    :
+    "/login",
 
-    {
-      title:"JEE Test Series",
-      link:"/jee-tests",
-      icon:"⚡",
-      desc:"Unlimited JEE mock tests"
-    },
+    icon:"🤖",
+    desc:"Solve doubts instantly with Gemini AI"
+  },
 
-    {
-      title:"NEET Test Series",
-      link:"/neet-tests",
-      icon:"🧬",
-      desc:"Unlimited NEET mock tests"
-    },
+  {
+    title:"JEE Test Series",
+    link:
+    loggedIn
+    ?
+    "/jee-tests"
+    :
+    "/login",
 
-    {
-      title:"Rank Predictor",
-      link:"/rank-predictor",
-      icon:"📊",
-      desc:"Predict AIR & percentile"
-    },
+    icon:"⚡",
+    desc:"Unlimited JEE mock tests"
+  },
 
-    {
-      title:"Study Material",
-      link:"/study-material",
-      icon:"📚",
-      desc:"Notes, NCERT & PYQs"
-    },
+  {
+    title:"NEET Test Series",
+    link:
+    loggedIn
+    ?
+    "/neet-tests"
+    :
+    "/login",
 
-    {
-      title:"Daily Quiz",
-      link:"/daily-quiz",
-      icon:"🔥",
-      desc:"Daily challenge questions"
-    },
+    icon:"🧬",
+    desc:"Unlimited NEET mock tests"
+  },
 
-    {
-      title:"Leaderboard",
-      link:"/leaderboard",
-      icon:"🏆",
-      desc:"Compete with toppers"
-    },
+  {
+    title:"Rank Predictor",
+    link:
+    loggedIn
+    ?
+    "/rank-predictor"
+    :
+    "/login",
 
-    {
-      title:"Premium Plans",
-      link:"/pricing",
-      icon:"💎",
-      desc:"Unlock all premium features"
-    }
+    icon:"📊",
+    desc:"Predict AIR & percentile"
+  },
 
-  ];
+  {
+    title:"Study Material",
+    link:
+    loggedIn
+    ?
+    "/study-material"
+    :
+    "/login",
+
+    icon:"📚",
+    desc:"Notes, NCERT & PYQs"
+  },
+
+  {
+    title:"Daily Quiz",
+    link:
+    loggedIn
+    ?
+    "/daily-quiz"
+    :
+    "/login",
+
+    icon:"🔥",
+    desc:"Daily challenge questions"
+  },
+
+  {
+    title:"Leaderboard",
+    link:
+    loggedIn
+    ?
+    "/leaderboard"
+    :
+    "/login",
+
+    icon:"🏆",
+    desc:"Compete with toppers"
+  },
+
+  {
+    title:"Premium Plans",
+    link:
+    loggedIn
+    ?
+    "/pricing"
+    :
+    "/login",
+
+    icon:"💎",
+    desc:"Unlock all premium features"
+  }
+
+];
 
   const stats = [
 
@@ -106,13 +188,29 @@ export default function HomePage() {
 
           <div className="hidden md:flex gap-8 text-base md:text-lg">
 
-            <Link href="/jee-tests">
+            <Link
+  href={
+    loggedIn
+    ?
+    "/jee-tests"
+    :
+    "/login"
+  }
+>
 
               JEE Tests
 
             </Link>
 
-            <Link href="/neet-tests">
+            <Link
+  href={
+    loggedIn
+    ?
+    "/neet-tests"
+    :
+    "/login"
+  }
+>
 
               NEET Tests
 
@@ -128,13 +226,29 @@ export default function HomePage() {
 
             </a>
 
-            <Link href="/pricing">
+            <Link
+  href={
+    loggedIn
+    ?
+    "/pricing"
+    :
+    "/login"
+  }
+>
 
               Premium
 
             </Link>
 
-            <Link href="/profile">
+            <Link
+  href={
+    loggedIn
+    ?
+    "/profile"
+    :
+    "/login"
+  }
+>
 
               Profile
 
@@ -366,9 +480,15 @@ export default function HomePage() {
             </p>
 
             <Link
-              href="/rank-predictor"
-              className="inline-block px-6 py-4 rounded-2xl bg-purple-600 text-sm md:text-lg font-bold"
-            >
+  href={
+    loggedIn
+    ?
+    "/rank-predictor"
+    :
+    "/login"
+  }
+  className="inline-block px-6 py-4 rounded-2xl bg-purple-600 text-sm md:text-lg font-bold"
+>
 
               Predict Rank 🚀
 
