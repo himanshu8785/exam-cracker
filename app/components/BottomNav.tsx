@@ -45,7 +45,11 @@ export default function BottomNav(){
   },[]);
 
   const navItems = [
-
+    {
+  label:"Home",
+  href:"/",
+  icon:"🏠"
+},
     {
       label:"JEE",
       href:
