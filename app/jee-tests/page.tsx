@@ -2,346 +2,156 @@
 
 import Link from "next/link";
 
-export default function JEETestSeriesPage(){
+export default function JEETestsPage(){
 
-  const fullTests = Array.from(
-    {length:20},
-    (_,i)=>{
+  const tests = [
 
-      let plan = "FREE";
+    {
 
-      if(i >= 3){
+      title:"JEE Full Test 1",
 
-        plan = "BASIC";
+      description:
+      "Full syllabus mock test for JEE aspirants 😎🔥",
 
-      }
+      icon:"🚀",
 
-      if(i >= 8){
+      color:
+      "from-purple-500 to-blue-500"
 
-        plan = "PRO";
+    },
 
-      }
+    {
 
-      if(i >= 15){
+      title:"Physics Test",
 
-        plan = "ELITE";
+      description:
+      "Advanced Physics practice set 😎🔥",
 
-      }
+      icon:"⚡",
 
-      return{
+      color:
+      "from-yellow-500 to-orange-500"
 
-        title:`JEE Full Test ${i+1}`,
+    },
 
-        plan,
+    {
 
-        link:`/mock-test?exam=JEE&test=${i+1}`
+      title:"Chemistry Test",
 
-      };
+      description:
+      "Physical + Organic + Inorganic practice 😎🔥",
 
-    }
-  );
+      icon:"🧪",
 
-  function getBadge(plan:string){
+      color:
+      "from-green-500 to-emerald-500"
 
-    if(plan === "FREE"){
+    },
 
-      return(
+    {
 
-        <div className="bg-green-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
+      title:"Maths Test",
 
-          FREE
+      description:
+      "High-level JEE Maths questions 😎🔥",
 
-        </div>
+      icon:"📐",
 
-      );
-
-    }
-
-    if(plan === "BASIC"){
-
-      return(
-
-        <div className="bg-purple-500 px-4 py-2 rounded-xl text-sm font-bold">
-
-          BASIC ₹19
-
-        </div>
-
-      );
+      color:
+      "from-pink-500 to-rose-500"
 
     }
 
-    if(plan === "PRO"){
-
-      return(
-
-        <div className="bg-blue-500 px-4 py-2 rounded-xl text-sm font-bold">
-
-          PRO ₹49
-
-        </div>
-
-      );
-
-    }
-
-    return(
-
-      <div className="bg-yellow-500 text-black px-4 py-2 rounded-xl text-sm font-bold">
-
-        ELITE ₹299
-
-      </div>
-
-    );
-
-  }
-
-  function TestCard({title,link,plan}:any){
-
-    const locked =
-    plan !== "FREE";
-
-    return(
-
-      <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[30px] p-8 hover:border-purple-500 transition relative overflow-hidden">
-
-        <div className="absolute top-4 right-4">
-
-          {getBadge(plan)}
-
-        </div>
-
-        <div className="flex justify-between items-center mb-6">
-
-          <div className="text-5xl">
-
-            📝
-
-          </div>
-
-        </div>
-
-        <h2 className="text-3xl font-black mb-6">
-
-          {title}
-
-        </h2>
-
-        <div className="space-y-3 text-gray-300 mb-8">
-
-          <p>
-
-            ⏱ 60 Minutes
-
-          </p>
-
-          <p>
-
-            🔥 Real JEE PYQs
-
-          </p>
-
-          <p>
-
-            🚀 Smart Test Engine
-
-          </p>
-
-        </div>
-
-        {
-
-          locked
-
-          ?
-
-          <Link
-            href="/pricing"
-            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-500 text-lg font-bold"
-          >
-
-            Unlock {plan} 💎
-
-          </Link>
-
-          :
-
-          <Link
-            href={link}
-            className="block text-center py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-lg font-bold"
-          >
-
-            Start Free Test 🚀
-
-          </Link>
-
-        }
-
-      </div>
-
-    );
-
-  }
+  ];
 
   return(
 
-    <main className="min-h-screen bg-[#050816] text-white">
+    <main className="min-h-screen bg-[#050816] text-white overflow-hidden">
 
       {/* HERO */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-12">
+      <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
 
-        <div className="bg-gradient-to-r from-purple-700 to-blue-700 rounded-[45px] p-12">
+        <div className="inline-block px-6 py-3 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8">
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10">
-
-            <div>
-
-              <div className="inline-block px-5 py-2 rounded-full bg-white/20 mb-6">
-
-                ⚡ Real JEE Test Series
-
-              </div>
-
-              <h1 className="text-7xl font-black leading-tight mb-6">
-
-                100+
-                <br />
-
-                JEE Mock Tests 😎🔥
-
-              </h1>
-
-              <p className="text-xl text-gray-100 max-w-2xl leading-relaxed">
-
-                Full syllabus,
-                half syllabus,
-                chapter tests,
-                PYQs and subject-wise practice 🚀
-
-              </p>
-
-            </div>
-
-            <div className="text-[150px]">
-
-              ⚡
-
-            </div>
-
-          </div>
+          🚀 JEE Test Series
 
         </div>
 
-      </section>
+        <h1 className="text-7xl md:text-8xl font-black mb-8 leading-tight">
 
-      {/* PLAN INFO */}
+          Crack
+          {" "}
 
-      <section className="max-w-7xl mx-auto px-6 py-10">
+          <span className="bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            JEE
 
-          <div className="bg-purple-600 rounded-[35px] p-10">
+          </span>
 
-            <h2 className="text-4xl font-black mb-6">
+        </h1>
 
-              BASIC ₹19
+        <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
 
-            </h2>
+          Attempt professional level JEE mock tests 😎🔥
 
-            <div className="space-y-4 text-lg">
-
-              <p>✅ 3 Full Tests</p>
-
-              <p>✅ 2 Half Tests</p>
-
-              <p>✅ Daily Quiz</p>
-
-            </div>
-
-          </div>
-
-          <div className="bg-blue-600 rounded-[35px] p-10">
-
-            <h2 className="text-4xl font-black mb-6">
-
-              PRO ₹49
-
-            </h2>
-
-            <div className="space-y-4 text-lg">
-
-              <p>✅ 20 Full Tests</p>
-
-              <p>✅ Subject Tests</p>
-
-              <p>✅ Analytics</p>
-
-              <p>✅ Leaderboard</p>
-
-            </div>
-
-          </div>
-
-          <div className="bg-yellow-500 text-black rounded-[35px] p-10">
-
-            <h2 className="text-4xl font-black mb-6">
-
-              ELITE ₹299
-
-            </h2>
-
-            <div className="space-y-4 text-lg font-semibold">
-
-              <p>✅ ALL Tests</p>
-
-              <p>✅ ALL Notes</p>
-
-              <p>✅ Future AI Tools</p>
-
-              <p>✅ Premium Features</p>
-
-            </div>
-
-          </div>
-
-        </div>
+        </p>
 
       </section>
 
       {/* TESTS */}
 
-      <section className="max-w-7xl mx-auto px-6 py-16 pb-24">
+      <section className="max-w-7xl mx-auto px-6 pb-24">
 
-        <div className="flex items-center gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-          <div className="text-5xl">
+          {
 
-            🚀
+            tests.map((test,index)=>(
 
-          </div>
+              <div
+                key={index}
+                className="relative rounded-[45px] p-[2px]"
+              >
 
-          <h2 className="text-5xl font-black">
+                <div className={`absolute inset-0 rounded-[45px] bg-gradient-to-br ${test.color}`}></div>
 
-            Full Syllabus Tests
+                <div className="relative bg-[#0B1120] rounded-[43px] p-10 h-full">
 
-          </h2>
+                  <div className="text-7xl mb-8">
 
-        </div>
+                    {test.icon}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  </div>
 
-          {fullTests.map((test,index)=>(
+                  <h2 className="text-5xl font-black mb-6 leading-tight">
 
-            <TestCard
-              key={index}
-              title={test.title}
-              link={test.link}
-              plan={test.plan}
-            />
+                    {test.title}
 
-          ))}
+                  </h2>
+
+                  <p className="text-gray-300 text-xl leading-relaxed mb-10">
+
+                    {test.description}
+
+                  </p>
+
+                  <Link
+                    href="/mock-test"
+                    className={`inline-flex items-center gap-3 px-8 py-5 rounded-3xl bg-gradient-to-r ${test.color} text-2xl font-black`}
+                  >
+
+                    Start Test 🚀
+
+                  </Link>
+
+                </div>
+
+              </div>
+
+            ))
+
+          }
 
         </div>
 
