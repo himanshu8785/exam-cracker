@@ -7,7 +7,8 @@ import {
   useState
 } from "react";
 
-import { usePathname } from "next/navigation";
+import { usePathname }
+from "next/navigation";
 
 import {
   onAuthStateChanged
@@ -45,11 +46,13 @@ export default function BottomNav(){
   },[]);
 
   const navItems = [
+
     {
-  label:"Home",
-  href:"/",
-  icon:"🏠"
-},
+      label:"Home",
+      href:"/",
+      icon:"🏠"
+    },
+
     {
       label:"JEE",
       href:
@@ -122,13 +125,13 @@ export default function BottomNav(){
 
   return(
 
-    <div className="fixed bottom-0 left-0 w-full z-50 px-4 pb-4">
+    <div className="fixed bottom-0 left-0 w-full z-50 px-3 pb-3">
 
       <div className="max-w-7xl mx-auto">
 
-        <div className="bg-[#0B1120]/90 backdrop-blur-2xl border border-white/10 rounded-[35px] px-4 py-4 shadow-2xl">
+        <div className="bg-[#0B1120]/95 backdrop-blur-2xl border border-white/10 rounded-[30px] px-2 py-3 shadow-2xl">
 
-          <div className="flex justify-between items-center gap-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center justify-between gap-2 overflow-x-auto scrollbar-hide">
 
             {navItems.map((item,index)=>(
 
@@ -141,16 +144,29 @@ export default function BottomNav(){
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-w-[90px] flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 text-gray-400 hover:text-white hover:bg-white/5"
+                className={`min-w-[72px] flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-2xl transition-all duration-300 active:scale-95
+
+                ${
+                  pathname === item.href
+
+                  ?
+
+                  "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+
+                  :
+
+                  "text-gray-400 hover:text-white hover:bg-white/5"
+
+                }`}
               >
 
-                <div className="text-2xl">
+                <div className="text-[22px]">
 
                   {item.icon}
 
                 </div>
 
-                <p className="text-sm font-bold whitespace-nowrap">
+                <p className="text-[11px] font-bold whitespace-nowrap">
 
                   {item.label}
 
@@ -163,9 +179,10 @@ export default function BottomNav(){
               <Link
                 key={index}
                 href={item.href}
-                className={`min-w-[90px] flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300
+                className={`min-w-[72px] flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-2xl transition-all duration-300 active:scale-95
 
-                ${pathname === item.href
+                ${
+                  pathname === item.href
 
                   ?
 
@@ -178,13 +195,13 @@ export default function BottomNav(){
                 }`}
               >
 
-                <div className="text-2xl">
+                <div className="text-[22px]">
 
                   {item.icon}
 
                 </div>
 
-                <p className="text-sm font-bold whitespace-nowrap">
+                <p className="text-[11px] font-bold whitespace-nowrap">
 
                   {item.label}
 
