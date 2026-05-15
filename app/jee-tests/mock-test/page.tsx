@@ -117,7 +117,7 @@ export default function JEEMockTestPage(){
 
           (doc)=>{
 
-            const data = doc.data();
+            const data:any = doc.data();
 
             return{
 

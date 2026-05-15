@@ -117,7 +117,7 @@ export default function NEETMockTestPage(){
 
           (doc)=>{
 
-            const data = doc.data();
+            const data:any = doc.data();
 
             return{
 
