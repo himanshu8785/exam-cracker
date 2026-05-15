@@ -4,57 +4,23 @@ import Link from "next/link";
 
 export default function JEETestSeriesPage(){
 
-  const tests = [
+  const tests = Array.from(
 
-    {
-      title:"Physics Mock Test",
-      chapter:"Laws of Motion",
-      questions:"30 Questions",
-      time:"45 Min",
+    {length:100},
+
+    (_,index)=>({
+
+      title:`JEE Test ${index+1}`,
+
+      questions:"75 Questions",
+
+      time:"180 Min",
+
       icon:"⚡"
-    },
 
-    {
-      title:"Chemistry Mock Test",
-      chapter:"Organic Chemistry",
-      questions:"30 Questions",
-      time:"45 Min",
-      icon:"🧪"
-    },
+    })
 
-    {
-      title:"Maths Mock Test",
-      chapter:"Calculus",
-      questions:"30 Questions",
-      time:"45 Min",
-      icon:"📘"
-    },
-
-    {
-      title:"Physics Mock Test",
-      chapter:"Thermodynamics",
-      questions:"30 Questions",
-      time:"45 Min",
-      icon:"🔥"
-    },
-
-    {
-      title:"Chemistry Mock Test",
-      chapter:"Chemical Bonding",
-      questions:"30 Questions",
-      time:"45 Min",
-      icon:"⚗️"
-    },
-
-    {
-      title:"Maths Mock Test",
-      chapter:"Coordinate Geometry",
-      questions:"30 Questions",
-      time:"45 Min",
-      icon:"📐"
-    }
-
-  ];
+  );
 
   return(
 
@@ -68,7 +34,7 @@ export default function JEETestSeriesPage(){
 
           <div className="inline-block px-5 py-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-sm md:text-base mb-6">
 
-            🚀 JEE Chapterwise Practice
+            🚀 JEE Mock Test Series
 
           </div>
 
@@ -80,8 +46,8 @@ export default function JEETestSeriesPage(){
 
           <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto">
 
-            Practice chapterwise tests
-            with real JEE level questions 🚀
+            Attempt all 100 JEE mock tests
+            and boost your rank 🚀
 
           </p>
 
@@ -108,17 +74,11 @@ export default function JEETestSeriesPage(){
 
                 </div>
 
-                <h2 className="text-2xl font-black mb-3">
+                <h2 className="text-2xl font-black mb-5">
 
                   {test.title}
 
                 </h2>
-
-                <p className="text-purple-400 font-bold mb-5">
-
-                  {test.chapter}
-
-                </p>
 
                 <div className="flex items-center justify-between text-gray-400 text-sm mb-8">
 
