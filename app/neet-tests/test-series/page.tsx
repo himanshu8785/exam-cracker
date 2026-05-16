@@ -90,7 +90,7 @@ export default function NEETTestSeriesPage(){
                 </div>
 
                 <Link
-                  href="/neet-tests/mock-test"
+                  href={`/neet-tests/mock-test?testId=neet-test-${index+1}`}
                   className="inline-block w-full text-center px-6 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 text-sm md:text-lg font-bold active:scale-95 transition-all"
                 >
 

@@ -6,6 +6,10 @@ import {
 } from "react";
 
 import {
+  useSearchParams
+} from "next/navigation";
+
+import {
   db
 } from "../../../firebase";
 
@@ -20,14 +24,20 @@ import {
 
 export default function JEEMockTestPage(){
 
+  const searchParams =
+  useSearchParams();
+
+  const testId =
+  searchParams.get("testId");
+
   const [questions,setQuestions] =
-  useState([]);
+  useState<any[]>([]);
 
   const [currentQuestion,setCurrentQuestion] =
   useState(0);
 
   const [selectedAnswers,setSelectedAnswers] =
-  useState({});
+  useState<any>({});
 
   const [timeLeft,setTimeLeft] =
   useState(180);
@@ -41,7 +51,7 @@ export default function JEEMockTestPage(){
   const [savingScore,setSavingScore] =
   useState(false);
 
-  const formatTime = (time)=>{
+  const formatTime = (time:number)=>{
 
     const minutes =
     Math.floor(time/60);
@@ -78,6 +88,12 @@ export default function JEEMockTestPage(){
               "exam",
               "==",
               "JEE"
+            ),
+
+            where(
+              "testId",
+              "==",
+              testId
             )
 
           );
@@ -103,6 +119,12 @@ export default function JEEMockTestPage(){
               "subject",
               "==",
               subject
+            ),
+
+            where(
+              "testId",
+              "==",
+              testId
             )
 
           );
@@ -117,7 +139,8 @@ export default function JEEMockTestPage(){
 
           (doc)=>{
 
-            const data:any = doc.data();
+            const data:any =
+            doc.data();
 
             return{
 
@@ -162,9 +185,13 @@ export default function JEEMockTestPage(){
 
     }
 
-    fetchQuestions();
+    if(testId){
 
-  },[subject]);
+      fetchQuestions();
+
+    }
+
+  },[subject,testId]);
 
   useEffect(()=>{
 
@@ -190,7 +217,7 @@ export default function JEEMockTestPage(){
 
   },[timeLeft,submitted]);
 
-  const handleOptionClick = (option)=>{
+  const handleOptionClick = (option:string)=>{
 
     setSelectedAnswers({
 
@@ -224,7 +251,7 @@ export default function JEEMockTestPage(){
 
   const scoreData = questions.reduce(
 
-    (total,q,index)=>{
+    (total:any,q:any,index:number)=>{
 
       if(
         selectedAnswers[index]
@@ -279,6 +306,8 @@ export default function JEEMockTestPage(){
           exam:"JEE",
 
           subject,
+
+          testId,
 
           score:
           scoreData.score,
@@ -535,7 +564,7 @@ export default function JEEMockTestPage(){
             {
               questions[currentQuestion]
               ?.options
-              ?.map((option,index)=>(
+              ?.map((option:any,index:number)=>(
 
                 <button
                   key={index}
@@ -573,7 +602,7 @@ export default function JEEMockTestPage(){
 
         <div className="flex flex-wrap gap-3 mb-10">
 
-          {questions.map((_,index)=>(
+          {questions.map((_:any,index:number)=>(
 
             <button
               key={index}

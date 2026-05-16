@@ -5,6 +5,12 @@ import {
   useEffect
 } from "react";
 
+import Link from "next/link";
+
+import {
+  useSearchParams
+} from "next/navigation";
+
 import {
   db
 } from "../../../firebase";
@@ -19,6 +25,12 @@ import {
 } from "firebase/firestore";
 
 export default function NEETMockTestPage(){
+
+  const searchParams =
+  useSearchParams();
+
+  const testId =
+  searchParams.get("testId");
 
   const [questions,setQuestions] =
   useState([]);
@@ -41,7 +53,7 @@ export default function NEETMockTestPage(){
   const [savingScore,setSavingScore] =
   useState(false);
 
-  const formatTime = (time)=>{
+  const formatTime = (time:number)=>{
 
     const minutes =
     Math.floor(time/60);
@@ -78,6 +90,12 @@ export default function NEETMockTestPage(){
               "exam",
               "==",
               "NEET"
+            ),
+
+            where(
+              "testId",
+              "==",
+              testId
             )
 
           );
@@ -103,6 +121,12 @@ export default function NEETMockTestPage(){
               "subject",
               "==",
               subject
+            ),
+
+            where(
+              "testId",
+              "==",
+              testId
             )
 
           );
@@ -117,7 +141,8 @@ export default function NEETMockTestPage(){
 
           (doc)=>{
 
-            const data:any = doc.data();
+            const data:any =
+            doc.data();
 
             return{
 
@@ -162,9 +187,13 @@ export default function NEETMockTestPage(){
 
     }
 
-    fetchQuestions();
+    if(testId){
 
-  },[subject]);
+      fetchQuestions();
+
+    }
+
+  },[subject,testId]);
 
   useEffect(()=>{
 
@@ -190,7 +219,7 @@ export default function NEETMockTestPage(){
 
   },[timeLeft,submitted]);
 
-  const handleOptionClick = (option)=>{
+  const handleOptionClick = (option:string)=>{
 
     setSelectedAnswers({
 
@@ -224,7 +253,7 @@ export default function NEETMockTestPage(){
 
   const scoreData = questions.reduce(
 
-    (total,q,index)=>{
+    (total:any,q:any,index:number)=>{
 
       if(
         selectedAnswers[index]
@@ -279,6 +308,8 @@ export default function NEETMockTestPage(){
           exam:"NEET",
 
           subject,
+
+          testId,
 
           score:
           scoreData.score,
@@ -435,7 +466,8 @@ export default function NEETMockTestPage(){
               "All",
               "Physics",
               "Chemistry",
-              "Biology"
+              "Botany",
+              "Zoology"
             ]
 
             .map((item,index)=>(
@@ -535,7 +567,7 @@ export default function NEETMockTestPage(){
             {
               questions[currentQuestion]
               ?.options
-              ?.map((option,index)=>(
+              ?.map((option:any,index:number)=>(
 
                 <button
                   key={index}
@@ -573,7 +605,7 @@ export default function NEETMockTestPage(){
 
         <div className="flex flex-wrap gap-3 mb-10">
 
-          {questions.map((_,index)=>(
+          {questions.map((_:any,index:number)=>(
 
             <button
               key={index}
