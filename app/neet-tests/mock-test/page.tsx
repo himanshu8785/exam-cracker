@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useEffect
+  useEffect,
+  Suspense
 } from "react";
 
 import Link from "next/link";
@@ -24,7 +25,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 
-export default function NEETMockTestPage(){
+function MockTestContent(){
 
   const searchParams =
   useSearchParams();
@@ -697,6 +698,33 @@ export default function NEETMockTestPage(){
       </div>
 
     </main>
+
+  );
+
+}
+export default function NEETMockTestPage(){
+
+  return(
+
+    <Suspense
+      fallback={
+
+        <main className="min-h-screen bg-[#050816] text-white flex items-center justify-center">
+
+          <div className="text-4xl font-black">
+
+            Loading...
+
+          </div>
+
+        </main>
+
+      }
+    >
+
+      <MockTestContent />
+
+    </Suspense>
 
   );
 

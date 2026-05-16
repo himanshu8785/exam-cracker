@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useEffect
+  useEffect,
+  Suspense
 } from "react";
 
 import {
@@ -22,7 +23,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 
-export default function JEEMockTestPage(){
+function MockTestContent(){
 
   const searchParams =
   useSearchParams();
@@ -694,6 +695,33 @@ export default function JEEMockTestPage(){
       </div>
 
     </main>
+
+  );
+
+}
+export default function JEEMockTestPage(){
+
+  return(
+
+    <Suspense
+      fallback={
+
+        <main className="min-h-screen bg-[#050816] text-white flex items-center justify-center">
+
+          <div className="text-4xl font-black">
+
+            Loading...
+
+          </div>
+
+        </main>
+
+      }
+    >
+
+      <MockTestContent />
+
+    </Suspense>
 
   );
 
