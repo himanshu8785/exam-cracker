@@ -66,7 +66,7 @@ export default function NEETSubjectwisePage(){
 
             <Link
               key={index}
-              href="/neet-tests/mock-test"
+              href={`/neet-tests/subjectwise/${subject.title.toLowerCase()}`}
               className="group relative overflow-hidden bg-white/5 border border-white/10 backdrop-blur-xl rounded-[32px] p-8 md:p-10 hover:border-green-500/50 active:scale-[0.98] hover:-translate-y-2 transition-all duration-300"
             >
 
