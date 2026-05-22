@@ -60,7 +60,7 @@ export default function JEESubjectwisePage(){
 
             <Link
               key={index}
-              href="/jee-tests/mock-test"
+              href={`/jee-tests/subjectwise/${subject.title.toLowerCase()}`}
               className="group relative overflow-hidden bg-white/5 border border-white/10 backdrop-blur-xl rounded-[32px] p-8 md:p-10 hover:border-purple-500/50 active:scale-[0.98] hover:-translate-y-2 transition-all duration-300"
             >
 
