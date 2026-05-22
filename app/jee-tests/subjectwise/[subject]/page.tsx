@@ -36,8 +36,6 @@ export default function JEESubjectTestsPage(){
 
       <div className="max-w-7xl mx-auto">
 
-        {/* HERO */}
-
         <div className="text-center mb-16">
 
           <div className="inline-block px-5 py-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-sm md:text-base mb-6">
@@ -59,8 +57,6 @@ export default function JEESubjectTestsPage(){
           </p>
 
         </div>
-
-        {/* TEST GRID */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
